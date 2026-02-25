@@ -13,26 +13,8 @@
             rel="stylesheet"
         />
 
-        <!-- Tailwind CSS CDN -->
-        <script src="https://cdn.tailwindcss.com"></script>
-
         <!-- Custom CSS -->
-        <link rel="stylesheet" href="assets/css/main.css" />
-
-        <!-- Tailwind Config -->
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            "bhs-green": "#006400",
-                            "bhs-gold": "#FFCC00",
-                            "bhs-red": "#C41230",
-                        },
-                    },
-                },
-            };
-        </script>
+        <link rel="stylesheet" href="./src/css/main.css" />
     </head>
     <body class="min-h-screen bg-white font-['Inter']">
         <!-- Sticky Navigation -->
@@ -75,7 +57,7 @@
             <!-- Hero Image with Dark Overlay -->
             <div class="absolute inset-0 z-0">
                 <img
-                    src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?w=1920&h=1080&fit=crop"
+                    src="./src/images/194798a31b4a402cc84d49816afed367ea1864bf.png"
                     alt="Berkeley High School Theater"
                     class="w-full h-full object-cover"
                 />
@@ -93,7 +75,7 @@
                 <div class="absolute w-32 h-32 bg-white/50 rounded-full"></div>
                 <!-- Logo at 80% size -->
                 <img
-                    src="https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=200&h=200&fit=crop"
+                    src="./src/images/3a0bf6cefcdf1741c73598afa6f1e2293731f56b.png"
                     alt="Berkeley High School Yellow Jacket Logo"
                     class="w-[102.4px] h-[102.4px] relative z-10 drop-shadow-lg"
                 />
@@ -203,7 +185,7 @@
                 <div class="mb-4 relative">
                     <div class="h-6 bg-white/10 rounded-full overflow-hidden">
                         <div
-                            class="progress-bar h-full bg-bhs-gold rounded-full"
+                            class="progress-bar h-full bg-bhs-gold"
                             style="width: 12.33%"
                         ></div>
                     </div>
@@ -384,7 +366,7 @@
 
                     <!-- Saturday Event (Main) -->
                     <div
-                        class="bg-bhs-gold/85 rounded-xl shadow-lg overflow-hidden border-[4px] border-bhs-red/80 transform hover:scale-105 transition-all"
+                        class="bg-bhs-gold/85 rounded-xl shadow-lg overflow-hidden border-4 border-bhs-red/80 transform hover:scale-105 transition-all"
                     >
                         <div class="p-8">
                             <div
@@ -1018,6 +1000,6 @@
         </footer>
 
         <!-- Minimal JavaScript for Sticky Nav and Logo Animation -->
-        <script src="assets/js/main.js"></script>
+        <script src="./src/js/main.js"></script>
     </body>
 </html>
