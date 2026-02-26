@@ -3,12 +3,12 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: [main]
-  workflow_dispatch: # <--- ADD THIS LINE TO GET THE BUTTON
+  workflow_dispatch:
 
 permissions:
-  contents: write
-  pages: write # Required for modern deployment
-  id-token: write # Required for modern deployment
+  contents: read
+  pages: write
+  id-token: write
 
 jobs:
   build-and-deploy:
@@ -29,8 +29,13 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v3
+      # NEW: Upload the built files for GitHub Pages
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist
+          path: "./dist"
+
+      # NEW: Tell GitHub to take those files and put them live
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
