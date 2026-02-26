@@ -2,10 +2,13 @@ name: Deploy to GitHub Pages
 
 on:
   push:
-    branches: [main] # Runs every time you push to main
+    branches: [main]
+  workflow_dispatch: # <--- ADD THIS LINE TO GET THE BUTTON
 
 permissions:
   contents: write
+  pages: write # Required for modern deployment
+  id-token: write # Required for modern deployment
 
 jobs:
   build-and-deploy:
