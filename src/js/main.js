@@ -1,5 +1,3 @@
-// Minimal JavaScript for BHS 40th Reunion Website
-
 // Sticky Navigation - Show/Hide on Scroll
 (function () {
   const stickyNav = document.getElementById("sticky-nav");
@@ -56,3 +54,20 @@ window.addEventListener("DOMContentLoaded", function () {
     fbLink.href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
   }
 });
+
+// src/main.js
+//
+import "./jquery-global.js"; // Vite pulls the code in right here
+import { loadPins } from "./map-logic.js"; // We'll put the heavy lifting here
+
+window.initMap = function () {
+  // 1. Create the Map instance
+  const map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: 42.5584, lng: -71.2689 }, // Billerica area
+    zoom: 6,
+    mapId: "BHS_MAP_ID", // Optional: for custom styling
+  });
+
+  // 2. Start loading the pins from your Google Sheet
+  loadPins(map);
+};

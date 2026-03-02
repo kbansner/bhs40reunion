@@ -36,9 +36,14 @@
             href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap"
             rel="stylesheet"
         />
-
+        <script
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3ai7PcNeXo-lI6LPG3dez315Z28fnXyI&callback=initMap&loading=async"
+            async
+            defer
+        ></script>
         <!-- Minimal JavaScript for Sticky Nav and Logo Animation -->
         <script type="module" src="/src/js/main.js"></script>
+        <script type="module" src="/src/js/map-logic.js"></script>
         <!-- Custom CSS -->
         <link rel="stylesheet" href="/src/css/main.css" />
     </head>
@@ -156,7 +161,7 @@
                         Kickstart the Reunion
                     </a>
                     <a
-                        href="#map"
+                        href="#mapSection"
                         class="w-full sm:w-auto px-8 py-4 bg-transparent text-white font-bold text-lg rounded-lg border-2 border-white hover:bg-white/10 transition-all flex items-center justify-center gap-2"
                     >
                         <svg
@@ -482,7 +487,7 @@
         </section>
 
         <!-- Map & Questionnaire Section -->
-        <section id="map" class="py-16 px-4 bg-white">
+        <section id="mapSection" class="py-16 px-4 bg-white">
             <div class="max-w-5xl mx-auto">
                 <div class="text-center mb-12">
                     <h2
@@ -499,14 +504,15 @@
                 <div
                     class="bg-gray-100 rounded-xl shadow-lg p-8 mb-8 border-4 border-bhs-green/20"
                 >
-                    <iframe
+                    <div id="map" style="height: 480px; width: 100%"></div>
+                    <!--<iframe
                         src="https://www.google.com/maps/d/u/0/embed?mid=15IoMMY9Gi6i_a22cNDYIAYq0Isxs8Vo&ehbc=2E312F"
                         width="100%"
                         height="480"
                         class="rounded-lg"
                         style="border: 0"
                         loading="lazy"
-                    ></iframe>
+                    ></iframe>-->
                 </div>
 
                 <!-- Questionnaire CTA -->
