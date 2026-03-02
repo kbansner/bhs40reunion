@@ -45,11 +45,11 @@ export function loadPins(map) {
               const rsvpLower = rsvp.toLowerCase();
 
               if (rsvpLower.includes("yes")) {
-                pinColor = "#c41230"; // Red
+                pinColor = "#006400"; // Green
               } else if (rsvpLower.includes("no")) {
-                pinColor = "#ffcc00"; // Yellow
-              } else if (rsvpLower.includes("maybe")) {
                 pinColor = "#808080"; // Grey
+              } else if (rsvpLower.includes("maybe")) {
+                pinColor = "#ffcc00"; // Gold
               }
 
               // --- 2. Create the Marker ---
