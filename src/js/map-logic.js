@@ -6,11 +6,11 @@ const SHEET_URL =
 
 export function loadPins(map) {
   const bounds = new google.maps.LatLngBounds();
-  const geocoder = new google.maps.Geocoder();
 
   window.$("#map").sheetrock({
     url: SHEET_URL,
-    query: "select A, B, C, D",
+    // Step 1: Update query to include columns E (Lat) and F (Lng)
+    query: "select A, B, C, D, E, F",
     callback: function (error, options, response) {
       if (error) {
         console.error("Sheetrock Error:", error);
@@ -30,62 +30,60 @@ export function loadPins(map) {
         const location = row.cellsArray[2];
         const note = row.cellsArray[3] || "";
 
-        if (location) {
-          geocoder.geocode({ address: location }, (results, status) => {
-            if (status === "OK") {
-              const lat = results[0].geometry.location.lat();
-              const lng = results[0].geometry.location.lng();
+        // Step 2: Grab the cached coordinates directly from the row data
+        const lat = parseFloat(row.cellsArray[4]); // Column E
+        const lng = parseFloat(row.cellsArray[5]); // Column F
 
-              const jitterLat = (Math.random() - 0.5) * 0.07;
-              const jitterLng = (Math.random() - 0.5) * 0.07;
-              const finalPos = { lat: lat + jitterLat, lng: lng + jitterLng };
+        // Check if the numbers exist
+        if (!isNaN(lat) && !isNaN(lng)) {
+          const jitterLat = (Math.random() - 0.5) * 0.15; // Set back to your preferred jitter
+          const jitterLng = (Math.random() - 0.5) * 0.15;
+          const finalPos = { lat: lat + jitterLat, lng: lng + jitterLng };
 
-              // --- 1. Determine Color (BEFORE creating the marker) ---
-              let pinColor = "#808080"; // Default Grey
-              const rsvpLower = rsvp.toLowerCase();
+          // Determine Color
+          let pinColor = "#808080";
+          const rsvpLower = rsvp.toLowerCase();
 
-              if (rsvpLower.includes("yes")) {
-                pinColor = "#006400"; // Green
-              } else if (rsvpLower.includes("no")) {
-                pinColor = "#808080"; // Grey
-              } else if (rsvpLower.includes("maybe")) {
-                pinColor = "#ffcc00"; // Gold
-              }
+          if (rsvpLower.includes("yes")) {
+            pinColor = "#006400"; // BHS Green
+          } else if (rsvpLower.includes("no")) {
+            pinColor = "#808080"; // Grey
+          } else if (rsvpLower.includes("maybe")) {
+            pinColor = "#ffcc00"; // Gold
+          }
 
-              // --- 2. Create the Marker ---
-              const marker = new google.maps.Marker({
-                map: map,
-                position: finalPos,
-                title: name,
-                icon: {
-                  path: google.maps.SymbolPath.CIRCLE,
-                  fillColor: pinColor,
-                  fillOpacity: 0.9,
-                  scale: 8,
-                  strokeColor: "white",
-                  strokeWeight: 2,
-                },
-              });
-
-              // --- 3. InfoWindow Setup ---
-              const infoWindow = new google.maps.InfoWindow({
-                content: `
-                  <div style="font-family: sans-serif; padding: 5px; color: #333;">
-                    <strong style="font-size: 18px;">${name}</strong><br>
-                    <span style="font-size: 12px;">Attending: ${rsvp}</span><br>
-                    <small style="color: #666;">${location}</small>
-                    ${note ? `<p style="margin-top: 8px; border-top: 1px solid #eee; padding-top: 5px;"><em>"${note}"</em></p>` : ""}
-                  </div>`,
-              });
-
-              marker.addListener("click", () => infoWindow.open(map, marker));
-
-              bounds.extend(finalPos);
-              map.fitBounds(bounds);
-            } else {
-              console.error(`Geocode failed for ${location}: ${status}`);
-            }
+          // Create the Marker
+          const marker = new google.maps.Marker({
+            map: map,
+            position: finalPos,
+            title: name,
+            icon: {
+              path: google.maps.SymbolPath.CIRCLE,
+              fillColor: pinColor,
+              fillOpacity: 0.9,
+              scale: 8,
+              strokeColor: "white",
+              strokeWeight: 2,
+            },
           });
+
+          // InfoWindow Setup
+          const infoWindow = new google.maps.InfoWindow({
+            content: `
+              <div style="font-family: sans-serif; padding: 5px; color: #333;">
+                <strong style="font-size: 18px;">${name}</strong><br>
+                <span style="font-size: 12px;">Attending: ${rsvp}</span><br>
+                <small style="color: #666;">${location}</small>
+                ${note ? `<p style="margin-top: 8px; border-top: 1px solid #eee; padding-top: 5px;"><em>"${note}"</em></p>` : ""}
+              </div>`,
+          });
+
+          marker.addListener("click", () => infoWindow.open(map, marker));
+
+          bounds.extend(finalPos);
+          map.fitBounds(bounds);
+        } else {
+          console.warn(`Skipping ${name}: No Lat/Lng data found in Sheet.`);
         }
       });
     },
