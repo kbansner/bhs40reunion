@@ -106,6 +106,9 @@ export function loadPins(map) {
         const el = document.getElementById(id);
         if (el) el.textContent = `(${count})`;
       }
+
+      // THIS IS THE FIX for Dev Mode:
+      window.initMap = initMap;
     },
   });
 }
