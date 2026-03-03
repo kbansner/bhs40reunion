@@ -6,6 +6,7 @@
     --color-bhs-red: #c41230;
     --color-bhs-gold: #ffcc00;
     --color-bhs-green: #006400;
+    --color-text-dark: #666666;
 }
 
 /* Your existing custom CSS follows... */
@@ -113,4 +114,50 @@ img {
     .heading-font {
         letter-spacing: -0.5px;
     }
+}
+
+:root {
+    /* Spacing & Shapes */
+    --pill-padding: 0.5rem 1rem;
+    --pill-radius: 9999px;
+    --transition-speed: 0.2s;
+}
+
+/* The "Mixin" Logic using a Shared Class */
+.rsvp-pills > div {
+    display: inline-block;
+    padding: var(--pill-padding);
+    border-radius: var(--pill-radius);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    transition:
+        box-shadow var(--transition-speed),
+        transform var(--transition-speed);
+    cursor: default;
+}
+
+.rsvp-pills > div:hover {
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
+}
+
+/* Applying specific "Mixins" to your lists */
+#list-yes > div {
+    background-color: var(--color-bhs-green);
+    color: white;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+#list-maybe > div {
+    background-color: var(--color-bhs-gold);
+    color: var(--color-bhs-green);
+}
+
+#list-no > div {
+    color: var(--color-text-dark);
+    font-size: 0.875rem;
+    display: inline-block;
+}
+#list-no > div:not(:last-child)::after {
+    content: ", ";
 }

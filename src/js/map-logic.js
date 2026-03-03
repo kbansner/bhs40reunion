@@ -9,7 +9,6 @@ export function loadPins(map) {
 
   window.$("#map").sheetrock({
     url: SHEET_URL,
-    // Step 1: Update query to include columns E (Lat) and F (Lng)
     query: "select A, B, C, D, E, F",
     callback: function (error, options, response) {
       if (error) {
@@ -17,42 +16,57 @@ export function loadPins(map) {
         return;
       }
 
-      if (!response.rows || response.rows.length <= 1) {
-        console.warn("No data rows found in Google Sheet.");
-        return;
-      }
+      if (!response.rows || response.rows.length <= 1) return;
+
+      // Initialize counters
+      let countYes = 0;
+      let countMaybe = 0;
+      let countNo = 0;
 
       response.rows.forEach((row, index) => {
-        if (index === 0) return; // Skip header row
+        if (index === 0) return; // Skip header
 
         const name = row.cellsArray[0];
         const rsvp = row.cellsArray[1] || "";
         const location = row.cellsArray[2];
         const note = row.cellsArray[3] || "";
+        const lat = parseFloat(row.cellsArray[4]);
+        const lng = parseFloat(row.cellsArray[5]);
+        const rsvpLower = rsvp.toLowerCase();
 
-        // Step 2: Grab the cached coordinates directly from the row data
-        const lat = parseFloat(row.cellsArray[4]); // Column E
-        const lng = parseFloat(row.cellsArray[5]); // Column F
+        // --- PART 1: Update the "Who's Coming" Lists ---
+        let listId = "";
+        if (rsvpLower.includes("yes")) {
+          listId = "list-yes";
+          countYes++;
+        } else if (rsvpLower.includes("maybe")) {
+          listId = "list-maybe";
+          countMaybe++;
+        } else if (rsvpLower.includes("no")) {
+          listId = "list-no";
+          countNo++;
+        }
 
-        // Check if the numbers exist
+        if (name && listId) {
+          const listEl = document.getElementById(listId);
+          if (listEl) {
+            const ele = document.createElement("div");
+            ele.textContent = name;
+            listEl.appendChild(ele);
+          }
+        }
+
+        // --- PART 2: Create Map Pins (Only if we have Lat/Lng) ---
         if (!isNaN(lat) && !isNaN(lng)) {
-          const jitterLat = (Math.random() - 0.5) * 0.15; // Set back to your preferred jitter
+          const jitterLat = (Math.random() - 0.5) * 0.15;
           const jitterLng = (Math.random() - 0.5) * 0.15;
           const finalPos = { lat: lat + jitterLat, lng: lng + jitterLng };
 
-          // Determine Color
-          let pinColor = "#808080";
-          const rsvpLower = rsvp.toLowerCase();
-
-          if (rsvpLower.includes("yes")) {
+          let pinColor = "#808080"; // Default Grey
+          if (rsvpLower.includes("yes"))
             pinColor = "#006400"; // BHS Green
-          } else if (rsvpLower.includes("no")) {
-            pinColor = "#808080"; // Grey
-          } else if (rsvpLower.includes("maybe")) {
-            pinColor = "#ffcc00"; // Gold
-          }
+          else if (rsvpLower.includes("maybe")) pinColor = "#ffcc00"; // Gold
 
-          // Create the Marker
           const marker = new google.maps.Marker({
             map: map,
             position: finalPos,
@@ -67,7 +81,6 @@ export function loadPins(map) {
             },
           });
 
-          // InfoWindow Setup
           const infoWindow = new google.maps.InfoWindow({
             content: `
               <div style="font-family: sans-serif; padding: 5px; color: #333;">
@@ -79,13 +92,20 @@ export function loadPins(map) {
           });
 
           marker.addListener("click", () => infoWindow.open(map, marker));
-
           bounds.extend(finalPos);
           map.fitBounds(bounds);
-        } else {
-          console.warn(`Skipping ${name}: No Lat/Lng data found in Sheet.`);
         }
       });
+      // After the loop, update your headlines or badges
+      updateCountDisplay("count-yes", countYes);
+      updateCountDisplay("count-maybe", countMaybe);
+      updateCountDisplay("count-no", countNo);
+
+      // Helper function to update the DOM
+      function updateCountDisplay(id, count) {
+        const el = document.getElementById(id);
+        if (el) el.textContent = `(${count})`;
+      }
     },
   });
 }
