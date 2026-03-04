@@ -161,3 +161,18 @@ img {
 #list-no > div:not(:last-child)::after {
     content: ", ";
 }
+
+/* For Headings: "balance" ensures lines are roughly equal length */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    text-wrap: balance;
+}
+
+/* For Paragraphs: "pretty" specifically targets the last line to prevent orphans */
+p {
+    text-wrap: pretty;
+}
