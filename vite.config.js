@@ -3,7 +3,7 @@ import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 
 export default defineConfig({
   // This matches your repository name exactly
-  base: "/bhs40reunion",
+  base: "/",
 
   plugins: [
     ViteImageOptimizer({

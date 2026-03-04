@@ -79,31 +79,25 @@
                 </a>
             </div>
         </nav>
-
-        <!-- Hero Section -->
+        <!--  Hero Section  -->
         <section
-            class="relative h-[600px] md:h-[700px] flex items-center justify-center text-center overflow-hidden"
+            class="relative w-full min-h-[500px] max-h-[800px] -flex items-center justify-center text-center overflow-hidden"
         >
-            <!-- Hero Image with Dark Overlay -->
-            <div class="absolute inset-0 z-0">
-                <img
-                    src="/src/images/194798a31b4a402cc84d49816afed367ea1864bf.png"
-                    alt="Berkeley High School Theater"
-                    class="w-full h-full object-cover"
-                />
-                <div
-                    class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70"
-                ></div>
-            </div>
+            <img
+                src="/src/images/194798a31b4a402cc84d49816afed367ea1864bf.png"
+                alt="Berkeley High School on Parade"
+                class="relative w-full h-auto min-h-[500px] max-h-[800px] object-cover object-bottom block"
+            />
 
-            <!-- BHS Logo - Upper Right (Desktop only) -->
+            <div
+                class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70 z-10"
+            ></div>
+
             <div
                 id="logo-container"
-                class="hidden md:flex absolute top-12 right-16 z-20 items-center justify-center"
+                class="hidden md:flex absolute top-12 right-16 z-30 items-center justify-center"
             >
-                <!-- White Circle Background -->
                 <div class="absolute w-32 h-32 bg-white/50 rounded-full"></div>
-                <!-- Logo at 80% size -->
                 <img
                     src="/src/images/3a0bf6cefcdf1741c73598afa6f1e2293731f56b.png"
                     alt="Berkeley High School Yellow Jacket Logo"
@@ -111,83 +105,84 @@
                 />
             </div>
 
-            <!-- Hero Content -->
-            <div class="relative z-10 px-4 max-w-4xl mx-auto pb-8 md:pb-0">
-                <div
-                    class="inline-block px-6 py-2 bg-bhs-red rounded-full mb-6 mt-12 md:mt-0"
-                >
+            <div class="absolute inset-0 z-20 flex items-center justify-center">
+                <div class="px-4 max-w-4xl mx-auto pb-8 md:pb-0">
+                    <div
+                        class="inline-block px-6 py-2 bg-bhs-red rounded-full mb-6 mt-12 md:mt-0"
+                    >
+                        <p
+                            class="text-bhs-gold font-bold text-lg md:text-xl tracking-wide"
+                        >
+                            BERKELEY HIGH SCHOOL CLASS&nbsp;OF&nbsp;'86
+                        </p>
+                    </div>
+                    <h1
+                        class="text-5xl md:text-7xl font-black mb-6 text-white heading-font"
+                    >
+                        40 Years. One Jacket Family.
+                    </h1>
                     <p
-                        class="text-bhs-gold font-bold text-lg md:text-xl tracking-wide"
+                        class="text-xl md:text-2xl mb-8 text-bhs-gold font-medium"
                     >
-                        BERKELEY HIGH SCHOOL CLASS&nbsp;OF&nbsp;'86
+                        October 3rd, 2026 | Berkeley, CA
                     </p>
-                </div>
-                <h1
-                    class="text-5xl md:text-7xl font-black mb-6 text-white heading-font"
-                >
-                    40 Years. One Jacket Family.
-                </h1>
-                <p class="text-xl md:text-2xl mb-8 text-bhs-gold font-medium">
-                    October 3rd, 2026 | Berkeley, CA
-                </p>
-                <p
-                    class="text-lg md:text-xl mb-6 text-white/90 max-w-2xl mx-auto"
-                >
-                    Help us make this our most inclusive reunion&nbsp;yet.
-                </p>
+                    <p
+                        class="text-lg md:text-xl mb-6 text-white/90 max-w-2xl mx-auto"
+                    >
+                        Help us make this our most inclusive reunion&nbsp;yet.
+                    </p>
 
-                <!-- CTA Buttons -->
-                <div
-                    class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8"
-                >
-                    <a
-                        href="#kickstart"
-                        class="w-full sm:w-auto px-8 py-4 bg-bhs-gold text-bhs-green font-bold text-lg rounded-lg hover:bg-bhs-gold/90 transition-all transform hover:scale-105 flex items-center justify-center gap-2 shadow-lg"
+                    <div
+                        class="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8"
                     >
-                        <svg
-                            class="w-5 h-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                        <a
+                            href="#kickstart"
+                            class="w-full sm:w-auto px-8 py-4 bg-bhs-gold text-bhs-green font-bold text-lg rounded-lg hover:bg-bhs-gold/90 transition-all transform hover:scale-105 flex items-center justify-center gap-2 shadow-lg"
                         >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                        </svg>
-                        Kickstart the Reunion
-                    </a>
-                    <a
-                        href="#mapSection"
-                        class="w-full sm:w-auto px-8 py-4 bg-transparent text-white font-bold text-lg rounded-lg border-2 border-white hover:bg-white/10 transition-all flex items-center justify-center gap-2"
-                    >
-                        <svg
-                            class="w-5 h-5"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
+                            <svg
+                                class="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                />
+                            </svg>
+                            Kickstart the Reunion
+                        </a>
+                        <a
+                            href="#mapSection"
+                            class="w-full sm:w-auto px-8 py-4 bg-transparent text-white font-bold text-lg rounded-lg border-2 border-white hover:bg-white/10 transition-all flex items-center justify-center gap-2"
                         >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                            />
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                            />
-                        </svg>
-                        Join the Class Map
-                    </a>
+                            <svg
+                                class="w-5 h-5"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                                />
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                                />
+                            </svg>
+                            Join the Class Map
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
-
         <!-- Divider - Black/Gold/Red/Gold Stripes -->
         <div class="w-full">
             <div class="h-[2px] bg-black"></div>
@@ -215,7 +210,7 @@
                 <div class="mb-4 relative">
                     <div class="mb-4 relative">
                         <div
-                            class="bg-gray-100 rounded-xl shadow-lg p-8 mb-8 border-4 border-bhs-green/20"
+                            class="bg-gray-100 rounded-xl shadow-lg p-2 mb-8 border-4 border-bhs-green/20"
                         >
                             <iframe
                                 src="https://www.zeffy.com/embed/thermometer/help-us-secure-the-venue"
