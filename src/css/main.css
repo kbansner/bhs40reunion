@@ -178,12 +178,15 @@ p {
 }
 
 /* Removes the extra padding at the top of the popup */
-.gm-style-iw {
+/*.gm-style-iw {
     padding-top: 0 !important;
-}
+}*/
 
 /* Optional: Moves the 'X' button slightly if it looks too cramped */
-.gm-ui-hover-effect {
+/*.gm-ui-hover-effect {
     top: 0 !important;
     right: 0 !important;
+}*/
+.gm-style-iw-d {
+    margin-top: -40px !important;
 }
