@@ -87,7 +87,7 @@ export function loadPins(map) {
                 <strong style="font-size: 18px;">${name}</strong><br>
                 <span style="font-size: 12px;">Attending: ${rsvp}</span><br>
                 <small style="color: #666;">${location}</small>
-                ${note ? `<p style="margin-top: 8px; border-top: 1px solid #eee; padding-top: 5px;"><em>"${note}"</em></p>` : ""}
+                ${note ? `<p style="margin-top: 8px; border-top: 1px solid #eee; padding-top: 5px; min-width: 250px; max-width: 340px;"><em>"${note}"</em></p>` : ""}
               </div>`,
           });
 

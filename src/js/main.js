@@ -64,6 +64,7 @@ window.initMap = function () {
   // 1. Create the Map instance
   const map = new google.maps.Map(document.getElementById("map"), {
     center: { lat: 42.5584, lng: -71.2689 }, // Billerica area
+    zoomControl: true, // This forces the +/- buttons to show
     zoom: 6,
     mapId: "BHS_MAP_ID", // Optional: for custom styling
   });
