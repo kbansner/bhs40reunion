@@ -84,10 +84,10 @@ export function loadPins(map) {
           const infoWindow = new google.maps.InfoWindow({
             content: `
               <div style="font-family: sans-serif; padding: 5px; color: #333;">
-                <strong style="font-size: 18px; margin-bottom: 2px;display: inline-block;">${name}</strong><br>
+                <strong style="display: inlineblock; font-size: 18px; margin-bottom: 2px; margin-right: 40px;">${name}</strong><br>
                 <div style="font-size: 12px; line-height: 1.4">Attending: ${rsvp}</div>
-                <div style="font-size: 12px; min-width: 240px;">${location}</div>
-                ${note ? `<p style="margin-top: 8px; border-top: 1px solid #ddd; padding-top: 8px; min-width: 250px; max-width: 340px;"><em>"${note}"</em></p>` : ""}
+                <div style="font-size: 12px;">${location}</div>
+                ${note ? `<p style="margin-top: 8px; border-top: 1px solid #ddd; padding-top: 8px;"><em>"${note}"</em></p>` : ""}
               </div>`,
           });
 
