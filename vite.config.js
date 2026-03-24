@@ -1,13 +1,12 @@
 import { defineConfig } from "vite";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
+import { resolve } from "path"; // Required for multiple entry points
 
 export default defineConfig({
-  // This matches your repository name exactly
   base: "/",
 
   plugins: [
     ViteImageOptimizer({
-      // High-quality compression for reunion photos
       jpg: { quality: 75 },
       png: { quality: 80 },
       webp: { lossy: true, quality: 75 },
@@ -16,8 +15,14 @@ export default defineConfig({
   ],
 
   build: {
-    // Ensures a clean build for GitHub Pages
     outDir: "dist",
-    assetsInlineLimit: 4096, // Files smaller than 4kb become base64 to save requests
+    assetsInlineLimit: 4096,
+    // Add rollupOptions here to include the new page
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, "index.html"),
+        contact: resolve(__dirname, "contact.html"),
+      },
+    },
   },
 });
