@@ -350,7 +350,6 @@ const missingClassmatesData = [
       { name: "McEldowney, Josephine", uid: "BHS-305" },
       { name: "McGee, Geanise R.", uid: "BHS-211" },
       { name: "McGee, LaRhonda D.", uid: "BHS-355" },
-      { name: "McKinney, Malcolm K.", uid: "BHS-383" },
       { name: "McNack, Kathryn E.", uid: "BHS-328" },
       { name: "Medcalf, Rebecca", uid: "BHS-507" },
       { name: "Medina, Denise D.", uid: "BHS-164" },
