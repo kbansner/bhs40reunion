@@ -1,0 +1,59 @@
+/* Contact Page Specific Styles */
+
+/* Committee Card Hover Effects */
+.committee-card {
+  transform: scale(1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.committee-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 25px 50px -12px rgba(255, 204, 0, 0.25);
+}
+
+/* Yearbook Inset Hover Effect */
+.committee-card:hover .yearbook-inset {
+  border-color: #ffffff;
+  transform: scale(1.1);
+  transition: all 0.3s ease;
+}
+
+.yearbook-inset {
+  transition: all 0.3s ease;
+}
+
+/* Smooth scrolling for anchor links */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Mobile adjustments for yearbook inset position */
+@media (max-width: 640px) {
+  .yearbook-inset {
+    top: 1rem;
+    right: 1rem;
+    bottom: auto;
+  }
+}
+
+/* Polaroid animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(12deg);
+  }
+  50% {
+    transform: translateY(-10px) rotate(12deg);
+  }
+}
+
+#memory-lane .absolute:nth-child(1) {
+  animation: float 6s ease-in-out infinite;
+}
+
+#memory-lane .absolute:nth-child(2) {
+  animation: float 8s ease-in-out infinite 1s;
+}
+
+#memory-lane .absolute:nth-child(3) {
+  animation: float 7s ease-in-out infinite 2s;
+}
