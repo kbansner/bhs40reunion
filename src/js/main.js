@@ -53,12 +53,6 @@ window.addEventListener("DOMContentLoaded", function () {
   if (fbLink) {
     fbLink.href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
   }
-
-  // Render missing classmates dynamically
-  renderMissingClassmates();
-
-  // Initialize search functionality for missing classmates
-  initMissingClassmatesSearch();
 });
 
 // src/main.js
@@ -82,490 +76,80 @@ window.initMap = function () {
 // ============================================
 // HELP US FIND SECTION - Search & Contact Functions
 // ============================================
+async function fetchClassmatesFromSheet() {
+  const sheetId = "1vzSMuzoYv9H40xQmpXCjHALZmx3ALnb9WH-musGAvqo";
+  const tabName = "Help Us Find";
+  const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}`;
 
-// Updated Missing Classmates Data - BHS Class of '86
-// Complete Missing Classmates Data - BHS Class of '86
-const missingClassmatesData = [
-  {
-    letter: "A",
-    names: [
-      { name: "Abukhdair, Miriam Fahtma", uid: "BHS-447" },
-      { name: "Ackerman, Laura K.", uid: "BHS-362" },
-      { name: "Akino, Keshi", uid: "BHS-339" },
-      { name: "Alexis, Calvin", uid: "BHS-096" },
-      { name: "Anderson, Rico E.", uid: "BHS-519" },
-      { name: "Aquino, Robert F.", uid: "BHS-524" },
-      { name: "Austin, Gena Anne", uid: "BHS-212" },
-      { name: "Aviles, Olga Tatiana", uid: "BHS-472" },
-    ],
-  },
-  {
-    letter: "B",
-    names: [
-      { name: "Backer, David A.", uid: "BHS-150" },
-      { name: "Baker, Bette J.", uid: "BHS-080" },
-      { name: "Baker, Bryant", uid: "BHS-091" },
-      { name: "Baker, Paul", uid: "BHS-478" },
-      { name: "Ball, Benjamin J.", uid: "BHS-077" },
-      { name: "Bankhead, Peter", uid: "BHS-483" },
-      { name: "Barter, Christopher M.", uid: "BHS-126" },
-      { name: "Bayless, Rico L.", uid: "BHS-520" },
-      { name: "Bean, Scott M.", uid: "BHS-540" },
-      { name: "Bell, Steven M.", uid: "BHS-580" },
-      { name: "Bennett, Sonji B.", uid: "BHS-565" },
-      { name: "Bergesen, Sally C.", uid: "BHS-535" },
-      { name: "Best, Zachary M.", uid: "BHS-644" },
-      { name: "Bickel, Stephen E.", uid: "BHS-577" },
-      { name: "Binder, Devin K.", uid: "BHS-169" },
-      { name: "Black, Lisa M.", uid: "BHS-376" },
-      { name: "Blair, Kimberly D.", uid: "BHS-341" },
-      { name: "Blomberg, Jorgen A.", uid: "BHS-303" },
-      { name: "Bolt (Juarez), Helen I.", uid: "BHS-234" },
-      { name: "Bond, Jane T.", uid: "BHS-258" },
-      { name: "Boykin (Corbin), Venise S.", uid: "BHS-623" },
-      { name: "Bradford, Jeffrey P.", uid: "BHS-270" },
-      { name: "Bradley, Maria", uid: "BHS-394" },
-      { name: "Brand, Shauna L.", uid: "BHS-553" },
-      { name: "Bright, Kathryn L.", uid: "BHS-329" },
-      { name: "Brody, Mimi M.", uid: "BHS-446" },
-      { name: "Brown, Aaron E.", uid: "BHS-002" },
-      { name: "Brown, David M.", uid: "BHS-153" },
-      { name: "Buchanan, Alice J.", uid: "BHS-012" },
-      { name: "Bucher, Richard C.", uid: "BHS-516" },
-      { name: "Buckland, Anthony F.", uid: "BHS-062" },
-      { name: "Budinger, Thomas P.", uid: "BHS-610" },
-      { name: "Bui, Quang M.", uid: "BHS-496" },
-      { name: "Bullock, Jr., Emeal", uid: "BHS-182" },
-      { name: "Burdette (Schwarzbart), Sharon", uid: "BHS-551" },
-      { name: "Burns, Erik T.", uid: "BHS-193" },
-      { name: "Bush, David R.", uid: "BHS-155" },
-      { name: "Butler, Brian A.", uid: "BHS-087" },
-      { name: "Butts, Godivus M.", uid: "BHS-220" },
-    ],
-  },
-  {
-    letter: "C",
-    names: [
-      { name: "Calhoun, Sherston D.", uid: "BHS-558" },
-      { name: "Campbell, Caitlin M.", uid: "BHS-095" },
-      { name: "Campbell, Colin M.", uid: "BHS-132" },
-      { name: "Capers, Eric", uid: "BHS-187" },
-      { name: "Cary, Ethan M.", uid: "BHS-198" },
-      { name: "Chai, David K.", uid: "BHS-152" },
-      { name: "Chan, Pui W.", uid: "BHS-495" },
-      { name: "Chi, Chi-Liang (Gary)", uid: "BHS-114" },
-      { name: "Chi, Hyuk", uid: "BHS-241" },
-      { name: "Chi, Wook", uid: "BHS-634" },
-      { name: "Chien, Ning C. (Nina)", uid: "BHS-467" },
-      { name: "Cho, Jenny J.", uid: "BHS-283" },
-      { name: "Cho Nadell, Lailina", uid: "BHS-350" },
-      { name: "Chung, Susan S.", uid: "BHS-583" },
-      { name: "Clark, Juliet L.", uid: "BHS-317" },
-      { name: "Cole, Carey K.", uid: "BHS-098" },
-      { name: "Coleman, Lakesha", uid: "BHS-351" },
-      { name: "Collins, Jason F.", uid: "BHS-262" },
-      { name: "Cooreman, Kathy", uid: "BHS-330" },
-      { name: "Coulter, Bridgid L.", uid: "BHS-089" },
-      { name: "Cox, Jennifer", uid: "BHS-273" },
-      { name: "Crosby, Wyonona", uid: "BHS-635" },
-      { name: "Currie, Yolanda R.", uid: "BHS-639" },
-    ],
-  },
-  {
-    letter: "D",
-    names: [
-      { name: "Da Silva, Janaina T.", uid: "BHS-256" },
-      { name: "Daughtry, Mary L.", uid: "BHS-414" },
-      { name: "Davis, Royce D.", uid: "BHS-530" },
-      { name: "Dea, Christopher S.", uid: "BHS-129" },
-      { name: "Delaney, Andrew T.", uid: "BHS-045" },
-      { name: "Delgado, Silvia", uid: "BHS-560" },
-      { name: "DeLissovoy, Noah", uid: "BHS-469" },
-      { name: "Dolven, Eric T.", uid: "BHS-191" },
-      { name: "Dommer, Jason G.", uid: "BHS-263" },
-      { name: "Doyle, Mathew A.", uid: "BHS-416" },
-      { name: "Dozier, Jeffrey E.", uid: "BHS-268" },
-    ],
-  },
-  {
-    letter: "E",
-    names: [
-      { name: "Early, Yolanda", uid: "BHS-637" },
-      { name: "Edington, Alphonso D.", uid: "BHS-023" },
-      { name: "Eggling (Seiden), Marcy", uid: "BHS-391" },
-      { name: "Elliott, Aaron", uid: "BHS-001" },
-      { name: "Ellish, Jason A.", uid: "BHS-260" },
-      { name: "Ely, Michael", uid: "BHS-433" },
-      { name: "Ernst, Peter J.", uid: "BHS-489" },
-      { name: "Estrada, Michelle D.", uid: "BHS-442" },
-    ],
-  },
-  {
-    letter: "F",
-    names: [
-      { name: "Falk, Amerin", uid: "BHS-025" },
-      { name: "Fisher, Jacob S.", uid: "BHS-249" },
-      { name: "Fitzsimons, Amy P.", uid: "BHS-035" },
-      { name: "Fletcher, Jill J.", uid: "BHS-289" },
-      { name: "Folkmanis, Jason", uid: "BHS-259" },
-      { name: "Forrest, Anne", uid: "BHS-055" },
-      { name: "Frank, Marcos G.", uid: "BHS-388" },
-      { name: "Fredman, Peter B.", uid: "BHS-486" },
-      { name: "Freedman, Anne Marie", uid: "BHS-056" },
-    ],
-  },
-  {
-    letter: "G",
-    names: [
-      { name: "Gaines, Atwood G.", uid: "BHS-070" },
-      { name: "Gamble, Mark D.", uid: "BHS-404" },
-      { name: "Ghelerter, Lara E.", uid: "BHS-354" },
-      { name: "Giese, Christopher R.", uid: "BHS-128" },
-      { name: "Gonzales, Elizabeth", uid: "BHS-176" },
-      { name: "Gooding, Colin T.", uid: "BHS-133" },
-      { name: "Govers, Scott B.", uid: "BHS-539" },
-      { name: "Gray, Michele C.", uid: "BHS-439" },
-      { name: "Grayson, Ninochka", uid: "BHS-468" },
-      { name: "Greinke, Barney W.", uid: "BHS-074" },
-      { name: "Greer, William L. (Buddy)", uid: "BHS-630" },
-      { name: "Gregory, Stephen L.", uid: "BHS-578" },
-      { name: "Griffin, Benjamin L.", uid: "BHS-078" },
-    ],
-  },
-  {
-    letter: "H",
-    names: [
-      { name: "Haley, Ramal", uid: "BHS-502" },
-      { name: "Halverson, Aniko L.", uid: "BHS-050" },
-      { name: "Harper, Mia R.", uid: "BHS-431" },
-      { name: "Harper, Rashidi", uid: "BHS-505" },
-      { name: "Harris, Adriene C.", uid: "BHS-009" },
-      { name: "Harris, Katherine R.", uid: "BHS-327" },
-      { name: "Harris, Tonie L.", uid: "BHS-615" },
-      { name: "Hay, Tammy L.", uid: "BHS-591" },
-      { name: "Henry, Melissa S.", uid: "BHS-428" },
-      { name: "Herbert, Jaheda", uid: "BHS-252" },
-      { name: "Higgins, Neave V.", uid: "BHS-462" },
-      { name: "Hoffman (Signer), Flynn", uid: "BHS-200" },
-      { name: "Holmes, Jacob A.", uid: "BHS-247" },
-      { name: "Holmes, Melissa", uid: "BHS-426" },
-      { name: "Horning, Cynthia M.", uid: "BHS-140" },
-      { name: "Horton, Emma G.", uid: "BHS-183" },
-      { name: "Hosley, Sonji S.", uid: "BHS-566" },
-      { name: "Hudson, Marcus D.", uid: "BHS-390" },
-      { name: "Hughes, Nicole M.", uid: "BHS-465" },
-    ],
-  },
-  {
-    letter: "I",
-    names: [
-      { name: "Inacay, Amor L.", uid: "BHS-028" },
-      { name: "Ishimaru, Craig I.", uid: "BHS-134" },
-      { name: "Ison, III, Anthony C.", uid: "BHS-060" },
-    ],
-  },
-  {
-    letter: "J",
-    names: [
-      { name: "Jackson, Anthony C.", uid: "BHS-061" },
-      { name: "Jackson, Tina R.", uid: "BHS-612" },
-      { name: "James, LaShan", uid: "BHS-356" },
-      { name: "Jeffries, Karen", uid: "BHS-322" },
-      { name: "Johnson, Julie C.", uid: "BHS-314" },
-      { name: "Johnson, Nancy L.", uid: "BHS-455" },
-      { name: "Johnson, Rachawn M.", uid: "BHS-498" },
-      { name: "Johnson, Sean D.", uid: "BHS-541" },
-      { name: "Johnson, Thomas E.", uid: "BHS-609" },
-      { name: "Johnson, Jr., Willie C.", uid: "BHS-631" },
-      { name: "Jones, Felica D.", uid: "BHS-199" },
-      { name: "Jones, Fonda Y.", uid: "BHS-201" },
-      { name: "Jones, Meshia D.", uid: "BHS-430" },
-      { name: "Jones, Ruth M. L.", uid: "BHS-531" },
-      { name: "Jones, Wendy K.", uid: "BHS-626" },
-      { name: "Jordan (Le Vinh), Jordan", uid: "BHS-363" },
-      { name: "Joyner, Nicole D.", uid: "BHS-464" },
-    ],
-  },
-  {
-    letter: "K",
-    names: [
-      { name: "Kalmar, Tanaya R.", uid: "BHS-593" },
-      { name: "Kanyuk, Jane N.", uid: "BHS-257" },
-      { name: "Keasler, Anthony (Ian)", uid: "BHS-058" },
-      { name: "Kechley, Kevin", uid: "BHS-340" },
-      { name: "Keeney, Brian P.", uid: "BHS-088" },
-      { name: "Kelman, Navah M.", uid: "BHS-461" },
-      { name: "Kessler, Gabriel S.", uid: "BHS-208" },
-      { name: "Kim, Mauricio R.", uid: "BHS-421" },
-      { name: "King, Benjamin N.", uid: "BHS-079" },
-      { name: "Klinman, Douglas", uid: "BHS-173" },
-      { name: "Kloian, Elizabeth", uid: "BHS-177" },
-      { name: "Krabbe, Tatiana A.", uid: "BHS-598" },
-    ],
-  },
-  {
-    letter: "L",
-    names: [
-      { name: "Labarre, Leland J.", uid: "BHS-365" },
-      { name: "La Coss, Simone M.", uid: "BHS-561" },
-      { name: "Lam, Hong Y.", uid: "BHS-240" },
-      { name: "Langer, Catherine", uid: "BHS-106" },
-      { name: "Lau, Sophia So Fei", uid: "BHS-569" },
-      { name: "Lawson, Christy", uid: "BHS-130" },
-      { name: "Le Thuan, D. Thuan", uid: "BHS-142" },
-      { name: "Lee, Susan E.", uid: "BHS-582" },
-      { name: "Leegant, Ava R.", uid: "BHS-072" },
-      { name: "Leonard, Joanna E.", uid: "BHS-292" },
-      { name: "Leonard, Julius B.", uid: "BHS-319" },
-      { name: "Levy, Oren Avi", uid: "BHS-473" },
-      { name: "Levy, Rebecca S.", uid: "BHS-510" },
-      { name: "Libby, Shannon V.", uid: "BHS-548" },
-      { name: "Light, Judah S.", uid: "BHS-311" },
-      { name: "Link, Yvonne D.", uid: "BHS-643" },
-      { name: "Little, Christian Lige", uid: "BHS-118" },
-      { name: "Long, Guevara J.", uid: "BHS-225" },
-      { name: "Lopez, Jr., Heriberto", uid: "BHS-237" },
-      { name: "Lou, Charlie Lei", uid: "BHS-112" },
-      { name: "Lubliner, Anna Sarah", uid: "BHS-054" },
-      { name: "Lucas, Lisa", uid: "BHS-374" },
-      { name: "Lupoff, Thomas D.", uid: "BHS-608" },
-      { name: "Lyles, Carolyn Yvette", uid: "BHS-102" },
-      { name: "Lynch, Stacy R.", uid: "BHS-572" },
-      { name: "Lynch (Golden-Schubert), Shannon", uid: "BHS-547" },
-      { name: "Lyons, Damion E.", uid: "BHS-144" },
-    ],
-  },
-  {
-    letter: "M",
-    names: [
-      { name: "Manninen, Mari", uid: "BHS-393" },
-      { name: "Manougian, Yon", uid: "BHS-640" },
-      { name: "Martinez, Melissa", uid: "BHS-427" },
-      { name: "Martinson, Jemal D.", uid: "BHS-271" },
-      { name: "Matthews, Joyce", uid: "BHS-310" },
-      { name: "McClure, Peter C.", uid: "BHS-487" },
-      { name: "McCoy, Anthony A.", uid: "BHS-059" },
-      { name: "McCoy, Marc C.", uid: "BHS-387" },
-      { name: "McCoy, Monica D.", uid: "BHS-450" },
-      { name: "McEldowney, Josephine", uid: "BHS-305" },
-      { name: "McGee, Geanise R.", uid: "BHS-211" },
-      { name: "McGee, LaRhonda D.", uid: "BHS-355" },
-      { name: "McNack, Kathryn E.", uid: "BHS-328" },
-      { name: "Medcalf, Rebecca", uid: "BHS-507" },
-      { name: "Medina, Denise D.", uid: "BHS-164" },
-      { name: "Mendonca, Michael G.", uid: "BHS-435" },
-      { name: "Menocal, Marshall L.", uid: "BHS-407" },
-      { name: "Merritt, Christopher L.", uid: "BHS-125" },
-      { name: "Meuris, Christine R.", uid: "BHS-122" },
-      { name: "Miller, Wanda", uid: "BHS-625" },
-      { name: "Minor, Darron", uid: "BHS-148" },
-      { name: "Mishell, Jacob M.", uid: "BHS-248" },
-      { name: "Mixon, Sean H.", uid: "BHS-543" },
-      { name: "Miyoshi, Owen M.", uid: "BHS-474" },
-      { name: "Moll, Jason S.", uid: "BHS-264" },
-      { name: "Montali, Amy", uid: "BHS-029" },
-      { name: "Moore, Amy E.", uid: "BHS-033" },
-      { name: "Moore, Mark D.", uid: "BHS-403" },
-      { name: "Morgan, Damian L.", uid: "BHS-143" },
-      { name: "Morris, Georgiana N.", uid: "BHS-215" },
-      { name: "Mosley, Jonathan", uid: "BHS-301" },
-      { name: "Mouratoff, Vasilis M.", uid: "BHS-622" },
-      { name: "Murphy, Cary J.", uid: "BHS-104" },
-      { name: "Myles, Achebe L.", uid: "BHS-006" },
-      { name: "Myles, Kisaya", uid: "BHS-346" },
-    ],
-  },
-  {
-    letter: "N",
-    names: [
-      { name: "Nelson, Angela C.", uid: "BHS-047" },
-      { name: "Nelson, Marielle L.", uid: "BHS-397" },
-      { name: "Nesbitt, George J.", uid: "BHS-214" },
-      { name: "Newkirk (Christman), Rachel A.", uid: "BHS-500" },
-      { name: "Ng, Matthew S.", uid: "BHS-419" },
-      { name: "Nishifue, Caroline", uid: "BHS-101" },
-    ],
-  },
-  {
-    letter: "O",
-    names: [
-      { name: "O'Donnell Lahey, Elizabeth", uid: "BHS-178" },
-      { name: "Oki, Craig S.", uid: "BHS-135" },
-      { name: "Oki, David Y.", uid: "BHS-158" },
-      { name: "Olin, Gabriel S.", uid: "BHS-209" },
-      { name: "Oliver, Maria A.", uid: "BHS-395" },
-      { name: "Orenstein, Catherine", uid: "BHS-107" },
-      { name: "Orme, Stephan H.", uid: "BHS-574" },
-      { name: "Orozco, Enrique", uid: "BHS-184" },
-      { name: "Ortiz, Pedro", uid: "BHS-481" },
-      { name: "Ott, Aaron M.", uid: "BHS-004" },
-      { name: "Otterbeck, Mary A.", uid: "BHS-413" },
-      { name: "Outland, Shelita", uid: "BHS-555" },
-    ],
-  },
-  {
-    letter: "P",
-    names: [
-      { name: "Parker, Chris M.", uid: "BHS-117" },
-      { name: "Partyka (Heimpel), Doron U.", uid: "BHS-172" },
-      { name: "Perez, Aurora A.", uid: "BHS-071" },
-      { name: "Perkins, Chris", uid: "BHS-115" },
-      { name: "Peterson, Andrew J.", uid: "BHS-041" },
-      { name: "Petry, Pamela", uid: "BHS-475" },
-      { name: "Petty, Kemberle Ann", uid: "BHS-334" },
-      { name: "Phan, Giao Q.", uid: "BHS-216" },
-      { name: "Phill, Lee R.", uid: "BHS-364" },
-      { name: "Platt, Rebecca E.", uid: "BHS-509" },
-      { name: "Pon, Malcolm K.", uid: "BHS-384" },
-      { name: "Ponthier, Bonnie L.", uid: "BHS-084" },
-      { name: "Portero, Jonathan D.", uid: "BHS-302" },
-      { name: "Price, Armein", uid: "BHS-068" },
-      { name: "Price, Monique D.", uid: "BHS-452" },
-      { name: "Prichard, Sean D.", uid: "BHS-542" },
-      { name: "Prince, Rebecca", uid: "BHS-508" },
-      { name: "Pugh, Terrie S.", uid: "BHS-603" },
-    ],
-  },
-  {
-    letter: "Q",
-    names: [
-      { name: "Qin, Zhang", uid: "BHS-645" },
-      { name: "Quady, Peter A.", uid: "BHS-485" },
-    ],
-  },
-  {
-    letter: "R",
-    names: [
-      { name: "Ramey, Caitlin C.", uid: "BHS-094" },
-      { name: "Ramirez, Marcus A.", uid: "BHS-389" },
-      { name: "Ramos, Enrique", uid: "BHS-185" },
-      { name: "Ray, Allegheny M.", uid: "BHS-022" },
-      { name: "Recht, Joseph W.", uid: "BHS-304" },
-      { name: "Redman (Shedroff), Joshua", uid: "BHS-306" },
-      { name: "Rehn, Andrea", uid: "BHS-038" },
-      { name: "Reid, James", uid: "BHS-254" },
-      { name: "Reiff, Devan J.", uid: "BHS-168" },
-      { name: "Ricketts, Frances", uid: "BHS-202" },
-      { name: "Roberts, Jennifer L.", uid: "BHS-280" },
-      { name: "Roberts, Norman P.", uid: "BHS-471" },
-      { name: "Roizen, Zoe I.", uid: "BHS-646" },
-      { name: "Rosenblum, Petra E.", uid: "BHS-490" },
-      { name: "Rudnick, Rachel", uid: "BHS-499" },
-    ],
-  },
-  {
-    letter: "S",
-    names: [
-      { name: "Sanders, Greg", uid: "BHS-222" },
-      { name: "Sanders, III, Robert L.", uid: "BHS-525" },
-      { name: "Savage, Deanna", uid: "BHS-160" },
-      { name: "Scheiner, Ethan", uid: "BHS-197" },
-      { name: "Schwarzbart (Burdette), Sharon", uid: "BHS-551" },
-      { name: "Sessions, Amy (Aimee)", uid: "BHS-030" },
-      { name: "Shabazz, Terika", uid: "BHS-601" },
-      { name: "Shaver, Mark A.", uid: "BHS-401" },
-      { name: "Shepard, Laura B.", uid: "BHS-360" },
-      { name: "Simmons, Degi", uid: "BHS-163" },
-      { name: "Simmons, Philip J.", uid: "BHS-492" },
-      { name: "Simpson, Michael M.", uid: "BHS-438" },
-      { name: "Skelton, Eona", uid: "BHS-186" },
-      { name: "Slaughter, Darcel D.", uid: "BHS-146" },
-      { name: "Sloan, Reuben C.", uid: "BHS-514" },
-      { name: "Smith, Bobby", uid: "BHS-083" },
-      { name: "Smith, Mavalda T.", uid: "BHS-422" },
-      { name: "Smith, Nico C.", uid: "BHS-463" },
-      { name: "Smoller, Karen A.", uid: "BHS-323" },
-      { name: "Spencer, Michael D.", uid: "BHS-434" },
-      { name: "Spiller, Harry L.", uid: "BHS-227" },
-      { name: "Spitzer, Joel B.", uid: "BHS-293" },
-      { name: "Springsteen, Tamara", uid: "BHS-590" },
-      { name: "Stanley, Antonio", uid: "BHS-205" },
-      { name: "Starks, Taurus L.", uid: "BHS-599" },
-      { name: "Steinbach, Aminta N.", uid: "BHS-027" },
-      { name: "Stevens, Rachel J.", uid: "BHS-501" },
-      { name: "Stevens, Spencer D.", uid: "BHS-570" },
-      { name: "Stevens, Stefan", uid: "BHS-573" },
-      { name: "Stroud, Richard G.", uid: "BHS-517" },
-      { name: "Stuart, Deshane L.", uid: "BHS-167" },
-      { name: "Stuart (Bagnell), Jennifer Ann", uid: "BHS-276" },
-      { name: "Suarez, Raquel M.", uid: "BHS-504" },
-      { name: "Sugimoto, Susie K.", uid: "BHS-585" },
-      { name: "Sul, Martin R.", uid: "BHS-411" },
-      { name: "Sullivan, Shauna E.", uid: "BHS-552" },
-    ],
-  },
-  {
-    letter: "T",
-    names: [
-      { name: "Taplin, Heather E.", uid: "BHS-231" },
-      { name: "Taylor, Alicia L.", uid: "BHS-015" },
-      { name: "Taylor, Eric C.", uid: "BHS-189" },
-      { name: "Taylor, Shokai K.", uid: "BHS-559" },
-      { name: "Teague, Michelle J.", uid: "BHS-443" },
-      { name: "Thibodeaux, Julius", uid: "BHS-318" },
-      { name: "Thomas, LaTanya", uid: "BHS-358" },
-      { name: "Thornton, Tawana L.", uid: "BHS-600" },
-      { name: "Threatt, Christian R.", uid: "BHS-119" },
-      { name: "Tien, Cherie T.", uid: "BHS-113" },
-      { name: "Tims, Martrice S.", uid: "BHS-412" },
-      { name: "Torre, Karen M.", uid: "BHS-325" },
-      { name: "Torrence, Tandeeka M.", uid: "BHS-594" },
-      { name: "Toubba, Tania", uid: "BHS-595" },
-      { name: "Trainor, Ellen D. (Ellie)", uid: "BHS-181" },
-      { name: "Tran, Sahn", uid: "BHS-533" },
-    ],
-  },
-  {
-    letter: "U",
-    names: [{ name: "Upshaw, Cassandra", uid: "BHS-105" }],
-  },
-  {
-    letter: "V",
-    names: [
-      { name: "Valentine, Manuel", uid: "BHS-385" },
-      { name: "Vanarsdale, Jessi", uid: "BHS-285" },
-      { name: "Vann, Troy D.", uid: "BHS-618" },
-      { name: "Verzhbinsky, Anna", uid: "BHS-053" },
-      { name: "Vogel-Chemla, David S.", uid: "BHS-156" },
-    ],
-  },
-  {
-    letter: "W",
-    names: [
-      { name: "Wagoner, Robert A.", uid: "BHS-523" },
-      { name: "Walker-Troutt, Anton", uid: "BHS-064" },
-      { name: "Wann, Leon", uid: "BHS-367" },
-      { name: "Watkins, Tana L.", uid: "BHS-592" },
-      { name: "Watts, Christy L.", uid: "BHS-131" },
-      { name: "Wedgley, Hannah", uid: "BHS-226" },
-      { name: "Wei, Pei-Yuan", uid: "BHS-482" },
-      { name: "Welton, Elizabeth A.", uid: "BHS-179" },
-      { name: "Westbrooks, Donald V.", uid: "BHS-171" },
-      { name: "Wexelman, Sara L.", uid: "BHS-536" },
-      { name: "Whaley, Derek L.", uid: "BHS-166" },
-      { name: "Whitfield, Lashun", uid: "BHS-357" },
-      { name: "Whitmore, Henry E.", uid: "BHS-235" },
-      { name: "Williams, Alisa", uid: "BHS-016" },
-      { name: "Williams, Naomi M.", uid: "BHS-457" },
-      { name: "Willils, Andrew R.", uid: "BHS-044" },
-      { name: "Willis, Chris M.", uid: "BHS-116" },
-      { name: "Woods, Adrian", uid: "BHS-008" },
-      { name: "Woods, Fred D.", uid: "BHS-204" },
-      { name: "Wyrick, Regina E.", uid: "BHS-512" },
-    ],
-  },
-  {
-    letter: "Y",
-    names: [
-      { name: "Yadegar, Jahanrad (Jay)", uid: "BHS-251" },
-      { name: "Yee, Charles L.", uid: "BHS-111" },
-      { name: "Yin, Sopheak S.", uid: "BHS-568" },
-    ],
-  },
-];
+  try {
+    const response = await fetch(url);
+    const csvText = await response.text();
+    const rows = csvText.split("\n").slice(1);
+
+    const rawList = rows
+      .map((row) => {
+        // 1. Skip completely empty rows
+        if (!row.trim()) return null;
+
+        const cols = row
+          .split(",")
+          .map((field) => field.replace(/"/g, "").trim());
+
+        const uid = cols[0];
+        const firstName = cols[1] || "";
+        const lastGrad = cols[2] || "";
+        const lastNow = cols[3] || "";
+
+        // 2. Safety check: If there's no UID or no last name, skip this row
+        if (!uid || (!lastGrad && !lastNow)) return null;
+
+        let displayName;
+        if (lastNow) {
+          displayName = `${lastNow} (${lastGrad}), ${firstName}`;
+        } else {
+          displayName = `${lastGrad}, ${firstName}`;
+        }
+
+        // 3. Safety check for the sort letter
+        const sortBase = lastNow || lastGrad;
+        const sortLetter = sortBase ? sortBase.charAt(0).toUpperCase() : "?";
+
+        return { name: displayName, uid: uid, sortLetter: sortLetter };
+      })
+      .filter((item) => item !== null && item.uid.startsWith("BHS-"));
+
+    // Grouping
+    const grouped = rawList.reduce((acc, person) => {
+      const letter = person.sortLetter;
+      if (!acc[letter]) acc[letter] = { letter: letter, names: [] };
+      acc[letter].names.push({ name: person.name, uid: person.uid });
+      return acc;
+    }, {});
+
+    return Object.values(grouped)
+      .sort((a, b) => a.letter.localeCompare(b.letter))
+      .map((group) => ({
+        ...group,
+        names: group.names.sort((a, b) => a.name.localeCompare(b.name)),
+      }));
+  } catch (error) {
+    console.error("Fetch failed:", error);
+    return [];
+  }
+}
+
+// --- INITIALIZATION LOGIC ---
+document.addEventListener("DOMContentLoaded", async () => {
+  // Use 'await' so missingClassmatesData becomes the actual ARRAY, not a Promise
+  const missingClassmatesData = await fetchClassmatesFromSheet();
+
+  // Now .forEach will work perfectly
+  renderMissingClassmates(missingClassmatesData);
+  initMissingClassmatesSearch();
+});
 
 // Render all missing classmates dynamically
-function renderMissingClassmates() {
+function renderMissingClassmates(missingClassmatesData) {
   const container = document.getElementById("missing-classmates-container");
   const alphabetNav = document.querySelector(
     ".flex.flex-wrap.justify-center.gap-2.mb-8",
