@@ -136,8 +136,7 @@
                             d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                         />
                     </svg>
-                    Help Us Find
-                    <span class="hidden sm:inline-block">Missing Jackets</span>
+                    Who's Missing?
                 </a>
             </div>
         </nav>
@@ -160,9 +159,9 @@
                 id="logo-container"
                 class="hidden md:flex absolute top-12 right-16 z-30 items-center justify-center"
             >
-                <div class="absolute w-32 h-32 bg-white/50 rounded-full"></div>
+                <div class="absolute w-32 h-32 bg-white/70 rounded-full"></div>
                 <img
-                    src="/src/images/3a0bf6cefcdf1741c73598afa6f1e2293731f56b.png"
+                    src="/src/images/yellow-jacket.png"
                     alt="Berkeley High School Yellow Jacket Logo"
                     class="w-[102.4px] h-[102.4px] relative z-10 drop-shadow-lg"
                 />
@@ -173,7 +172,7 @@
             >
                 <div class="max-w-4xl mx-auto">
                     <div
-                        class="px-6 py-2 bg-bhs-red rounded-full mb-8 mt-12 md:mt-0 hidden sm:block"
+                        class="px-12 py-2 bg-bhs-red rounded-full mb-8 mt-12 lg:mb-16 md:mt-0 hidden sm:inline-block"
                     >
                         <h2
                             class="text-bhs-gold font-bold text-lg md:text-xl tracking-wide uppercase"
@@ -182,19 +181,19 @@
                         </h2>
                     </div>
                     <h1
-                        class="text-5xl md:text-7xl font-black mb-8 text-white heading-font"
+                        class="leading-none text-4xl md:text-7xl font-black mb-8 text-white heading-font"
                     >
-                        Reunion Dates: October 2-4, 2026
+                        Back to Berkeley: October 2-4, 2026
                     </h1>
                     <h3
-                        class="text-xl md:text-2xl mb-8 text-bhs-gold font-medium"
+                        class="text-xl md:text-2xl mb-6 text-bhs-gold font-medium"
                     >
-                        Location and Venue in Berkeley, California
+                        Help us lock in our venues! Your check-in helps us plan
+                        the perfect space and gets your name off the "Missing
+                        Jackets" list.
                     </h3>
-                    <p
-                        class="text-lg md:text-xl mb-6 text-white/90 max-w-2xl mx-auto"
-                    >
-                        Help us make this our most inclusive reunion&nbsp;yet.
+                    <p class="text-lg mb-6 text-white/90 max-w-2xl mx-auto">
+                        Make this our most inclusive reunion&nbsp;yet.
                     </p>
 
                     <div
@@ -224,25 +223,20 @@
                             class="w-full sm:w-auto px-8 py-4 bg-bhs-gold text-bhs-green font-bold text-lg rounded-lg hover:bg-bhs-gold/90 transition-all transform hover:scale-105 flex items-center justify-center gap-2 shadow-lg"
                         >
                             <svg
-                                class="w-5 h-5"
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
                                 fill="none"
                                 stroke="currentColor"
-                                viewBox="0 0 24 24"
+                                stroke-width="3"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
                             >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                                />
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                                />
+                                <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
-                            Join the Class Map & RSVP
+
+                            Join the Map & Check-in
                         </a>
                         <a
                             href="#help-us-find"
@@ -261,7 +255,7 @@
                                     d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                                 />
                             </svg>
-                            Help Us Find Missing Jackets
+                            Who's Missing?
                         </a>
                     </div>
                 </div>
@@ -326,7 +320,7 @@
                             <span
                                 id="goal-label"
                                 class="text-sm font-medium text-gray-600"
-                                >Goal: 620</span
+                                >Headcount Goal: 620</span
                             >
                         </div>
                         <!-- Progress Bar -->
@@ -339,10 +333,10 @@
                                 style="width: 18.4%"
                             ></div>
                         </div>
-                        <div class="mt-2 text-right">
+                        <div class="mt-2">
                             <span class="text-xs text-gray-500"
-                                ><span id="percent-display">18.4%</span> of
-                                goal</span
+                                >Help us lock in the right space by checking in
+                                today.</span
                             >
                         </div>
                     </div>
@@ -353,8 +347,7 @@
                     >
                         <div class="text-center">
                             <div
-                                id="percent-reachable"
-                                class="text-5xl font-black text-bhs-green mb-2 heading-font"
+                                class="percent-reachable text-5xl font-black text-bhs-green mb-2 heading-font"
                             >
                                 18.4%
                             </div>
@@ -528,10 +521,12 @@
                     <h2
                         class="text-4xl md:text-5xl font-bold mb-4 text-bhs-green heading-font"
                     >
-                        Where Are We Now?
+                        The Class of '86 Map
                     </h2>
                     <p class="text-xl text-gray-700">
-                        See where classmates have landed across the globe
+                        See who's coming from across the globe. Is your pin
+                        missing? Check-in to add yourself to the map and help us
+                        estimate our final headcount.
                     </p>
                 </div>
 
@@ -558,9 +553,23 @@
                         href="https://forms.gle/BQduAPNC67e2U9YQ7"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="inline-block px-8 py-3 bg-bhs-green text-white font-bold text-lg rounded-lg hover:bg-bhs-green/90 transition-all transform hover:scale-105 shadow-lg"
+                        class="inline-flex items-center gap-2 px-8 py-3 bg-bhs-green text-white font-bold text-lg rounded-lg hover:bg-bhs-green/90 transition-all transform hover:scale-105 shadow-lg"
                     >
-                        Fill Out the Check-in Questionnaire
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="3"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+
+                        <span>Join the Class Map & Check-in</span>
                     </a>
                 </div>
             </div>
@@ -693,18 +702,34 @@
                     >
                         Ready to RSVP?
                     </h3>
-                    <p class="text-bhs-green/80 mb-6 text-lg">
-                        Use the Check-in Questionnaire below to update your
-                        status and join the list of confirmed attendees. You can
-                        change your RSVP status at any time.
+                    <p class="text-bhs-green/90 mb-6 text-lg max-w-md mx-auto">
+                        Our check-in helps us finalize
+                        <span class="font-bold">venues</span>
+                        based on headcount. Help us find the
+                        <span class="missing-count-display font-bold">...</span>
+                        remaining Jackets!
                     </p>
                     <a
                         href="https://forms.gle/BQduAPNC67e2U9YQ7"
                         target="_blank"
                         rel="noopener noreferrer"
-                        class="inline-block px-8 py-3 bg-bhs-green text-white font-bold text-lg rounded-lg hover:bg-bhs-green/90 transition-all transform hover:scale-105 shadow-lg"
+                        class="inline-flex items-center gap-2 px-8 py-3 bg-bhs-green text-white font-bold text-lg rounded-lg hover:bg-bhs-green/90 transition-all transform hover:scale-105 shadow-lg"
                     >
-                        Fill Out the Check-in Questionnaire
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="3"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+
+                        <span>Join the Class Map & Check-in</span>
                     </a>
                 </div>
             </div>
@@ -728,8 +753,7 @@
                                 >25 check-ins per week</span
                             >. At this pace, we'll find half of our remaining
                             <span
-                                id="missing-count-display"
-                                class="font-bold text-gray-700"
+                                class="missing-count-display font-bold text-gray-700"
                                 >350</span
                             >
                             missing classmates by July!
@@ -779,27 +803,16 @@
                         class="w-full md:w-[70%] mx-auto text-left px-4 md:px-0"
                     >
                         <p class="mb-4 text-gray-600">
-                            <b
-                                >Our 40th reunion is only as good as the people
-                                who show up—and we don’t want anyone left
-                                behind.</b
+                            We are still searching for
+                            <span class="font-bold"
+                                ><span class="missing-count-display">350</span>
+                                classmates.</span
                             >
-                            Below are the classmates we haven’t been able to
-                            reach yet. If you see a friend on this list, you can
-                            help by clicking the icons on their card to:
+                            If you find a name that should be on the 'Confirmed'
+                            list, please encourage them to check-in. Knowing our
+                            total numbers early ensures we have enough room for
+                            everyone at our October venues!
                         </p>
-
-                        <ul class="list-disc ml-6 mb-4 space-y-2 text-gray-600">
-                            <li>
-                                ✉️ <b>Send an Email</b> or 💬
-                                <b>SMS</b> directly to them with a pre-written
-                                invite.
-                            </li>
-                            <li>
-                                📄 <b>Submit a Lead</b> to the committee if you
-                                have their updated contact info.
-                            </li>
-                        </ul>
 
                         <p class="text-xs italic text-gray-400 border-t pt-4">
                             Note: This list contains names only. As soon as a

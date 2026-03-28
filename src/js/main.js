@@ -391,7 +391,9 @@ async function fetchReunionStats() {
   const chartCanvas = document.getElementById("momentumChart");
   const syncTimestamp = document.getElementById("sync-timestamp");
   const chartTitle = document.querySelector("#momentum-section h2");
-  const missingCountDisplay = document.getElementById("missing-count-display");
+  const missingCountDisplay = document.querySelectorAll(
+    ".missing-count-display",
+  );
 
   try {
     const response = await fetch(SCRIPT_URL);
@@ -403,7 +405,9 @@ async function fetchReunionStats() {
     // Adjust 'stats.missingJackets' to match your exact JSON property name
     const missingJacketsCount = stats.missingJackets || 351;
     if (missingCountDisplay) {
-      missingCountDisplay.innerText = missingJacketsCount;
+      missingCountDisplay.forEach((el) => {
+        el.innerText = missingJacketsCount;
+      });
     }
 
     // 2. Update the Global UI Cards
@@ -414,7 +418,15 @@ async function fetchReunionStats() {
 
     document.getElementById("rsvp-label").innerText = `${rsvpCount} RSVPs`;
     document.getElementById("progress-bar-fill").style.width = `${pct}%`;
-    document.getElementById("percent-display").innerText = `${pct.toFixed(1)}%`;
+    // document.getElementById("percent-display").innerText = `${pct.toFixed(1)}%`;
+    // 1. Select all elements with the class
+    const percentElements = document.querySelectorAll(".percent-reachable");
+
+    // 2. Loop through each one and update its content
+    percentElements.forEach((el) => {
+      // Replace '64%' with your variable, e.g., (data.percentage * 100) + '%'
+      el.innerText = `${pct.toFixed(1)}%`;
+    });
 
     if (syncTimestamp && stats.lastUpdated) {
       syncTimestamp.innerText = `Synced at ${stats.lastUpdated}`;
