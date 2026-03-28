@@ -390,6 +390,8 @@ async function fetchReunionStats() {
   const skeleton = document.getElementById("chart-skeleton");
   const chartCanvas = document.getElementById("momentumChart");
   const syncTimestamp = document.getElementById("sync-timestamp");
+  const chartTitle = document.querySelector("#momentum-section h2");
+  const missingCountDisplay = document.getElementById("missing-count-display");
 
   try {
     const response = await fetch(SCRIPT_URL);
@@ -397,43 +399,67 @@ async function fetchReunionStats() {
 
     const stats = await response.json();
 
-    // 1. Update the Countdown Card
+    // 1. Get the "351" number (Missing Jackets / No Email)
+    // Adjust 'stats.missingJackets' to match your exact JSON property name
+    const missingJacketsCount = stats.missingJackets || 351;
+    if (missingCountDisplay) {
+      missingCountDisplay.innerText = missingJacketsCount;
+    }
+
+    // 2. Update the Global UI Cards
     document.getElementById("countdown-display").innerText =
       stats.daysRemaining;
-
-    // 2. Update the Progress Bar Card
     const rsvpCount = stats.rsvps;
-    const goal = stats.goal;
     const pct = stats.percentage * 100;
 
     document.getElementById("rsvp-label").innerText = `${rsvpCount} RSVPs`;
-    document.getElementById("goal-label").innerText = `Goal: ${goal}`;
     document.getElementById("progress-bar-fill").style.width = `${pct}%`;
-
-    // 3. Update the Engagement Cards
     document.getElementById("percent-display").innerText = `${pct.toFixed(1)}%`;
-    document.getElementById("percent-reachable").innerText =
-      `${pct.toFixed(1)}%`;
 
-    // 4. Update Timestamp
     if (syncTimestamp && stats.lastUpdated) {
       syncTimestamp.innerText = `Synced at ${stats.lastUpdated}`;
     }
 
-    // 5. Build the Momentum Chart
-    const ctx = chartCanvas.getContext("2d");
+    // 3. Success State Check (25/week target)
+    const trendData = stats.weeklyTrends;
+    const latestCount = trendData[trendData.length - 1].count;
+    const target = 25;
 
+    if (latestCount >= target && chartTitle) {
+      chartTitle.classList.remove("text-bhs-green");
+      chartTitle.classList.add("text-green-600");
+      if (!chartTitle.innerText.includes("🎉")) chartTitle.innerText += " 🎉";
+    }
+
+    // 4. Build the Momentum Chart
+    const ctx = chartCanvas.getContext("2d");
     new Chart(ctx, {
       type: "bar",
       data: {
-        labels: stats.weeklyTrends.map((t) => `Week ${t.week}`),
+        labels: trendData.map((t) => `Week ${t.week}`),
         datasets: [
           {
-            data: stats.weeklyTrends.map((t) => t.count),
-            backgroundColor: stats.weeklyTrends.map((_, i) =>
-              i === stats.weeklyTrends.length - 1 ? "#2e7d32" : "#741b47",
-            ),
+            label: "Actual Check-ins",
+            data: trendData.map((t) => t.count),
+            backgroundColor: trendData.map((t, i) => {
+              if (i === trendData.length - 1) {
+                return t.count >= target ? "#16a34a" : "#2D5A27";
+              }
+              return "#741b47";
+            }),
             borderRadius: 6,
+            order: 2,
+          },
+          {
+            label: "Weekly Target",
+            data: new Array(trendData.length).fill(target),
+            type: "line",
+            borderColor: "#cbd5e1",
+            borderDash: [5, 5],
+            pointRadius: 0,
+            fill: false,
+            borderWidth: 2,
+            order: 1,
           },
         ],
       },
@@ -442,13 +468,17 @@ async function fetchReunionStats() {
         maintainAspectRatio: false,
         plugins: { legend: { display: false } },
         scales: {
-          y: { beginAtZero: true, grid: { color: "#f0f0f0" } },
+          y: {
+            beginAtZero: true,
+            grid: { color: "#f8fafc" },
+            suggestedMax: 35,
+          },
           x: { grid: { display: false } },
         },
       },
-    }); // <--- This was missing!
+    });
 
-    // 6. Smooth transition: Show chart, hide skeleton
+    // 5. Transition UI
     chartCanvas.classList.add("chart-loaded");
     if (skeleton) {
       skeleton.style.opacity = "0";
@@ -458,18 +488,8 @@ async function fetchReunionStats() {
     }
   } catch (error) {
     console.error("Dashboard Sync Failed:", error);
-
-    // UI Fail-Safe: Show retry button if things go south
     if (skeleton) {
-      skeleton.innerHTML = `
-        <div class="flex flex-col items-center justify-center w-full h-full text-gray-500 p-4 text-center">
-          <p class="mb-2 font-semibold">Connection timed out.</p>
-          <button onclick="location.reload()" class="px-4 py-2 bg-bhs-gold text-bhs-green rounded-md font-bold hover:bg-yellow-500 transition-colors">
-            Retry Sync
-          </button>
-        </div>
-      `;
-      skeleton.classList.remove("loading-pulse");
+      skeleton.innerHTML = `<div class="p-4 text-center">Sync Failed. <button onclick="location.reload()">Retry</button></div>`;
     }
   }
 }

@@ -709,51 +709,59 @@
         </section>
 
         <!-- Reunion Momentum Chart -->
-        <section class="py-16 px-4 bg-white">
+        <section id="momentum-section" class="py-16 px-4 bg-white">
             <div class="max-w-6xl mx-auto">
-                <!-- Chart Card -->
                 <div
                     class="bg-white rounded-xl shadow-lg p-8 border-2 border-gray-100"
                 >
-                    <!-- Header -->
-                    <div class="mb-8">
+                    <div class="mb-8 text-left">
                         <h2
                             class="text-3xl md:text-4xl font-bold text-bhs-green mb-2 heading-font"
                         >
-                            Registration Momentum
+                            New Classmate Check-ins
                         </h2>
-                        <p class="text-gray-500 text-sm md:text-base">
-                            New classmates joining the party each week
+                        <p class="text-gray-500 text-sm md:text-base max-w-2xl">
+                            Our target is
+                            <span class="font-bold text-gray-700"
+                                >25 check-ins per week</span
+                            >. At this pace, we'll find half of our remaining
+                            <span
+                                id="missing-count-display"
+                                class="font-bold text-gray-700"
+                                >350</span
+                            >
+                            missing classmates by July!
                         </p>
                     </div>
 
-                    <!-- SVG Bar Chart with 7 weeks of data -->
                     <div class="relative w-full" style="height: 300px">
                         <div
                             id="chart-skeleton"
-                            class="loading-pulse absolute inset-0 z-10 rounded-lg"
+                            class="loading-pulse absolute inset-0 z-10 rounded-lg bg-gray-50"
                         ></div>
-
                         <div style="height: 300px; width: 100%">
                             <canvas id="momentumChart"></canvas>
                         </div>
                     </div>
 
-                    <!-- Footer Bridge -->
                     <div class="mt-8 text-center">
                         <p class="text-gray-600 italic text-sm md:text-base">
-                            We're growing! But we still haven't found everyone.
-                            ↓
+                            Every check-in is one person closer to a full house
+                            in October.
                         </p>
                         <div
+                            class="text-2xl text-gray-400 mt-1 mb-2 animate-bounce"
+                        >
+                            ↓
+                        </div>
+                        <div
                             id="sync-timestamp"
-                            class="text-gray-200 text-sm mt-2"
+                            class="text-gray-300 text-[10px] uppercase tracking-widest mt-2"
                         ></div>
                     </div>
                 </div>
             </div>
         </section>
-
         <section
             id="help-us-find"
             class="py-16 px-4 bg-gradient-to-b from-gray-50 to-white"
