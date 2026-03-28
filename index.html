@@ -272,6 +272,98 @@
             <div class="h-[11px] bg-bhs-red"></div>
             <div class="h-[8px] bg-bhs-gold"></div>
         </div>
+        <!-- Live Status Section -->
+        <section class="py-12 px-4 bg-[#2d2d2d]">
+            <div class="max-w-6xl mx-auto">
+                <!-- Responsive Flex Container - Horizontal on desktop, vertical on mobile -->
+                <div class="flex flex-col md:flex-row gap-5 md:gap-6">
+                    <!-- Widget 1: The Countdown -->
+                    <div
+                        class="flex-1 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 border border-gray-100"
+                    >
+                        <div class="flex items-center gap-3 mb-2">
+                            <div
+                                class="w-10 h-10 bg-bhs-green rounded-full flex items-center justify-center flex-shrink-0"
+                            >
+                                <svg
+                                    class="w-6 h-6 text-bhs-gold"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    />
+                                </svg>
+                            </div>
+                            <h3
+                                id="countdown-display"
+                                class="text-2xl font-bold text-bhs-green heading-font"
+                            >
+                                6 Months and 5 Days
+                            </h3>
+                        </div>
+                        <p class="text-gray-600 text-sm ml-[52px]">
+                            until the Reunion!
+                        </p>
+                    </div>
+
+                    <!-- Widget 2: The Goal Tracker -->
+                    <div
+                        class="flex-1 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 border border-gray-100"
+                    >
+                        <div class="flex justify-between items-center mb-3">
+                            <span
+                                id="rsvp-label"
+                                class="text-sm font-semibold text-bhs-green"
+                                >114 RSVPs</span
+                            >
+                            <span
+                                id="goal-label"
+                                class="text-sm font-medium text-gray-600"
+                                >Goal: 620</span
+                            >
+                        </div>
+                        <!-- Progress Bar -->
+                        <div
+                            class="relative h-4 bg-gray-200 rounded-full overflow-hidden"
+                        >
+                            <div
+                                id="progress-bar-fill"
+                                class="status-progress-bar absolute top-0 left-0 h-full rounded-full transition-all duration-500"
+                                style="width: 18.4%"
+                            ></div>
+                        </div>
+                        <div class="mt-2 text-right">
+                            <span class="text-xs text-gray-500"
+                                ><span id="percent-display">18.4%</span> of
+                                goal</span
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Widget 3: The Metric -->
+                    <div
+                        class="flex-1 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow p-6 border border-gray-100"
+                    >
+                        <div class="text-center">
+                            <div
+                                id="percent-reachable"
+                                class="text-5xl font-black text-bhs-green mb-2 heading-font"
+                            >
+                                18.4%
+                            </div>
+                            <p class="text-sm text-gray-600 leading-snug">
+                                of Reachable Grads Reached
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         <!-- Events Section -->
         <section
@@ -903,17 +995,17 @@
                 <!-- Divider -->
                 <div class="border-t border-white/20 pt-8">
                     <div class="text-center text-white/80">
+                        <p class="mb-4">
+                            <a
+                                href="contact.html"
+                                class="text-bhs-gold hover:text-bhs-gold/80 transition-colors font-semibold"
+                            >
+                                Contact the Committee →
+                            </a>
+                        </p>
                         <p class="mb-2">Berkeley High School Class of 1986</p>
                         <p class="text-sm">
                             © 2026 BHS Class of '86 Reunion Committee
-                            <b
-                                >|
-                                <a
-                                    href="/contact.html"
-                                    class="text-white/80 hover:text"
-                                    >Get In Touch</a
-                                ></b
-                            >
                         </p>
                     </div>
                 </div>

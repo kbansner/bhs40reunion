@@ -380,3 +380,39 @@ function sendSMS(name) {
 
   window.location.href = `sms:?&body=${message}`;
 }
+
+async function fetchReunionStats() {
+  const SCRIPT_URL =
+    "https://script.google.com/macros/s/AKfycbzjyvO6nipB3IwyNapX-_j8ejzoCrXkjC3xus5ynmbs0S2K9s3PptH0iCo1lq9nWhQr/exec";
+
+  try {
+    const response = await fetch(SCRIPT_URL);
+    const stats = await response.json();
+
+    // 1. Update the Countdown Card
+    document.getElementById("countdown-display").innerText =
+      stats.daysRemaining;
+
+    // 2. Update the Progress Bar Card
+    const rsvpCount = stats.rsvps;
+    const goal = stats.goal;
+    const pct = stats.percentage * 100; // Convert 0.18 to 18
+
+    document.getElementById("rsvp-label").innerText = `${rsvpCount} RSVPs`;
+    document.getElementById("goal-label").innerText = `Goal: ${goal}`;
+
+    // Animate the progress bar width
+    const bar = document.getElementById("progress-bar-fill");
+    bar.style.width = `${pct}%`;
+
+    // 3. Update the Engagement Card
+    document.getElementById("percent-display").innerText = `${pct.toFixed(1)}%`;
+
+    document.getElementById("percent-reachable").innerText =
+      `${pct.toFixed(1)}%`;
+  } catch (error) {
+    console.error("Error loading reunion stats:", error);
+  }
+}
+
+window.onload = fetchReunionStats;
