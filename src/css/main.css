@@ -191,9 +191,9 @@ p {
     margin: 9% auto;
     display: block;
     background-color: #ddd;
-    width: 75%;
-    height: 35px; /* Adjust height to match your text size */
-    border-radius: 15px;
+    width: 70%;
+    height: 40px; /* Adjust height to match your text size */
+    border-radius: 20px;
     animation: pulse 1.5s infinite ease-in-out;
 }
 
