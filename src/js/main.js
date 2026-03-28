@@ -140,12 +140,14 @@ async function fetchClassmatesFromSheet() {
 
 // --- INITIALIZATION LOGIC ---
 document.addEventListener("DOMContentLoaded", async () => {
-  // Use 'await' so missingClassmatesData becomes the actual ARRAY, not a Promise
+  // 1. Fetch and render Missing Classmates
   const missingClassmatesData = await fetchClassmatesFromSheet();
-
-  // Now .forEach will work perfectly
   renderMissingClassmates(missingClassmatesData);
   initMissingClassmatesSearch();
+
+  // 2. Fetch and render Dashboard Stats & Chart
+  // We call it here instead of using window.onload
+  fetchReunionStats();
 });
 
 // Render all missing classmates dynamically
@@ -385,8 +387,14 @@ async function fetchReunionStats() {
   const SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbzjyvO6nipB3IwyNapX-_j8ejzoCrXkjC3xus5ynmbs0S2K9s3PptH0iCo1lq9nWhQr/exec";
 
+  const skeleton = document.getElementById("chart-skeleton");
+  const chartCanvas = document.getElementById("momentumChart");
+  const syncTimestamp = document.getElementById("sync-timestamp");
+
   try {
     const response = await fetch(SCRIPT_URL);
+    if (!response.ok) throw new Error("Network response was not ok");
+
     const stats = await response.json();
 
     // 1. Update the Countdown Card
@@ -396,23 +404,72 @@ async function fetchReunionStats() {
     // 2. Update the Progress Bar Card
     const rsvpCount = stats.rsvps;
     const goal = stats.goal;
-    const pct = stats.percentage * 100; // Convert 0.18 to 18
+    const pct = stats.percentage * 100;
 
     document.getElementById("rsvp-label").innerText = `${rsvpCount} RSVPs`;
     document.getElementById("goal-label").innerText = `Goal: ${goal}`;
+    document.getElementById("progress-bar-fill").style.width = `${pct}%`;
 
-    // Animate the progress bar width
-    const bar = document.getElementById("progress-bar-fill");
-    bar.style.width = `${pct}%`;
-
-    // 3. Update the Engagement Card
+    // 3. Update the Engagement Cards
     document.getElementById("percent-display").innerText = `${pct.toFixed(1)}%`;
-
     document.getElementById("percent-reachable").innerText =
       `${pct.toFixed(1)}%`;
+
+    // 4. Update Timestamp
+    if (syncTimestamp && stats.lastUpdated) {
+      syncTimestamp.innerText = `Synced at ${stats.lastUpdated}`;
+    }
+
+    // 5. Build the Momentum Chart
+    const ctx = chartCanvas.getContext("2d");
+
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: stats.weeklyTrends.map((t) => `Week ${t.week}`),
+        datasets: [
+          {
+            data: stats.weeklyTrends.map((t) => t.count),
+            backgroundColor: stats.weeklyTrends.map((_, i) =>
+              i === stats.weeklyTrends.length - 1 ? "#2e7d32" : "#741b47",
+            ),
+            borderRadius: 6,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, grid: { color: "#f0f0f0" } },
+          x: { grid: { display: false } },
+        },
+      },
+    }); // <--- This was missing!
+
+    // 6. Smooth transition: Show chart, hide skeleton
+    chartCanvas.classList.add("chart-loaded");
+    if (skeleton) {
+      skeleton.style.opacity = "0";
+      setTimeout(() => {
+        skeleton.style.display = "none";
+      }, 100);
+    }
   } catch (error) {
-    console.error("Error loading reunion stats:", error);
+    console.error("Dashboard Sync Failed:", error);
+
+    // UI Fail-Safe: Show retry button if things go south
+    if (skeleton) {
+      skeleton.innerHTML = `
+        <div class="flex flex-col items-center justify-center w-full h-full text-gray-500 p-4 text-center">
+          <p class="mb-2 font-semibold">Connection timed out.</p>
+          <button onclick="location.reload()" class="px-4 py-2 bg-bhs-gold text-bhs-green rounded-md font-bold hover:bg-yellow-500 transition-colors">
+            Retry Sync
+          </button>
+        </div>
+      `;
+      skeleton.classList.remove("loading-pulse");
+    }
   }
 }
-
-window.onload = fetchReunionStats;

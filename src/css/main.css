@@ -185,3 +185,26 @@ p {
 .status-progress-bar {
     background: linear-gradient(to right, #006400, #ffcc00);
 }
+
+/* The Skeleton Loader */
+.loading-pulse {
+    margin: 9% auto;
+    display: block;
+    background-color: #ddd;
+    width: 75%;
+    height: 35px; /* Adjust height to match your text size */
+    border-radius: 15px;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% {
+        background-color: #ddd;
+    }
+    50% {
+        background-color: #f5f5f5;
+    }
+    100% {
+        background-color: #ddd;
+    }
+}

@@ -79,6 +79,8 @@
         <!-- Minimal JavaScript for Sticky Nav and Logo Animation -->
         <script type="module" src="/src/js/main.js"></script>
         <script type="module" src="/src/js/map-logic.js"></script>
+        <!-- Library for momentumChart -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
         <!-- Custom CSS -->
         <link rel="stylesheet" href="/src/css/main.css" />
     </head>
@@ -702,6 +704,52 @@
                     >
                         Fill Out the Questionnaire
                     </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reunion Momentum Chart -->
+        <section class="py-16 px-4 bg-white">
+            <div class="max-w-6xl mx-auto">
+                <!-- Chart Card -->
+                <div
+                    class="bg-white rounded-xl shadow-lg p-8 border-2 border-gray-100"
+                >
+                    <!-- Header -->
+                    <div class="mb-8">
+                        <h2
+                            class="text-3xl md:text-4xl font-bold text-bhs-green mb-2 heading-font"
+                        >
+                            Registration Momentum
+                        </h2>
+                        <p class="text-gray-500 text-sm md:text-base">
+                            New classmates joining the party each week
+                        </p>
+                    </div>
+
+                    <!-- SVG Bar Chart with 7 weeks of data -->
+                    <div class="relative w-full" style="height: 300px">
+                        <div
+                            id="chart-skeleton"
+                            class="loading-pulse absolute inset-0 z-10 rounded-lg"
+                        ></div>
+
+                        <div style="height: 300px; width: 100%">
+                            <canvas id="momentumChart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Footer Bridge -->
+                    <div class="mt-8 text-center">
+                        <p class="text-gray-600 italic text-sm md:text-base">
+                            We're growing! But we still haven't found everyone.
+                            ↓
+                        </p>
+                        <div
+                            id="sync-timestamp"
+                            class="text-gray-200 text-sm mt-2"
+                        ></div>
+                    </div>
                 </div>
             </div>
         </section>
