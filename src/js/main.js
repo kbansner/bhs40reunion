@@ -153,9 +153,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 // Render all missing classmates dynamically
 function renderMissingClassmates(missingClassmatesData) {
   const container = document.getElementById("missing-classmates-container");
-  const alphabetNav = document.querySelector(
-    ".flex.flex-wrap.justify-center.gap-2.mb-8",
-  );
+  // justify-center
+  const alphabetNav = document.getElementById("alpha-jump");
 
   if (!container) return; // Section might not exist on page
 
@@ -170,7 +169,7 @@ function renderMissingClassmates(missingClassmatesData) {
       const link = document.createElement("a");
       link.href = `#letter-${letter}`;
       link.className =
-        "alphabet-link px-3 py-2 bg-bhs-green text-white rounded-md hover:bg-bhs-green/90 transition-colors font-semibold text-sm";
+        "alphabet-link flex-1 min-w-0 flex items-center justify-center bg-bhs-green text-white rounded-lg font-bold hover:bg-green-700 transition-all aspect-square px-3 py-2 bg-bhs-green hover:bg-bhs-green/90 transition-colors font-semibold text-sm";
       link.textContent = letter;
       alphabetNav.appendChild(link);
     });
@@ -193,7 +192,7 @@ function renderMissingClassmates(missingClassmatesData) {
 
     const grid = document.createElement("div");
     grid.className =
-      "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3";
+      "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2";
 
     section.names.forEach((name) => {
       const card = createClassmateCard(name);
@@ -219,22 +218,23 @@ function renderMissingClassmates(missingClassmatesData) {
 function createClassmateCard(classmateData) {
   const card = document.createElement("div");
   card.className =
-    "classmate-card bg-white p-3 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow";
+    "classmate-card flex items-center justify-between bg-white p-2 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow overflow-hidden";
   card.setAttribute("data-name", classmateData.name);
 
   const nameHeading = document.createElement("h4");
-  nameHeading.className = "font-semibold text-base text-bhs-green mb-2";
+  nameHeading.className =
+    "truncate min-w-0 w-full flex-1 font-semibold text-md text-bhs-green overflow-hidden";
   nameHeading.textContent = classmateData.name;
   card.appendChild(nameHeading);
 
   const buttonContainer = document.createElement("div");
-  buttonContainer.className = "flex gap-1.5 justify-center";
+  buttonContainer.className = "flex items-center space-x-1 flex-shrink-0";
 
   // Email button (icon only)
   const emailBtn = document.createElement("button");
   emailBtn.onclick = () => sendEmail(classmateData.name);
   emailBtn.className =
-    "flex items-center justify-center p-2 bg-bhs-gold/20 text-bhs-green rounded-md hover:bg-bhs-gold/40 transition-all";
+    "w-4 h-4 flex items-center justify-center text-bhs-green rounded hover:bg-bhs-gold/40 transition-all";
   emailBtn.title = "Email Them";
   emailBtn.setAttribute("aria-label", "Email Them");
   emailBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -253,7 +253,7 @@ function createClassmateCard(classmateData) {
   const smsBtn = document.createElement("button");
   smsBtn.onclick = () => sendSMS(classmateData.name);
   smsBtn.className =
-    "flex items-center justify-center p-2 bg-bhs-green/10 text-bhs-green rounded-md hover:bg-bhs-green/20 transition-all";
+    "w-4 h-4 flex items-center justify-center text-bhs-green rounded hover:bg-bhs-green/20 transition-all";
   smsBtn.title = "Text Them";
   smsBtn.setAttribute("aria-label", "Text Them");
   smsBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -274,7 +274,7 @@ function createClassmateCard(classmateData) {
   shareLink.target = "_blank";
   shareLink.rel = "noopener noreferrer";
   shareLink.className =
-    "flex items-center justify-center p-2 bg-bhs-red/10 text-bhs-red rounded-md hover:bg-bhs-red/20 transition-all";
+    "w-4 h-4 flex items-center justify-center text-bhs-red rounded hover:bg-bhs-red/20 transition-all";
   shareLink.title = "Share Their Info";
   shareLink.setAttribute("aria-label", "Share Their Info");
   shareLink.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

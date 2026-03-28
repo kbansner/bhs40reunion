@@ -129,7 +129,8 @@ img {
     padding: var(--pill-padding);
     border-radius: var(--pill-radius);
     font-weight: 500;
-    margin-bottom: 0.5rem;
+    font-size: 0.875rem;
+    margin-bottom: 0.3rem;
     transition:
         box-shadow var(--transition-speed),
         transform var(--transition-speed);
