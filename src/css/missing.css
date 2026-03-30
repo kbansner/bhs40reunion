@@ -1,0 +1,502 @@
+/* ===================================
+   MISSING CLASSMATES SEARCH TOOL
+   Page-specific styles for missing.html
+   Depends on main.css from homepage
+   =================================== */
+
+/* CSS Variables for BHS Brand Colors */
+:root {
+    --bhs-green: #006400;
+    --bhs-gold: #ffcc00;
+    --bhs-red: #c41230;
+    --bhs-bg: #fdf6e3;
+}
+
+/* Page Background */
+body {
+    background-color: var(--bhs-bg);
+    font-family: "Open Sans", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Container */
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 1rem;
+}
+
+/* ===================================
+   HEADER
+   =================================== */
+
+.missing-header {
+    background-color: var(--bhs-green);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+}
+
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+@media (min-width: 768px) {
+    .header-content {
+        flex-direction: row;
+    }
+}
+
+.header-title {
+    font-family: "Roboto Slab", serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--bhs-gold);
+    margin: 0;
+}
+
+@media (min-width: 768px) {
+    .header-title {
+        font-size: 1.875rem;
+    }
+}
+
+.header-subtitle {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.875rem;
+    margin: 0.25rem 0 0 0;
+}
+
+.btn-back {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    background-color: var(--bhs-gold);
+    color: var(--bhs-green);
+    font-weight: 700;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: all 0.3s;
+    font-size: 0.875rem;
+}
+
+.btn-back:hover {
+    background-color: rgba(255, 204, 0, 0.9);
+    transform: translateY(-1px);
+}
+
+@media (min-width: 768px) {
+    .btn-back {
+        font-size: 1rem;
+    }
+}
+
+/* ===================================
+   MAIN CONTENT
+   =================================== */
+
+.main-content {
+    padding: 2rem 0;
+}
+
+/* ===================================
+   SEARCH SECTION
+   =================================== */
+
+.search-section {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(0, 100, 0, 0.2);
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.search-header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+@media (min-width: 768px) {
+    .search-header {
+        flex-direction: row;
+        align-items: center;
+    }
+}
+
+.section-title {
+    font-family: "Roboto Slab", serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--bhs-green);
+    margin: 0;
+}
+
+.section-subtitle {
+    color: #6b7280;
+    font-size: 0.875rem;
+    margin: 0.25rem 0 0 0;
+}
+
+.view-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.view-label {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.btn-view {
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    background-color: #d1d5db;
+    color: #374151;
+    transition: all 0.2s;
+}
+
+.btn-view:hover {
+    background-color: #9ca3af;
+}
+
+.btn-view.active {
+    background-color: var(--bhs-green);
+    color: white;
+}
+
+/* Search Input */
+.search-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 3rem 0.75rem 1rem;
+    font-size: 1rem;
+    border: 2px solid #d1d5db;
+    border-radius: 0.5rem;
+    outline: none;
+    transition: all 0.2s;
+    box-sizing: border-box;
+}
+
+.search-input:focus {
+    border-color: var(--bhs-green);
+    box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.5);
+}
+
+.search-icon {
+    position: absolute;
+    right: 1rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 1.25rem;
+    height: 1.25rem;
+    color: #9ca3af;
+    pointer-events: none;
+}
+
+.search-count {
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin: 0.5rem 0 0 0;
+    text-align: center;
+}
+
+/* ===================================
+   ALPHABET SECTION
+   =================================== */
+
+.alphabet-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid rgba(0, 100, 0, 0.2);
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.alphabet-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.btn-letter {
+    width: 2rem;
+    height: 2rem;
+    background-color: rgba(255, 204, 0, 0.2);
+    color: var(--bhs-green);
+    font-weight: 700;
+    border: none;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.btn-letter:hover {
+    background-color: var(--bhs-gold);
+}
+
+.btn-show-all {
+    padding: 0 0.75rem;
+    height: 2rem;
+    background-color: var(--bhs-red);
+    color: white;
+    font-weight: 700;
+    border: none;
+    border-radius: 0.25rem;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-left: 0.5rem;
+}
+
+.btn-show-all:hover {
+    background-color: rgba(196, 18, 48, 0.9);
+}
+
+/* ===================================
+   CLASSMATES GRID
+   =================================== */
+
+.classmates-grid {
+    display: grid;
+    gap: 0.75rem;
+}
+
+.grid-cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 768px) {
+    .grid-cols-4 {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+.grid-cols-5 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 768px) {
+    .grid-cols-5 {
+        grid-template-columns: repeat(5, 1fr);
+    }
+}
+
+.grid-cols-6 {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+@media (min-width: 768px) {
+    .grid-cols-6 {
+        grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+/* ===================================
+   CLASSMATE CARD
+   =================================== */
+
+.classmate-card {
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e5e7eb;
+    overflow: hidden;
+    transition: all 0.3s;
+}
+
+.classmate-card:hover {
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    transform: translateY(-2px);
+}
+
+/* Thumbnail */
+.classmate-thumbnail {
+    aspect-ratio: 3 / 4;
+    background-color: #f3f4f6;
+    overflow: hidden;
+    position: relative;
+}
+
+.classmate-thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.classmate-thumbnail img.error {
+    display: none;
+}
+
+.image-error {
+    display: none;
+    width: 100%;
+    height: 100%;
+    align-items: center;
+    justify-content: center;
+    color: #6b7280;
+}
+
+.image-error.show {
+    display: flex;
+}
+
+.image-error svg {
+    width: 2.5rem;
+    height: 2.5rem;
+}
+
+/* Card Content */
+.classmate-content {
+    padding: 0.75rem;
+}
+
+.classmate-name {
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: var(--bhs-green);
+    margin: 0 0 0.5rem 0;
+    text-align: center;
+    line-height: 1.2;
+}
+
+@media (min-width: 768px) {
+    .classmate-name {
+        font-size: 1rem;
+    }
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+}
+
+.btn-action {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 0.25rem;
+    border: none;
+    padding: 0.375rem 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.btn-action svg {
+    width: 0.75rem;
+    height: 0.75rem;
+}
+
+.btn-email {
+    background-color: var(--bhs-gold);
+    color: var(--bhs-green);
+}
+
+.btn-email:hover {
+    background-color: rgba(255, 204, 0, 0.9);
+}
+
+.btn-text {
+    background-color: var(--bhs-green);
+    color: white;
+}
+
+.btn-text:hover {
+    background-color: rgba(0, 100, 0, 0.9);
+}
+
+.btn-share {
+    background-color: var(--bhs-red);
+    color: white;
+}
+
+.btn-share:hover {
+    background-color: rgba(196, 18, 48, 0.9);
+}
+
+/* ===================================
+   NO RESULTS
+   =================================== */
+
+.no-results {
+    text-align: center;
+    padding: 4rem 1rem;
+    background-color: white;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.no-results-icon {
+    width: 4rem;
+    height: 4rem;
+    margin: 0 auto 1rem;
+    color: #9ca3af;
+}
+
+.no-results-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #6b7280;
+    margin: 0 0 0.5rem 0;
+}
+
+.no-results-subtitle {
+    color: #9ca3af;
+    margin: 0;
+}
+
+/* ===================================
+   FOOTER
+   =================================== */
+
+.missing-footer {
+    background-color: var(--bhs-green);
+    margin-top: 3rem;
+    padding: 1.5rem 0;
+    text-align: center;
+}
+
+.footer-text {
+    color: white;
+    font-size: 0.875rem;
+    margin: 0;
+}
+
+.footer-subtext {
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.75rem;
+    margin: 0.25rem 0 0 0;
+}
