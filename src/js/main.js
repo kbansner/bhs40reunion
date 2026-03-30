@@ -354,7 +354,7 @@ function initMissingClassmatesSearch() {
 }
 
 // Email function for missing classmates
-function sendEmail(name) {
+window.sendEmail = (name) => {
   const questionnaireUrl = "https://forms.gle/BQduAPNC67e2U9YQ7"; // Replace with actual form URL
   const subject = encodeURIComponent(
     "BHS Class of '86 Reunion - We're Looking for You!",
@@ -369,10 +369,10 @@ function sendEmail(name) {
   );
 
   window.location.href = `mailto:?subject=${subject}&body=${body}`;
-}
+};
 
 // SMS function for missing classmates
-function sendSMS(name) {
+window.sendSMS = (name) => {
   const questionnaireUrl = "https://forms.gle/BQduAPNC67e2U9YQ7"; // Replace with actual form URL
   const firstName = name.split(",")[1] ? name.split(",")[1].trim() : name;
   const message = encodeURIComponent(
@@ -381,7 +381,7 @@ function sendSMS(name) {
   );
 
   window.location.href = `sms:?&body=${message}`;
-}
+};
 
 async function fetchReunionStats() {
   const SCRIPT_URL =
