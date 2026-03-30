@@ -51,8 +51,6 @@ function getThumbnailUrl(name, uid) {
   // 6. Generate Path
   const finalPath = `/grad-thumbnails/${numericUid}_${slug}.jpg`;
 
-  // console.log(`Generated Slug for ${uid} [${name}]: ${finalPath}`);
-
   return finalPath;
 }
 
@@ -135,7 +133,6 @@ function renderGrid() {
 
 // Create a classmate card
 function createClassmateCard(person, index) {
-  console.log("renderCard");
   const card = document.createElement("div");
   card.className =
     "classmate-card bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden";
@@ -196,17 +193,16 @@ function getInitials(name) {
 
 // Handle successful image load
 window.handleImageLoad = function (img, index) {
-  // console.log(`Image failed for index ${index}`);
   img.classList.add("loaded");
   const placeholder = document.getElementById(`placeholder-${index}`);
   if (placeholder) {
     placeholder.style.display = "none";
   }
-  // console.log("handleImageLoad", img, index);
 };
 
 // Handle image error
 window.handleImageError = function (img, index) {
+  console.log(`Image failed for index ${index}`);
   img.classList.add("error");
   img.style.display = "none";
   const placeholder = document.getElementById(`placeholder-${index}`);
