@@ -6,7 +6,7 @@
 // State
 let allMissingData = []; // Full dataset from Google Sheet/JSON
 let filteredClassmates = []; // Current filtered view
-let currentGridCols = 4;
+let currentGridCols = 5;
 
 // DOM Elements
 const searchInput = document.getElementById("search-missing"); // Updated ID to match your main.js
@@ -69,9 +69,14 @@ async function init() {
     allMissingData = rows
       .map((row) => {
         if (!row.trim()) return null;
+        // const cols = row
+        //   .split(",")
+        //   .map((field) => field.replace(/"/g, "").trim());
+
+        // Replace line 80 with this:
         const cols = row
-          .split(",")
-          .map((field) => field.replace(/"/g, "").trim());
+          .split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
+          .map((field) => field.replace(/^"|"$/g, "").trim());
 
         const uid = cols[0];
         const firstName = cols[1] || "";
@@ -94,8 +99,9 @@ async function init() {
 
     // Update UI Counts
     if (totalCount) totalCount.textContent = allMissingData.length;
-    if (totalCount) totalCount2.textContent = allMissingData.length;
+    if (totalCount2) totalCount2.textContent = allMissingData.length;
     if (showingCount) showingCount.textContent = allMissingData.length;
+    // console.log("totalCount2", totalCount2, allMissingData.length);
 
     generateAlphabetButtons();
     attachEventListeners();
@@ -162,21 +168,25 @@ function createClassmateCard(person, index) {
                 </svg>
             </div>
         </div>
-        <div class="p-3">
-            <h3 class="font-bold text-bhs-green text-sm truncate mb-3">${person.name}</h3>
-            <div class="flex flex-col gap-2">
-                <button class="btn-action flex items-center justify-center gap-2 p-2 bg-bhs-green text-white rounded text-xs" onclick="sendEmail('${person.name}')">
-                    Email Them
+            <div class="p-3">
+              <h3 class="font-bold text-base text-bhs-green mb-3 text-left leading-tight">${person.name}</h3>
+              <div class="flex justify-between gap-2">
+                <button class="flex-1 h-7 flex items-center justify-center bg-bhs-gold/20 text-bhs-green rounded border-0 cursor-pointer transition-all hover:bg-bhs-gold/40" onclick="sendEmail('${person.name}')" title="Email Them">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                  </svg>
                 </button>
-                <button class="btn-action flex items-center justify-center gap-2 p-2 bg-gray-100 text-gray-700 rounded text-xs" onclick="sendSMS('${person.name}')">
-                    Text Them
+                <button class="flex-1 h-7 flex items-center justify-center bg-bhs-gold/20 text-bhs-green rounded border-0 cursor-pointer transition-all hover:bg-bhs-gold/40" onclick="sendSMS('${person.name}')" title="Text Them">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
                 </button>
-                <a class="btn-action flex items-center justify-center gap-2 p-2 bg-bhs-red text-white rounded text-xs"
-                   href="https://docs.google.com/forms/d/e/1FAIpQLSeUCK2CHwM4sf2Y7YcxJh2EaqiuIWXf2DWIiUBRrGbYeEOxag/viewform?entry.1936296006=${encodeURIComponent(person.name)}&entry.1741703138=${person.uid}" target="_blank">
-                    Share Info
-                </a>
-            </div>
-        </div>
+                <button class="flex-1 h-7 flex items-center justify-center bg-bhs-gold/20 text-bhs-green rounded border-0 cursor-pointer transition-all hover:bg-bhs-gold/40" onclick="submitInfo('${person.name}','${person.uid}')" title="Share Their Info">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                </button>
+              </div>
     `;
   return card;
 }
@@ -229,6 +239,7 @@ function filterByLetter(letter) {
   filteredClassmates = allMissingData.filter((p) => p.letter === letter);
   if (searchInput) searchInput.value = "";
   renderGrid();
+  scrollToClassmateGrid();
 }
 
 // Change grid columns
@@ -260,6 +271,7 @@ function attachEventListeners() {
       filteredClassmates = [...allMissingData];
       if (searchInput) searchInput.value = "";
       renderGrid();
+      scrollToClassmateGrid();
     });
   }
 }
@@ -275,6 +287,20 @@ function generateAlphabetButtons() {
     btn.onclick = () => filterByLetter(letter);
     alphabetButtons.appendChild(btn);
   });
+}
+
+function scrollToClassmateGrid() {
+  const navHeight = document.getElementById("sticky-nav").offsetHeight;
+  const searchHeight = document.getElementById("search-navbar").offsetHeight;
+  const gridPosition = document.getElementById(
+    "classmates-grid-container",
+  ).offsetTop;
+  if (navHeight && searchHeight) {
+    window.scrollTo({
+      top: gridPosition - (navHeight + searchHeight) - 20, // 20px extra breathing room
+      behavior: "smooth",
+    });
+  }
 }
 
 // Start

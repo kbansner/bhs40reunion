@@ -26,39 +26,8 @@ window.initMap = function () {
   loadPins(map);
 };
 
-// Sticky Navigation - Show/Hide on Scroll
-(function () {
-  const stickyNav = document.getElementById("sticky-nav");
-  let lastScrollY = window.scrollY;
-
-  function handleScroll() {
-    const currentScrollY = window.scrollY;
-
-    // Show sticky nav after scrolling 300px
-    if (currentScrollY > 300) {
-      stickyNav.classList.add("visible");
-    } else {
-      stickyNav.classList.remove("visible");
-    }
-
-    lastScrollY = currentScrollY;
-  }
-
-  // Throttle scroll event for performance
-  let ticking = false;
-  window.addEventListener("scroll", function () {
-    if (!ticking) {
-      window.requestAnimationFrame(function () {
-        handleScroll();
-        ticking = false;
-      });
-      ticking = true;
-    }
-  });
-})();
-
-// Update share links with current URL (runs after page load)
 window.addEventListener("DOMContentLoaded", function () {
+  // Update share links with current URL (runs after page load)
   const currentUrl = encodeURIComponent(window.location.href);
   const shareMessage = encodeURIComponent(
     "Check out the Berkeley High Class of '86 40th Reunion! Help us make it happen: ",
@@ -82,287 +51,6 @@ window.addEventListener("DOMContentLoaded", function () {
     fbLink.href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
   }
 });
-
-// ============================================
-// HELP US FIND SECTION - Search & Contact Functions
-// ============================================
-async function fetchClassmatesFromSheet() {
-  const sheetId = "1vzSMuzoYv9H40xQmpXCjHALZmx3ALnb9WH-musGAvqo";
-  const tabName = "Help Us Find";
-  const url = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(tabName)}`;
-
-  try {
-    const response = await fetch(url);
-    const csvText = await response.text();
-    const rows = csvText.split("\n").slice(1);
-
-    const rawList = rows
-      .map((row) => {
-        // 1. Skip completely empty rows
-        if (!row.trim()) return null;
-
-        const cols = row
-          .split(",")
-          .map((field) => field.replace(/"/g, "").trim());
-
-        const uid = cols[0];
-        const firstName = cols[1] || "";
-        const lastGrad = cols[2] || "";
-        const lastNow = cols[3] || "";
-
-        // 2. Safety check: If there's no UID or no last name, skip this row
-        if (!uid || (!lastGrad && !lastNow)) return null;
-
-        let displayName;
-        if (lastNow) {
-          displayName = `${lastNow} (${lastGrad}), ${firstName}`;
-        } else {
-          displayName = `${lastGrad}, ${firstName}`;
-        }
-
-        // 3. Safety check for the sort letter
-        const sortBase = lastNow || lastGrad;
-        const sortLetter = sortBase ? sortBase.charAt(0).toUpperCase() : "?";
-
-        return { name: displayName, uid: uid, sortLetter: sortLetter };
-      })
-      .filter((item) => item !== null && item.uid.startsWith("BHS-"));
-
-    // Grouping
-    const grouped = rawList.reduce((acc, person) => {
-      const letter = person.sortLetter;
-      if (!acc[letter]) acc[letter] = { letter: letter, names: [] };
-      acc[letter].names.push({ name: person.name, uid: person.uid });
-      return acc;
-    }, {});
-
-    return Object.values(grouped)
-      .sort((a, b) => a.letter.localeCompare(b.letter))
-      .map((group) => ({
-        ...group,
-        names: group.names.sort((a, b) => a.name.localeCompare(b.name)),
-      }));
-  } catch (error) {
-    console.error("Fetch failed:", error);
-    return [];
-  }
-}
-
-// --- INITIALIZATION LOGIC ---
-document.addEventListener("DOMContentLoaded", async () => {
-  // 1. Fetch and render Missing Classmates
-  const missingClassmatesData = await fetchClassmatesFromSheet();
-  renderMissingClassmates(missingClassmatesData);
-  initMissingClassmatesSearch();
-
-  // 2. Fetch and render Dashboard Stats & Chart
-  // We call it here instead of using window.onload
-  fetchReunionStats();
-});
-
-// Render all missing classmates dynamically
-function renderMissingClassmates(missingClassmatesData) {
-  const container = document.getElementById("missing-classmates-container");
-  // justify-center
-  const alphabetNav = document.getElementById("alpha-jump");
-
-  if (!container) return; // Section might not exist on page
-
-  // Clear existing content
-  container.innerHTML = "";
-
-  // Build alphabet navigation
-  if (alphabetNav) {
-    alphabetNav.innerHTML = "";
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-    alphabet.forEach((letter) => {
-      const link = document.createElement("a");
-      link.href = `#letter-${letter}`;
-      link.className =
-        "alphabet-link flex-1 min-w-0 flex items-center justify-center bg-bhs-green text-white rounded-lg font-bold hover:bg-green-700 transition-all aspect-square px-3 py-2 bg-bhs-green hover:bg-bhs-green/90 transition-colors font-semibold text-sm";
-      link.textContent = letter;
-      alphabetNav.appendChild(link);
-    });
-  }
-
-  // Render each letter section
-  missingClassmatesData.forEach((section) => {
-    if (section.names.length === 0) return; // Skip empty sections
-
-    const sectionDiv = document.createElement("div");
-    sectionDiv.className = "letter-section mb-8";
-    sectionDiv.setAttribute("data-letter", section.letter);
-    sectionDiv.id = `letter-${section.letter}`;
-
-    const heading = document.createElement("h3");
-    heading.className =
-      "text-2xl font-bold text-bhs-green heading-font mb-4 pb-2 border-b-2 border-bhs-gold";
-    heading.textContent = section.letter;
-    sectionDiv.appendChild(heading);
-
-    const grid = document.createElement("div");
-    grid.className =
-      "grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2";
-
-    section.names.forEach((name) => {
-      const card = createClassmateCard(name);
-      grid.appendChild(card);
-    });
-
-    sectionDiv.appendChild(grid);
-    container.appendChild(sectionDiv);
-  });
-
-  // Update total count
-  const totalCount = missingClassmatesData.reduce(
-    (sum, section) => sum + section.names.length,
-    0,
-  );
-  const resultsCount = document.getElementById("results-count");
-  if (resultsCount) {
-    resultsCount.textContent = totalCount;
-  }
-}
-
-// Create a single classmate card
-function createClassmateCard(classmateData) {
-  const card = document.createElement("div");
-  card.className =
-    "classmate-card flex items-center justify-between bg-white p-2 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow overflow-hidden";
-  card.setAttribute("data-name", classmateData.name);
-
-  const nameHeading = document.createElement("h4");
-  nameHeading.className =
-    "truncate min-w-0 w-full flex-1 font-semibold text-md text-bhs-green overflow-hidden";
-  nameHeading.textContent = classmateData.name;
-  card.appendChild(nameHeading);
-
-  const buttonContainer = document.createElement("div");
-  buttonContainer.className = "flex items-center space-x-1 flex-shrink-0";
-
-  // Email button (icon only)
-  const emailBtn = document.createElement("button");
-  // emailBtn.onclick = () => sendEmail(classmateData.name);
-  emailBtn.onclick = () => window.sendEmail(classmateData.name);
-  emailBtn.className =
-    "w-4 h-4 flex items-center justify-center text-bhs-green rounded hover:bg-bhs-gold/40 transition-all";
-  emailBtn.title = "Email Them";
-  emailBtn.setAttribute("aria-label", "Email Them");
-  emailBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-  </svg>`;
-  emailBtn.addEventListener("click", function () {
-    // Send the event to Google Analytics
-    gtag("event", "button_click", {
-      button_name: "Email Them",
-      link_text: emailBtn.innerText,
-    });
-  });
-  buttonContainer.appendChild(emailBtn);
-
-  // SMS button (icon only)
-  const smsBtn = document.createElement("button");
-  smsBtn.onclick = () => window.sendSMS(classmateData.name);
-  smsBtn.className =
-    "w-4 h-4 flex items-center justify-center text-bhs-green rounded hover:bg-bhs-green/20 transition-all";
-  smsBtn.title = "Text Them";
-  smsBtn.setAttribute("aria-label", "Text Them");
-  smsBtn.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-  </svg>`;
-  smsBtn.addEventListener("click", function () {
-    // Send the event to Google Analytics
-    gtag("event", "button_click", {
-      button_name: "Text Them",
-      link_text: smsBtn.innerText,
-    });
-  });
-  buttonContainer.appendChild(smsBtn);
-
-  // Share info link (icon only) - NOW WITH UID!
-  const shareLink = document.createElement("a");
-  shareLink.href = `https://docs.google.com/forms/d/e/1FAIpQLSeUCK2CHwM4sf2Y7YcxJh2EaqiuIWXf2DWIiUBRrGbYeEOxag/viewform?usp=pp_url&entry.1936296006=${classmateData.name}&entry.1741703138=${classmateData.uid}`;
-  shareLink.target = "_blank";
-  shareLink.rel = "noopener noreferrer";
-  shareLink.className =
-    "w-4 h-4 flex items-center justify-center text-bhs-red rounded hover:bg-bhs-red/20 transition-all";
-  shareLink.title = "Share Their Info";
-  shareLink.setAttribute("aria-label", "Share Their Info");
-  shareLink.innerHTML = `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-  </svg>`;
-  shareLink.addEventListener("click", function () {
-    // Send the event to Google Analytics
-    gtag("event", "button_click", {
-      link_name: "Share Their Info",
-      link_url: shareLink.href,
-    });
-  });
-  buttonContainer.appendChild(shareLink);
-
-  card.appendChild(buttonContainer);
-  return card;
-}
-
-// Search functionality for missing classmates
-function initMissingClassmatesSearch() {
-  const searchInput = document.getElementById("search-missing");
-  if (!searchInput) return; // Section might not exist on page
-
-  const resultsCount = document.getElementById("results-count");
-  const noResults = document.getElementById("no-results");
-  const classmateCards = document.querySelectorAll(".classmate-card");
-  const letterSections = document.querySelectorAll(".letter-section");
-
-  searchInput.addEventListener("input", function (e) {
-    const searchTerm = e.target.value.toLowerCase().trim();
-    let visibleCount = 0;
-
-    // If search is empty, show all
-    if (searchTerm === "") {
-      classmateCards.forEach((card) => {
-        card.style.display = "";
-      });
-      letterSections.forEach((section) => {
-        section.style.display = "";
-      });
-      resultsCount.textContent = classmateCards.length;
-      noResults.classList.add("hidden");
-      return;
-    }
-
-    // Search and filter
-    classmateCards.forEach((card) => {
-      const name = card.getAttribute("data-name").toLowerCase();
-      if (name.includes(searchTerm)) {
-        card.style.display = "";
-        visibleCount++;
-      } else {
-        card.style.display = "none";
-      }
-    });
-
-    // Hide letter sections that have no visible cards
-    letterSections.forEach((section) => {
-      const visibleCardsInSection = section.querySelectorAll(
-        '.classmate-card:not([style*="display: none"])',
-      );
-      if (visibleCardsInSection.length === 0) {
-        section.style.display = "none";
-      } else {
-        section.style.display = "";
-      }
-    });
-
-    // Update count and show/hide no results message
-    resultsCount.textContent = visibleCount;
-    if (visibleCount === 0) {
-      noResults.classList.remove("hidden");
-    } else {
-      noResults.classList.add("hidden");
-    }
-  });
-}
 
 // Email function for missing classmates
 window.sendEmail = (name) => {
@@ -396,7 +84,12 @@ window.sendSMS = (name) => {
   window.location.href = `sms:?&body=${message}`;
 };
 
-async function fetchReunionStats() {
+window.submitInfo = function (name, uid) {
+  const formUrl = `https://docs.google.com/forms/d/e/1FAIpQLSeUCK2CHwM4sf2Y7YcxJh2EaqiuIWXf2DWIiUBRrGbYeEOxag/viewform?usp=pp_url&entry.1936296006=${name}&entry.1741703138=${uid}`;
+  window.open(formUrl, "_blank");
+};
+
+window.fetchReunionStats = async function () {
   const SCRIPT_URL =
     "https://script.google.com/macros/s/AKfycbzjyvO6nipB3IwyNapX-_j8ejzoCrXkjC3xus5ynmbs0S2K9s3PptH0iCo1lq9nWhQr/exec";
 
@@ -407,7 +100,6 @@ async function fetchReunionStats() {
   const missingCountDisplay = document.querySelectorAll(
     ".missing-count-display",
   );
-
   try {
     const response = await fetch(SCRIPT_URL);
     if (!response.ok) throw new Error("Network response was not ok");
@@ -506,7 +198,13 @@ async function fetchReunionStats() {
       });
     } else {
       console.warn("Chart.js not loaded yet. Retrying in 500ms...");
-      setTimeout(fetchReunionStats, 500);
+      // Chart logic
+      if (typeof Chart !== "undefined") {
+        renderChart(chartCanvas, stats);
+      } else if (chartRetryCount < 3) {
+        chartRetryCount++;
+        setTimeout(window.fetchReunionStats, 1000);
+      }
     }
 
     // 5. Transition UI
@@ -523,4 +221,57 @@ async function fetchReunionStats() {
       skeleton.innerHTML = `<div class="p-4 text-center">Sync Failed. <button onclick="location.reload()">Retry</button></div>`;
     }
   }
+};
+
+// Sticky navigation scroll handler
+let searchBarOriginalOffset = null;
+
+function handleScroll() {
+  // Search bar sticks ONLY when it would disappear under the sticky nav
+  const stickyNavHeight = 64; // Height of the sticky nav bar
+
+  const stickyNav = document.getElementById("sticky-nav");
+  const searchNavBar = document.getElementById("search-navbar");
+
+  if (stickyNav) {
+    // Sticky nav appears at 300px
+    if (window.scrollY > 300) {
+      console.log("show sticky nav");
+      stickyNav.classList.remove("-translate-y-full", "opacity-0");
+      stickyNav.classList.add("translate-y-0", "opacity-100");
+    } else {
+      stickyNav.classList.add("-translate-y-full", "opacity-0");
+      stickyNav.classList.remove("translate-y-0", "opacity-100");
+    }
+  }
+  if (!searchNavBar) return;
+  // Store the original position of search bar (before it becomes sticky)
+  if (searchBarOriginalOffset === null) {
+    searchBarOriginalOffset = searchNavBar.offsetTop;
+  }
+
+  // When scroll position + nav height reaches the search bar, lock it below nav
+  if (window.scrollY + stickyNavHeight >= searchBarOriginalOffset) {
+    searchNavBar.classList.add("below-sticky-nav");
+  } else {
+    searchNavBar.classList.remove("below-sticky-nav");
+  }
 }
+
+// Sticky Navigation - Show/Hide on Scroll
+(function () {
+  const stickyNav = document.getElementById("sticky-nav");
+  let lastScrollY = window.scrollY;
+
+  // Throttle scroll event for performance
+  let ticking = false;
+  window.addEventListener("scroll", function () {
+    if (!ticking) {
+      window.requestAnimationFrame(function () {
+        handleScroll();
+        ticking = false;
+      });
+      ticking = true;
+    }
+  });
+})();

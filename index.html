@@ -71,8 +71,7 @@
             href="https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@400;700;900&family=Inter:wght@400;500;600;700&display=swap"
             rel="stylesheet"
         />
-        <!-- Minimal JavaScript for Sticky Nav and Logo Animation -->
-        <script type="module" src="/src/js/main.js"></script>
+
         <!-- Library for momentumChart -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
         <!-- Custom CSS -->
@@ -509,7 +508,10 @@
         </section>
 
         <!-- Map & Questionnaire Section -->
-        <section id="mapSection" class="py-16 px-4 bg-white">
+        <section
+            id="mapSection"
+            class="py-16 px-4 bg-gradient-to-b from-white to-gray-50"
+        >
             <div class="max-w-5xl mx-auto">
                 <div class="text-center mb-12">
                     <h2
@@ -570,7 +572,10 @@
         </section>
 
         <!-- Who's Coming Section -->
-        <section id="whos-coming" class="py-16 px-4 bg-white">
+        <section
+            id="whos-coming"
+            class="py-16 px-4 bg-gradient-to-b from-white to-gray-50"
+        >
             <div class="max-w-6xl mx-auto">
                 <div class="text-center mb-12">
                     <h2
@@ -730,7 +735,10 @@
         </section>
 
         <!-- Reunion Momentum Chart -->
-        <section id="momentum-section" class="py-16 px-4 bg-white">
+        <section
+            id="momentum-section"
+            class="py-16 px-4 bg-gradient-to-b from-white to-gray-50"
+        >
             <div class="max-w-6xl mx-auto">
                 <div
                     class="bg-white rounded-xl shadow-lg p-8 border-2 border-gray-100"
@@ -782,111 +790,88 @@
                 </div>
             </div>
         </section>
-        <section
-            id="help-us-find"
-            class="py-16 px-4 bg-gradient-to-b from-gray-50 to-white"
-        >
+        <!-- Missing Classmates Section -->
+        <section id="help-us-find" class="py-16 px-4 bg-gray-50">
             <div class="max-w-7xl mx-auto">
-                <div class="text-center mb-12">
+                <div class="text-center mb-6">
                     <h2
-                        class="text-4xl md:text-5xl font-bold mb-8 text-bhs-green heading-font"
+                        class="text-4xl md:text-5xl font-bold mb-4 text-bhs-green heading-font"
                     >
                         Help Us Find Missing Jackets
                     </h2>
-                    <div
-                        class="w-full md:w-[70%] mx-auto text-left px-4 md:px-0"
-                    >
-                        <p class="mb-4 text-gray-600">
-                            We are still searching for
-                            <span class="font-bold"
-                                ><span class="missing-count-display">350</span>
-                                classmates.</span
-                            >
-                            If you find a name that should be on the 'Confirmed'
-                            list, please encourage them to check-in. Knowing our
-                            total numbers early ensures we have enough room for
-                            everyone at our October venues!
-                        </p>
-
-                        <p class="text-xs italic text-gray-400 border-t pt-4">
-                            Note: This list contains names only. As soon as a
-                            Jacket checks in or we receive a valid lead, their
-                            name will be removed from this page.
-                        </p>
-                    </div>
                 </div>
 
-                <!-- Search Bar -->
-                <div class="max-w-2xl mx-auto mb-8">
-                    <div class="relative">
+                <!-- Info Deck -->
+                <div class="max-w-4xl mx-auto mb-8 p-6">
+                    <p
+                        class="text-base md:text-lg text-gray-700 leading-relaxed text-center"
+                    >
+                        We are still searching for
+                        <span class="font-bold text-bhs-red">
+                            <span id="total-count">000</span> classmates</span
+                        >. If you find a name that should be on the 'Confirmed'
+                        list, please encourage them to check-in. Knowing our
+                        total numbers early ensures we have enough room for
+                        everyone at our October venues!
+                    </p>
+                </div>
+
+                <!-- Search & Navigation Bar -->
+                <div
+                    class="search-nav-bar sticky top-0 z-40 bg-gray-50 pb-4 pt-2 border-b-2 border-gray-200 mb-4 transition-all duration-300"
+                    id="search-navbar"
+                >
+                    <!-- Search Bar, Counter & View Controls -->
+                    <div
+                        class="hidden md:flex flex-col md:flex-row justify-between items-center gap-6 mb-3"
+                    >
                         <input
                             type="text"
                             id="search-missing"
                             placeholder="Search by name..."
-                            class="w-full px-6 py-4 text-lg border-2 border-bhs-green/30 rounded-lg focus:border-bhs-green focus:outline-none focus:ring-2 focus:ring-bhs-gold/50"
+                            class="px-4 py-2 border border-gray-300 rounded-lg w-full md:flex-1 outline-none transition-all focus:border-bhs-gold focus:ring-4 focus:ring-bhs-gold/10 bg-white"
                         />
-                        <svg
-                            class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                            />
-                        </svg>
+                        <p class="text-sm text-gray-600 whitespace-nowrap">
+                            Showing <span id="results-count">32</span> of
+                            <span id="total-count-2">32</span>
+                        </p>
+                        <div class="view-controls">
+                            <button class="btn-view" data-cols="4">
+                                4 cols
+                            </button>
+                            <button class="btn-view active" data-cols="5">
+                                5 cols
+                            </button>
+                            <button class="btn-view" data-cols="6">
+                                6 cols
+                            </button>
+                        </div>
                     </div>
-                    <p class="text-sm text-gray-600 mt-2 text-center">
-                        <span id="results-count"></span> classmates shown
-                    </p>
+
+                    <div class="alphabet-section">
+                        <div
+                            id="alphabet-buttons"
+                            class="flex flex-wrap justify-center gap-1"
+                        >
+                            <!-- Letters A-Z will be generated by JavaScript -->
+                        </div>
+                        <button id="show-all-btn" class="btn-show-all">
+                            Show All
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Alphabetical Quick Jump (populated by JavaScript) -->
-                <div
-                    id="alpha-jump"
-                    class="flex flex-nowrap justify-between items-center w-full gap-2 overflow-x-auto pb-2 scrollbar-hide mb-8 border-gray-200"
-                >
-                    <!-- A-Z links will be generated by JavaScript -->
-                </div>
-
-                <!-- Missing Classmates List (populated by JavaScript) -->
-                <div id="missing-classmates-container">
-                    <!-- Content will be dynamically generated by JavaScript -->
-                </div>
-
-                <!-- No Results Message -->
-                <div id="no-results" class="hidden text-center py-12">
-                    <svg
-                        class="w-16 h-16 mx-auto text-gray-400 mb-4"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
+                <div id="classmates-grid-container" class="min-h-[400px] p-4">
+                    <div
+                        class="grid grid-cols-2 md:grid-cols-5 gap-3"
+                        id="classmates-grid"
                     >
-                        <path
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                            stroke-width="2"
-                            d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                    </svg>
-                    <p class="text-xl text-gray-600 font-semibold">
-                        No classmates found
-                    </p>
-                    <p class="text-gray-500">Try a different search term</p>
-                </div>
-
-                <!-- Instructions Box -->
-                <div
-                    class="mt-12 bg-bhs-gold/20 rounded-xl p-6 border-2 border-bhs-gold/50"
-                >
-                    <h3
-                        class="text-xl font-bold text-bhs-green heading-font mb-3 flex items-center gap-2"
-                    >
+                        <!-- Grid items will be populated by JavaScript -->
+                    </div>
+                    <!-- No Results Message -->
+                    <div id="no-results" class="no-results hidden">
                         <svg
-                            class="w-6 h-6"
+                            class="no-results-icon"
                             fill="none"
                             stroke="currentColor"
                             viewBox="0 0 24 24"
@@ -895,79 +880,14 @@
                                 stroke-linecap="round"
                                 stroke-linejoin="round"
                                 stroke-width="2"
-                                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
                             />
                         </svg>
-                        How You Can Help
-                    </h3>
-                    <ul class="space-y-2 text-gray-700">
-                        <li class="flex items-start gap-2">
-                            <span
-                                class="text-bhs-gold font-bold justify-center p-1 bg-bhs-gold/20 text-bhs-green rounded-md"
-                                ><svg
-                                    class="w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                                    /></svg
-                            ></span>
-                            <span
-                                ><strong>Email Them:</strong> Sends a
-                                pre-written message with the reunion
-                                questionnaire link</span
-                            >
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span
-                                class="text-bhs-green font-bold items-center justify-center p-1 bg-bhs-green/10 text-bhs-green rounded-md"
-                                ><svg
-                                    class="w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                                    /></svg
-                            ></span>
-                            <span
-                                ><strong>Text Them:</strong> Opens your
-                                messaging app with a ready-to-send text
-                                message</span
-                            >
-                        </li>
-                        <li class="flex items-start gap-2">
-                            <span
-                                class="text-bhs-red font-bold items-center justify-center p-1 bg-bhs-red/10 text-bhs-red rounded-md"
-                                ><svg
-                                    class="w-4 h-4"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
-                                >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                                    /></svg
-                            ></span>
-                            <span
-                                ><strong>Share Their Info:</strong> Have their
-                                email or phone? Share it with us
-                                confidentially</span
-                            >
-                        </li>
-                    </ul>
+                        <p class="no-results-title">No classmates found</p>
+                        <p class="no-results-subtitle">
+                            Try a different search term
+                        </p>
+                    </div>
                 </div>
             </div>
         </section>
@@ -1069,6 +989,17 @@
                 </div>
             </div>
         </footer>
+        <!-- Minimal JavaScript for Sticky Nav and Logo Animation -->
+        <script type="module" src="/src/js/main.js"></script>
+        <script>
+            // Ensure the DOM and main.js are ready
+            window.addEventListener("DOMContentLoaded", () => {
+                if (typeof window.fetchReunionStats === "function") {
+                    window.fetchReunionStats();
+                }
+            });
+        </script>
+        <script type="module" src="/src/js/missing.js"></script>
         <script
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3ai7PcNeXo-lI6LPG3dez315Z28fnXyI&callback=initMap&v=weekly"
             defer
