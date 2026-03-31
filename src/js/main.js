@@ -374,10 +374,10 @@ window.sendEmail = (name) => {
     `Hi ${name.split(",")[1] ? name.split(",")[1].trim() : name},\n\n` +
       `The Berkeley High School Class of 1986 is planning our 40th reunion for October 2026!\n\n` +
       `We'd love to have you join us. Please check-in with this quick questionnaire so we can keep you in the loop:\n` +
-      `${questionnaireUrl}\n\n` +
+      `  ${questionnaireUrl}\n\n` +
       `Hope to see you there!\n\n` +
       `- BHS Class of '86 Reunion Committee\n` +
-      `https://bhs40reunion.com/`,
+      `  bhs40reunion.com`,
   );
 
   window.location.href = `mailto:?subject=${subject}&body=${body}`;
@@ -390,7 +390,7 @@ window.sendSMS = (name) => {
   const message = encodeURIComponent(
     `Hi ${firstName}! BHS Class of '86 here. We're planning our 40th reunion (Oct 2026) and would love to have you join! ` +
       `Fill out our quick questionnaire: ${questionnaireUrl} ` +
-      `or visit our website: https://bhs40reunion.com/`,
+      `or visit our website: bhs40reunion.com/`,
   );
 
   window.location.href = `sms:?&body=${message}`;
