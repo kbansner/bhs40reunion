@@ -1,3 +1,31 @@
+import "./jquery-global.js";
+import { loadPins } from "./map-logic.js";
+
+// --- 0. THE GOOGLE MAPS FIX ---
+// We attach this to 'window' so the Google API can see it from index.html
+window.initMap = function () {
+  console.log("Google Maps API is calling initMap...");
+  const mapElement = document.getElementById("map");
+
+  if (!mapElement) {
+    console.warn("Map element not found on this page.");
+    return;
+  }
+
+  const map = new google.maps.Map(mapElement, {
+    center: { lat: 37.8715, lng: -122.273 }, // Berkeley High
+    zoom: 12,
+    mapId: "BHS_REUNION_MAP", // Use your actual Map ID if you have one
+    zoomControl: true, // Ensure this is true
+    mapTypeControl: false, // Keeps it clean
+    streetViewControl: false, // Optional: Hide the little yellow man
+    fullscreenControl: true, // Good for mobile users
+  });
+
+  // Now that the map is ready, trigger the pins from your other file
+  loadPins(map);
+};
+
 // Sticky Navigation - Show/Hide on Scroll
 (function () {
   const stickyNav = document.getElementById("sticky-nav");
@@ -54,24 +82,6 @@ window.addEventListener("DOMContentLoaded", function () {
     fbLink.href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
   }
 });
-
-// src/main.js
-//
-import "./jquery-global.js"; // Vite pulls the code in right here
-import { loadPins } from "./map-logic.js"; // We'll put the heavy lifting here
-
-window.initMap = function () {
-  // 1. Create the Map instance
-  const map = new google.maps.Map(document.getElementById("map"), {
-    center: { lat: 42.5584, lng: -71.2689 }, // Billerica area
-    zoomControl: true, // This forces the +/- buttons to show
-    zoom: 6,
-    mapId: "BHS_MAP_ID", // Optional: for custom styling
-  });
-
-  // 2. Start loading the pins from your Google Sheet
-  loadPins(map);
-};
 
 // ============================================
 // HELP US FIND SECTION - Search & Contact Functions
@@ -232,7 +242,8 @@ function createClassmateCard(classmateData) {
 
   // Email button (icon only)
   const emailBtn = document.createElement("button");
-  emailBtn.onclick = () => sendEmail(classmateData.name);
+  // emailBtn.onclick = () => sendEmail(classmateData.name);
+  emailBtn.onclick = () => window.sendEmail(classmateData.name);
   emailBtn.className =
     "w-4 h-4 flex items-center justify-center text-bhs-green rounded hover:bg-bhs-gold/40 transition-all";
   emailBtn.title = "Email Them";
@@ -251,7 +262,7 @@ function createClassmateCard(classmateData) {
 
   // SMS button (icon only)
   const smsBtn = document.createElement("button");
-  smsBtn.onclick = () => sendSMS(classmateData.name);
+  smsBtn.onclick = () => window.sendSMS(classmateData.name);
   smsBtn.className =
     "w-4 h-4 flex items-center justify-center text-bhs-green rounded hover:bg-bhs-green/20 transition-all";
   smsBtn.title = "Text Them";
@@ -362,10 +373,11 @@ window.sendEmail = (name) => {
   const body = encodeURIComponent(
     `Hi ${name.split(",")[1] ? name.split(",")[1].trim() : name},\n\n` +
       `The Berkeley High School Class of 1986 is planning our 40th reunion for October 2026!\n\n` +
-      `We'd love to have you join us. Please fill out this quick questionnaire so we can keep you in the loop:\n` +
+      `We'd love to have you join us. Please check-in with this quick questionnaire so we can keep you in the loop:\n` +
       `${questionnaireUrl}\n\n` +
       `Hope to see you there!\n\n` +
-      `- BHS Class of '86 Reunion Committee`,
+      `- BHS Class of '86 Reunion Committee\n` +
+      `https://bhs40reunion.com/`,
   );
 
   window.location.href = `mailto:?subject=${subject}&body=${body}`;
@@ -377,7 +389,8 @@ window.sendSMS = (name) => {
   const firstName = name.split(",")[1] ? name.split(",")[1].trim() : name;
   const message = encodeURIComponent(
     `Hi ${firstName}! BHS Class of '86 here. We're planning our 40th reunion (Oct 2026) and would love to have you join! ` +
-      `Fill out our quick questionnaire: ${questionnaireUrl}`,
+      `Fill out our quick questionnaire: ${questionnaireUrl} ` +
+      `or visit our website: https://bhs40reunion.com/`,
   );
 
   window.location.href = `sms:?&body=${message}`;
@@ -444,51 +457,57 @@ async function fetchReunionStats() {
     }
 
     // 4. Build the Momentum Chart
-    const ctx = chartCanvas.getContext("2d");
-    new Chart(ctx, {
-      type: "bar",
-      data: {
-        labels: trendData.map((t) => `Week ${t.week}`),
-        datasets: [
-          {
-            label: "Actual Check-ins",
-            data: trendData.map((t) => t.count),
-            backgroundColor: trendData.map((t, i) => {
-              if (i === trendData.length - 1) {
-                return t.count >= target ? "#16a34a" : "#2D5A27";
-              }
-              return "#741b47";
-            }),
-            borderRadius: 6,
-            order: 2,
-          },
-          {
-            label: "Weekly Target",
-            data: new Array(trendData.length).fill(target),
-            type: "line",
-            borderColor: "#cbd5e1",
-            borderDash: [5, 5],
-            pointRadius: 0,
-            fill: false,
-            borderWidth: 2,
-            order: 1,
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        plugins: { legend: { display: false } },
-        scales: {
-          y: {
-            beginAtZero: true,
-            grid: { color: "#f8fafc" },
-            suggestedMax: 35,
-          },
-          x: { grid: { display: false } },
+    // Inside fetchReunionStats, near step 4:
+    if (typeof Chart !== "undefined") {
+      const ctx = chartCanvas.getContext("2d");
+      new Chart(ctx, {
+        type: "bar",
+        data: {
+          labels: trendData.map((t) => `Week ${t.week}`),
+          datasets: [
+            {
+              label: "Actual Check-ins",
+              data: trendData.map((t) => t.count),
+              backgroundColor: trendData.map((t, i) => {
+                if (i === trendData.length - 1) {
+                  return t.count >= target ? "#16a34a" : "#2D5A27";
+                }
+                return "#741b47";
+              }),
+              borderRadius: 6,
+              order: 2,
+            },
+            {
+              label: "Weekly Target",
+              data: new Array(trendData.length).fill(target),
+              type: "line",
+              borderColor: "#cbd5e1",
+              borderDash: [5, 5],
+              pointRadius: 0,
+              fill: false,
+              borderWidth: 2,
+              order: 1,
+            },
+          ],
         },
-      },
-    });
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            y: {
+              beginAtZero: true,
+              grid: { color: "#f8fafc" },
+              suggestedMax: 35,
+            },
+            x: { grid: { display: false } },
+          },
+        },
+      });
+    } else {
+      console.warn("Chart.js not loaded yet. Retrying in 500ms...");
+      setTimeout(fetchReunionStats, 500);
+    }
 
     // 5. Transition UI
     chartCanvas.classList.add("chart-loaded");
