@@ -119,9 +119,11 @@ window.fetchReunionStats = async function () {
     document.getElementById("countdown-display").innerText =
       stats.daysRemaining;
     const rsvpCount = stats.rsvps;
+    const goal = stats.goal;
     const pct = stats.percentage * 100;
 
     document.getElementById("rsvp-label").innerText = `${rsvpCount} RSVPs`;
+    document.getElementById("goal-label").innerText = `Headcount Goal ${goal}`;
     document.getElementById("progress-bar-fill").style.width = `${pct}%`;
     // document.getElementById("percent-display").innerText = `${pct.toFixed(1)}%`;
     // 1. Select all elements with the class
