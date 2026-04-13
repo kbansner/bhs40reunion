@@ -229,7 +229,7 @@
                                 <polyline points="20 6 9 17 4 12"></polyline>
                             </svg>
 
-                            Join the Map & Check-in
+                            Join the Map & RSVP
                         </a>
                         <a
                             href="#help-us-find"
@@ -701,7 +701,7 @@
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
 
-                        <span>Join the Class Map & Check-in</span>
+                        <span>Join the Class Map & RSVP</span>
                     </a>
                 </div>
             </div>
@@ -838,7 +838,7 @@
                         Ready to RSVP?
                     </h3>
                     <p class="text-bhs-green/90 mb-6 text-lg max-w-md mx-auto">
-                        Our check-in helps us finalize
+                        RSVPs help us finalize
                         <span class="font-bold">venues</span>
                         based on headcount. Help us find the
                         <span class="missing-count-display font-bold">...</span>
@@ -864,8 +864,95 @@
                             <polyline points="20 6 9 17 4 12"></polyline>
                         </svg>
 
-                        <span>Join the Class Map & Check-in</span>
+                        <span>Join the Class Map & RSVP</span>
                     </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Check-in Form -->
+        <section
+            id="check-in-section"
+            class="py-16 px-4 bg-gradient-to-b from-white to-gray-50"
+        >
+            <div class="max-w-6xl mx-auto">
+                <div
+                    class="bg-white rounded-xl shadow-lg p-8 border-2 border-gray-100"
+                >
+                    <div class="mb-8 text-left">
+                        <h2
+                            class="text-3xl md:text-4xl font-bold text-bhs-green mb-2 heading-font"
+                        >
+                            Not ready to RSVP? Just keep us updated.
+                        </h2>
+                        <p class="text-gray-500 text-sm md:text-base">
+                            We’ll send you the final schedule and ticket
+                            deadlines so you don't miss out. No commitment
+                            required.
+                        </p>
+                    </div>
+
+                    <form
+                        id="check-in-form"
+                        class="flex flex-col md:flex-row gap-4"
+                    >
+                        <input
+                            name="name"
+                            type="text"
+                            placeholder="Full Name"
+                            class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 outline-none"
+                            required
+                        />
+                        <input
+                            name="email"
+                            type="email"
+                            placeholder="Email Address"
+                            class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 outline-none"
+                            required
+                        />
+                        <input
+                            name="phone"
+                            type="tel"
+                            placeholder="Phone (Optional)"
+                            class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 outline-none"
+                        />
+                        <button
+                            tabindex="0"
+                            type="submit"
+                            id="submit-btn"
+                            class="hover:bg-bhs-gold text-bhs-green font-bold rounded-lg bg-bhs-gold/90 transition-all shadow-md py-2 px-6 duration-200 whitespace-nowrap"
+                        >
+                            Keep me posted
+                        </button>
+                    </form>
+                    <script>
+                        const scriptURL =
+                            "https://script.google.com/macros/s/AKfycbzvUhs1w4O0DdEI-pnczjOQCrgmVsp5NCt8a4pwgkiSLZOchLtFBqdCAYsohooZ9EJ3/exec";
+                        const form = document.getElementById("check-in-form");
+
+                        form.addEventListener("submit", (e) => {
+                            e.preventDefault();
+                            const btn = document.getElementById("submit-btn");
+                            btn.disabled = true;
+                            btn.innerText = "Saving...";
+
+                            fetch(scriptURL, {
+                                method: "POST",
+                                body: new FormData(form),
+                            })
+                                .then((response) => {
+                                    alert("Thanks! We'll keep you updated.");
+                                    form.reset();
+                                    btn.disabled = false;
+                                    btn.innerText = "Keep me posted";
+                                })
+                                .catch((error) => {
+                                    console.error("Error!", error.message);
+                                    btn.disabled = false;
+                                    btn.innerText = "Try Again";
+                                });
+                        });
+                    </script>
                 </div>
             </div>
         </section>
@@ -962,6 +1049,7 @@
                         class="hidden md:flex flex-col md:flex-row justify-between items-center gap-6 mb-3"
                     >
                         <input
+                            tabindex="-1"
                             type="text"
                             id="search-missing"
                             placeholder="Search by name..."
