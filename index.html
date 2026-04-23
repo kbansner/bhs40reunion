@@ -61,6 +61,21 @@
 
             gtag("config", "G-CN178R0FGE");
         </script>
+        <script>
+            // temporary, remove when Private RSVP is complete
+            window.addEventListener("DOMContentLoaded", () => {
+                // Check if we've seen them before
+                const hasVisited = localStorage.getItem("bhs86_visited");
+
+                if (!hasVisited) {
+                    // Mark them as a regular user starting today
+                    localStorage.setItem("bhs86_visited", "true");
+                    console.log("New visitor tracked.");
+                } else {
+                    console.log("Returning visitor recognized.");
+                }
+            });
+        </script>
 
         <title>BHS Class of '86 • 40th Reunion</title>
 
@@ -861,9 +876,7 @@
                     <p class="text-bhs-green/90 mb-6 text-lg max-w-md mx-auto">
                         RSVPs help us finalize
                         <span class="font-bold">venues</span>
-                        based on headcount. Help us find the
-                        <span class="missing-count-display font-bold">...</span>
-                        remaining Jackets!
+                        based on headcount.
                     </p>
                     <a
                         href="https://forms.gle/BQduAPNC67e2U9YQ7"
