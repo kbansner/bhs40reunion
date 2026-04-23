@@ -94,18 +94,29 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      if (e.key === "ArrowDown" && isVisible) {
+      // Handle Down Arrow AND Tab for navigation
+      if ((e.key === "ArrowDown" || e.key === "Tab") && isVisible) {
+        // If we're at the end of the list, don't let Tab focus away from the input
         e.preventDefault();
         selectedIndex = Math.min(selectedIndex + 1, items.length - 1);
         updateHighlight(items);
-      } else if (e.key === "ArrowUp" && isVisible) {
+      }
+
+      // Handle Up Arrow
+      else if (e.key === "ArrowUp" && isVisible) {
         e.preventDefault();
         selectedIndex = Math.max(selectedIndex - 1, 0);
         updateHighlight(items);
-      } else if ((e.key === "Enter" || e.key === "Tab") && isVisible) {
+      }
+
+      // Handle Enter (Removed Tab from here so it doesn't select)
+      else if (e.key === "Enter" && isVisible) {
         if (selectedIndex > -1) {
           e.preventDefault();
           items[selectedIndex].click();
+        } else if (items.length === 1) {
+          e.preventDefault();
+          items[0].click();
         }
       }
     });
