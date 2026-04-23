@@ -54,7 +54,7 @@ window.addEventListener("DOMContentLoaded", function () {
 
 // Email function for missing classmates
 window.sendEmail = (name) => {
-  const questionnaireUrl = "https://forms.gle/BQduAPNC67e2U9YQ7"; // Replace with actual form URL
+  const questionnaireUrl = "https://forms.gle/BQduAPNC67e2U9YQ7";
   const subject = encodeURIComponent(
     "BHS Class of '86 Reunion - We're Looking for You!",
   );
@@ -131,7 +131,6 @@ window.fetchReunionStats = async function () {
 
     // 2. Loop through each one and update its content
     percentElements.forEach((el) => {
-      // Replace '64%' with your variable, e.g., (data.percentage * 100) + '%'
       el.innerText = `${pct.toFixed(1)}%`;
     });
 

@@ -118,7 +118,7 @@ img {
 
 :root {
     /* Spacing & Shapes */
-    --pill-padding: 0.5rem 1rem;
+    --pill-padding: 0.5rem 0.75rem;
     --pill-radius: 9999px;
     --transition-speed: 0.2s;
 }
