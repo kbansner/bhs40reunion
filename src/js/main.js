@@ -225,37 +225,20 @@ window.fetchReunionStats = async function () {
 };
 
 // Sticky navigation scroll handler
-let searchBarOriginalOffset = null;
-
 function handleScroll() {
   // Search bar sticks ONLY when it would disappear under the sticky nav
   const stickyNavHeight = 64; // Height of the sticky nav bar
 
   const stickyNav = document.getElementById("sticky-nav");
-  const searchNavBar = document.getElementById("search-navbar");
-
   if (stickyNav) {
     // Sticky nav appears at 300px
     if (window.scrollY > 300) {
-      console.log("show sticky nav");
       stickyNav.classList.remove("-translate-y-full", "opacity-0");
       stickyNav.classList.add("translate-y-0", "opacity-100");
     } else {
       stickyNav.classList.add("-translate-y-full", "opacity-0");
       stickyNav.classList.remove("translate-y-0", "opacity-100");
     }
-  }
-  if (!searchNavBar) return;
-  // Store the original position of search bar (before it becomes sticky)
-  if (searchBarOriginalOffset === null) {
-    searchBarOriginalOffset = searchNavBar.offsetTop;
-  }
-
-  // When scroll position + nav height reaches the search bar, lock it below nav
-  if (window.scrollY + stickyNavHeight >= searchBarOriginalOffset) {
-    searchNavBar.classList.add("below-sticky-nav");
-  } else {
-    searchNavBar.classList.remove("below-sticky-nav");
   }
 }
 

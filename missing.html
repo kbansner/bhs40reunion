@@ -57,30 +57,76 @@
         <script type="module" src="/src/js/missing.js"></script>
     </head>
     <body>
-        <!-- Header -->
-        <header class="missing-header">
+        <!--<header class="missing-header">
             <div class="container">
                 <div class="header-content">
                     <div>
-                        <h1 class="header-title">Missing Classmates Search</h1>
+
                     </div>
                     <a href="index.html" class="btn-back"
                         >← Back to Main Site</a
                     >
                 </div>
             </div>
-        </header>
+        </header>-->
+        <!-- Sticky Navigation -->
+        <nav class="fixed top-0 left-0 right-0 z-50 bg-bhs-green shadow-lg">
+            <div
+                class="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center"
+            >
+                <a
+                    href="index.html"
+                    class="text-white font-bold text-lg heading-font hover:text-bhs-gold transition-colors"
+                >
+                    ← Back to Reunion
+                </a>
+                <a
+                    href="https://www.zeffy.com/en-US/donation-form/help-us-secure-the-venue"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex items-center gap-2 px-6 py-2 bg-bhs-gold text-bhs-green font-bold rounded-lg hover:bg-bhs-gold/90 transition-all shadow-md"
+                >
+                    <svg
+                        class="w-4 h-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                        />
+                    </svg>
+                    Contribute
+                </a>
+            </div>
+        </nav>
 
         <!-- Main Content -->
         <main class="main-content">
             <div class="container">
+                <!-- Header Section -->
+                <section
+                    class="max-w-[1100px] mx-auto px-4 mb-8 pt-20 text-center"
+                >
+                    <h1
+                        class="text-5xl md:text-6xl font-bold text-bhs-green heading-font mb-4"
+                    >
+                        Who's Missing?
+                    </h1>
+                </section>
+
                 <!-- Stats & Search Bar -->
                 <div class="search-section">
-                    <div class="search-header">
-                        <div>
+                    <div
+                        class="search-header flex flex-col md:flex-row justify-between items-start gap-4"
+                    >
+                        <div class="max-w-3xl">
                             <h2 class="section-title">
-                                <span id="total-count">32</span> Missing
-                                Classmates
+                                <span id="total-count">310</span> Missing
+                                Jackets
                             </h2>
                             <p class="section-subtitle">
                                 Names on this list represent classmates whose
@@ -90,8 +136,13 @@
                                 miss out on reunion updates.
                             </p>
                         </div>
-                        <div class="view-controls hidden md:block">
-                            <span class="view-label">View:</span>
+
+                        <div
+                            class="view-controls hidden md:flex items-center gap-2 pt-1"
+                        >
+                            <span class="view-label text-sm text-gray-500 mr-1"
+                                >View:</span
+                            >
                             <button class="btn-view" data-cols="4">
                                 4 cols
                             </button>
@@ -103,7 +154,6 @@
                             </button>
                         </div>
                     </div>
-
                     <!-- Search Bar -->
                     <div class="search-input-wrapper">
                         <input
@@ -168,274 +218,9 @@
                     </p>
                 </div>
             </div>
-            <!-- Contact & Volunteer Section -->
-            <section
-                id="contact"
-                class="max-w-[1100px] mx-auto px-4 mb-20 mt-25"
-            >
-                <div class="grid md:grid-cols-2 gap-8">
-                    <!-- General Inquiry -->
-                    <div class="bg-gray-800 rounded-xl p-8 shadow-lg">
-                        <h3
-                            class="text-2xl font-bold text-white heading-font mb-4"
-                        >
-                            Get in Touch
-                        </h3>
-                        <p class="text-gray-300 mb-6">
-                            Have questions about the reunion? Need more
-                            information? We're here to help!
-                        </p>
-                        <a
-                            href="mailto:info@bhs40.com"
-                            class="inline-flex items-center gap-3 px-8 py-4 bg-bhs-gold text-bhs-green font-bold text-lg rounded-lg hover:bg-bhs-gold/90 transition-all shadow-md"
-                        >
-                            <svg
-                                class="w-6 h-6"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                                />
-                            </svg>
-                            Email the Committee
-                        </a>
-                        <p class="text-sm text-gray-400 mt-4">info@bhs40.com</p>
-                    </div>
-
-                    <!-- Volunteer Call -->
-                    <div
-                        class="bg-gradient-to-br from-bhs-red to-red-900 rounded-xl p-8 shadow-lg"
-                    >
-                        <h3
-                            class="text-2xl font-bold text-white heading-font mb-4"
-                        >
-                            Want to Join the Crew?
-                        </h3>
-                        <p class="text-white mb-4">
-                            We need volunteers to help with our "Friend Finder"
-                            mission—finding the 350+ missing classmates and
-                            making this reunion unforgettable!
-                        </p>
-                        <ul class="text-white space-y-2 mb-6">
-                            <li class="flex items-start gap-2">
-                                <svg
-                                    class="w-5 h-5 text-bhs-gold mt-0.5 flex-shrink-0"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                >
-                                    <path
-                                        fill-rule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        clip-rule="evenodd"
-                                    />
-                                </svg>
-                                <span>Help track down missing classmates</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <svg
-                                    class="w-5 h-5 text-bhs-gold mt-0.5 flex-shrink-0"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                >
-                                    <path
-                                        fill-rule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        clip-rule="evenodd"
-                                    />
-                                </svg>
-                                <span>Assist with event planning</span>
-                            </li>
-                            <li class="flex items-start gap-2">
-                                <svg
-                                    class="w-5 h-5 text-bhs-gold mt-0.5 flex-shrink-0"
-                                    fill="currentColor"
-                                    viewBox="0 0 20 20"
-                                >
-                                    <path
-                                        fill-rule="evenodd"
-                                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
-                                        clip-rule="evenodd"
-                                    />
-                                </svg>
-                                <span>Share your BHS memories & photos</span>
-                            </li>
-                        </ul>
-                        <a
-                            href="https://docs.google.com/forms/d/e/1FAIpQLSfWA2g4RfJ2WilQB6cQ63xeElxaUKHimFgVx-JdDHwCQlxEFg/viewform?usp=publish-editor"
-                            class="inline-flex items-center gap-2 px-6 py-3 bg-white text-bhs-red font-bold rounded-lg hover:bg-gray-100 transition-all shadow-md"
-                        >
-                            <svg
-                                class="w-5 h-5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M12 4v16m8-8H4"
-                                />
-                            </svg>
-                            Sign Me Up!
-                        </a>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Memory Lane Photo Call Section -->
-            <section id="memory-lane" class="max-w-[1100px] mx-auto px-4 mb-10">
-                <div
-                    class="relative bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-12 shadow-2xl overflow-hidden"
-                >
-                    <!-- Decorative Polaroid Frames -->
-                    <div
-                        class="absolute top-8 right-8 w-32 h-36 bg-white/5 border-4 border-white/20 rounded-sm rotate-12 hidden lg:block"
-                    ></div>
-                    <div
-                        class="absolute bottom-12 left-12 w-28 h-32 bg-white/5 border-4 border-white/20 rounded-sm -rotate-6 hidden lg:block"
-                    ></div>
-                    <div
-                        class="absolute top-1/2 right-1/4 w-24 h-28 bg-white/5 border-4 border-white/20 rounded-sm rotate-3 hidden xl:block"
-                    ></div>
-
-                    <div class="relative z-10 max-w-2xl mx-auto text-center">
-                        <h2
-                            class="text-4xl font-bold text-bhs-gold heading-font mb-6"
-                        >
-                            Help Us Build the Slideshow!
-                        </h2>
-                        <p class="text-xl text-white mb-8">
-                            We want the <em>real</em> memories—the unofficial
-                            photos from the Northside steps, Grizzly Peak
-                            hangouts, Top Dog runs, and all those moments that
-                            didn't make it into the yearbook.
-                        </p>
-
-                        <div class="bg-black/30 rounded-xl p-8 mb-8">
-                            <h3 class="text-lg font-bold text-bhs-gold mb-4">
-                                How to Share Your Photos:
-                            </h3>
-                            <ul class="text-left text-gray-300 space-y-3">
-                                <li class="flex items-start gap-3">
-                                    <svg
-                                        class="w-6 h-6 text-bhs-gold flex-shrink-0 mt-0.5"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
-                                        />
-                                    </svg>
-                                    <div>
-                                        <strong class="text-white"
-                                            >Upload Link:</strong
-                                        >
-                                        <a
-                                            href="https://www.dropbox.com/request/kaD1AdrTn6ScgpI8M0TY"
-                                            class="text-bhs-gold hover:underline ml-1"
-                                            >bhs40.com/photos</a
-                                        >
-                                    </div>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <svg
-                                        class="w-6 h-6 text-bhs-gold flex-shrink-0 mt-0.5"
-                                        fill="none"
-                                        stroke="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            stroke-linecap="round"
-                                            stroke-linejoin="round"
-                                            stroke-width="2"
-                                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                                        />
-                                    </svg>
-                                    <div>
-                                        <strong class="text-white"
-                                            >Email:</strong
-                                        >
-                                        <a
-                                            href="mailto:photos@bhs40.com"
-                                            class="text-bhs-gold hover:underline ml-1"
-                                            >photos@bhs40.com</a
-                                        >
-                                    </div>
-                                </li>
-                                <li class="flex items-start gap-3">
-                                    <svg
-                                        class="w-6 h-6 text-bhs-gold flex-shrink-0 mt-0.5"
-                                        fill="currentColor"
-                                        viewBox="0 0 24 24"
-                                    >
-                                        <path
-                                            d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"
-                                        />
-                                    </svg>
-                                    <div>
-                                        <strong class="text-white"
-                                            >Facebook Group:</strong
-                                        >
-                                        <span class="text-gray-300 ml-1"
-                                            >Join "Berkeley High School Class of
-                                            1986 - 40 Year Reunion" and share
-                                            with #BHS86Memories</span
-                                        >
-                                    </div>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <p class="text-gray-400 italic">
-                            Scan those old prints, dig through the photo albums,
-                            and help us create a slideshow that captures the
-                            real spirit of BHS '86!
-                        </p>
-                    </div>
-                </div>
-            </section>
         </main>
 
         <!-- Footer -->
-        <footer class="bg-black py-8">
-            <div class="max-w-7xl mx-auto px-4 text-center">
-                <p class="text-gray-400 mb-4">
-                    Berkeley High School Class of 1986 • 40th Reunion
-                </p>
-                <div class="flex justify-center gap-6 mb-4">
-                    <a
-                        href="index.html"
-                        class="text-bhs-gold hover:text-bhs-gold/80 transition-colors"
-                    >
-                        Home
-                    </a>
-                    <a
-                        href="contact.html"
-                        class="text-bhs-gold hover:text-bhs-gold/80 transition-colors"
-                    >
-                        Contact
-                    </a>
-                    <a
-                        href="index.html#events"
-                        class="text-bhs-gold hover:text-bhs-gold/80 transition-colors"
-                    >
-                        Events
-                    </a>
-                </div>
-                <p class="text-sm text-gray-500">
-                    © 2026 BHS Class of '86 Reunion Committee
-                </p>
-            </div>
-        </footer>
+        <load ="./partials/footer.html" />
     </body>
 </html>
