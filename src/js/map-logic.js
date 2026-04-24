@@ -6,12 +6,6 @@ const SHEET_URL =
 export function loadPins(map) {
   const bounds = new google.maps.LatLngBounds();
 
-  // --- NEW: Clear existing lists before repopulating ---
-  ["list-yes", "list-maybe", "list-no"].forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) el.innerHTML = "";
-  });
-
   window.$("#map").sheetrock({
     url: SHEET_URL,
     query: "select A, B, C, D, E, F",
@@ -22,10 +16,6 @@ export function loadPins(map) {
       }
 
       if (!response || !response.rows || response.rows.length <= 1) return;
-
-      let countYes = 0;
-      let countMaybe = 0;
-      let countNo = 0;
 
       response.rows.forEach((row, index) => {
         if (index === 0) return; // Skip header
@@ -38,31 +28,7 @@ export function loadPins(map) {
         const lng = parseFloat(row.cellsArray[5]);
         const rsvpLower = rsvp.toLowerCase();
 
-        // 1. Determine List and Update Counters
-        let listId = "";
-        if (rsvpLower.includes("yes")) {
-          listId = "list-yes";
-          countYes++;
-        } else if (rsvpLower.includes("maybe")) {
-          listId = "list-maybe";
-          countMaybe++;
-        } else if (rsvpLower.includes("no")) {
-          listId = "list-no";
-          countNo++;
-        }
-
-        // 2. Add to "Who's Coming" sidebar
-        if (name && listId) {
-          const listEl = document.getElementById(listId);
-          if (listEl) {
-            const ele = document.createElement("div");
-            ele.className = "py-1 border-b border-gray-100 last:border-0"; // Optional styling
-            ele.textContent = name;
-            listEl.appendChild(ele);
-          }
-        }
-
-        // 3. Create Map Pins (Only if we have Lat/Lng)
+        // 1. Create Map Pins (Only if we have Lat/Lng)
         if (!isNaN(lat) && !isNaN(lng)) {
           // Reduced Jitter to ~1-2 blocks instead of 10 miles
           const jitterLat = (Math.random() - 0.5) * 0.02;
@@ -107,16 +73,6 @@ export function loadPins(map) {
       if (!bounds.isEmpty()) {
         map.fitBounds(bounds);
       }
-
-      // Update the total counts in the headers
-      updateCountDisplay("count-yes", countYes);
-      updateCountDisplay("count-maybe", countMaybe);
-      updateCountDisplay("count-no", countNo);
     },
   });
-}
-
-function updateCountDisplay(id, count) {
-  const el = document.getElementById(id);
-  if (el) el.textContent = `(${count})`;
 }
