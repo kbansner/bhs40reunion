@@ -109,6 +109,7 @@ function revealRSVPList(animate = true) {
 }
 
 // --- DATA PROCESSING ---
+// --- UPDATED DATA PROCESSING FOR NEW COLUMN LAYOUT ---
 async function loadDirectoryData() {
   try {
     const response = await fetch(CONFIG.SHEET_URL);
@@ -128,24 +129,40 @@ async function loadDirectoryData() {
       const cols = row
         .split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
         .map((c) => c.replace(/^"|"$/g, "").trim());
-      const fullName = `${cols[1] || ""} ${cols[2] || ""}`.trim();
-      const rawStatus = (cols[12] || "not responded").toLowerCase().trim();
+
+      const firstName = cols[1] || "";
+      const lastName = cols[2] || "";
+      const fullName = `${firstName} ${lastName}`.trim();
+
+      // NEW MAPPING BASED ON IMAGE_3293C8.PNG
+      const displayName = cols[12] || fullName; // Col M
+      const bio = cols[13] || ""; // Col N
+      const lat = cols[14] || null; // Col O
+      const lng = cols[15] || null; // Col P
+      const rawStatus = (cols[16] || "not responded").toLowerCase().trim(); // Col Q
+      const photoURL = cols[17] || "default.png"; // Col R
 
       let status = "not_responded";
-      if (rawStatus === "yes") status = "yes";
-      else if (rawStatus === "maybe") status = "maybe";
-      else if (rawStatus === "no") status = "no";
-      else if (rawStatus === "private") status = "private";
+
+      if (rawStatus === "yes" || rawStatus === "attending") {
+        status = "yes";
+      } else if (rawStatus === "maybe") {
+        status = "maybe";
+      } else if (rawStatus === "no") {
+        status = "no";
+      } else if (rawStatus === "private") {
+        status = "private";
+      } else if (rawStatus === "missing") {
+        status = "missing";
+      } else if (rawStatus === "deceased") {
+        status = "deceased";
+      }
 
       if (fullName && status !== "not_responded" && status !== "private") {
         const listEl = document.getElementById(`list-${status}`);
         if (listEl) {
           const ele = document.createElement("div");
-          ele.className =
-            status === "yes"
-              ? "inline-block bg-green-800 text-white px-4 py-2 rounded-full text-sm font-medium shadow-sm m-1"
-              : "py-1 border-b border-gray-100 last:border-0 text-sm text-gray-700 font-medium";
-          ele.textContent = fullName;
+          ele.textContent = displayName;
           listEl.appendChild(ele);
 
           if (status === "yes") countYes++;
@@ -156,10 +173,16 @@ async function loadDirectoryData() {
 
       return {
         name: fullName,
+        displayName: displayName,
+        bio: bio,
+        lat: lat,
+        lng: lng,
         status: status,
         hometown:
           cols[10] && cols[11] ? `${cols[10]}, ${cols[11]}` : cols[10] || null,
-        photo: `/grad-thumbnails/${cols[13] || "default.png"}`,
+        photo: photoURL.includes("http")
+          ? photoURL
+          : `/grad-thumbnails/${photoURL}`,
         isPrivate: status === "private",
       };
     });
@@ -245,9 +268,10 @@ function updateHighlight(items) {
 }
 
 window.selectPerson = function (name) {
-  const p = classmates.find((c) => c.name === name);
+  const p = classmates.find((c) => c.name === name || c.displayName === name);
   if (!p) return;
-  document.getElementById("directorySearch").value = name;
+
+  document.getElementById("directorySearch").value = p.displayName;
   document.getElementById("autocompleteDropdown").classList.add("hidden");
 
   const themes = {
@@ -264,25 +288,50 @@ window.selectPerson = function (name) {
       label: "Private",
       colors: "bg-purple-100 text-purple-700 border-purple-200",
     },
+    missing: {
+      label: "Missing",
+      colors: "bg-orange-50 text-orange-700 border-orange-200",
+    },
+    deceased: {
+      label: "In Memoriam", // Softened label
+      colors: "bg-slate-700 text-slate-50 border-slate-800", // Muted charcoal vs solid black
+    },
     not_responded: {
       label: "Not Responded",
-      colors: "bg-slate-100 text-slate-600",
+      colors: "bg-slate-100 text-slate-600 border-slate-200",
     },
   };
+
+  const statusKey = p.status.toLowerCase().trim();
+
   const t = themes[p.status] || themes.not_responded;
+
   const hometownHTML =
     !p.isPrivate && p.hometown
-      ? `<p class="mt-4 text-slate-600"><span class="font-bold text-slate-800">Hometown:</span> ${p.hometown}</p>`
+      ? `<p class="mt-2 text-slate-600"><span class="font-bold text-slate-800">Hometown:</span> ${p.hometown}</p>`
+      : "";
+
+  const bioHTML =
+    !p.isPrivate && p.bio
+      ? `<div class="mt-4 pt-4 border-t border-gray-100">
+           <p class="text-sm text-slate-500 italic leading-relaxed">"${p.bio}"</p>
+         </div>`
+      : "";
+
+  const imageStyle =
+    statusKey === "deceased"
+      ? "sepia-[.4] contrast-[.86] brightness-[1.1]" // Subtle warm vintage feel
       : "";
 
   document.getElementById("searchResults").innerHTML = `
       <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-100 max-w-3xl mx-auto mt-6 text-left">
         <div class="flex flex-col md:flex-row items-center gap-8">
-          <img src="${p.photo}" class="w-40 h-40 rounded-xl object-cover shadow-md border-4 border-white">
-          <div class="flex-1">
-            <h4 class="text-3xl font-bold text-green-800 mb-4">${p.name}</h4>
+          <img src="${p.photo}" class="w-40 h-40 rounded-xl object-cover shadow-md border-4 border-white shrink-0 ${imageStyle}">
+          <div class="flex-1 w-full">
+            <h4 class="text-3xl font-bold text-green-800 mb-2">${p.displayName}</h4>
             <span class="inline-flex px-4 py-1 rounded-full text-sm font-bold border ${t.colors}">${t.label}</span>
             ${hometownHTML}
+            ${bioHTML}
           </div>
         </div>
       </div>`;
