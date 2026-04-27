@@ -15,12 +15,17 @@ let classmates = [];
 let selectedIndex = -1;
 
 const placeholderHTML = `
-    <div id="search-placeholder-text" class="py-6 px-2 text-left">
+    <div id="search-placeholder-text" class="py-6 px-2">
         <div class="max-w-2xl">
             <h5 class="text-gray-400 font-bold mb-3 uppercase tracking-wider text-xs">A Note on our Data</h5>
             <p class="text-gray-500 text-base leading-relaxed">
                 We are working hard to track everyone down, but we aren't 100% certain about all our data.
                 Most of this has been <span class="italic">crowd-sourced</span> from classmates like you.
+            </p>
+            <p class="text-gray-500 text-base mt-4 leading-relaxed">
+                If you see a mistake, please accept our apologies and help us correct it!
+                And if your photo is missing, please send one to
+                <a href="mailto:photos@bhs40.com" class="text-yellow-500 hover:underline font-medium">photos@bhs40.com</a>.
             </p>
         </div>
     </div>`;
@@ -326,7 +331,9 @@ window.selectPerson = function (name) {
   document.getElementById("searchResults").innerHTML = `
       <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-100 max-w-3xl mx-auto mt-6 text-left">
         <div class="flex flex-col md:flex-row items-center gap-8">
-          <img src="${p.photo}" class="w-40 h-40 rounded-xl object-cover shadow-md border-4 border-white shrink-0 ${imageStyle}">
+          <img
+          onerror="this.onerror=null; this.src='/grad-thumbnails/default.png';"
+          src="${p.photo}" class="w-40 h-40 rounded-xl object-cover shadow-md border-4 border-white shrink-0 ${imageStyle}">
           <div class="flex-1 w-full">
             <h4 class="text-3xl font-bold text-green-800 mb-2">${p.displayName}</h4>
             <span class="inline-flex px-4 py-1 rounded-full text-sm font-bold border ${t.colors}">${t.label}</span>
