@@ -133,53 +133,38 @@ async function loadDirectoryData() {
       countMaybe = 0,
       countNo = 0;
 
-    classmates = rows.map((row) => {
+    // 1. Map and Clean Data
+    let processedClassmates = rows.map((row) => {
       const cols = row
         .split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/)
         .map((c) => c.replace(/^"|"$/g, "").trim());
 
-      const firstName = cols[1] || "";
+      // --- CLEANING INITIALS ---
+      let firstName = cols[1] || "";
       const lastName = cols[2] || "";
-      const fullName = `${firstName} ${lastName}`.trim();
+      // Strip space + single letter + optional dot at the end
+      firstName = firstName.replace(/\s[a-z]\.?$/gi, "").trim();
 
-      // NEW MAPPING BASED ON IMAGE_3293C8.PNG
-      const displayName = cols[12] || fullName; // Col M
-      const bio = cols[13] || ""; // Col N
-      const lat = cols[14] || null; // Col O
-      const lng = cols[15] || null; // Col P
-      const rawStatus = (cols[16] || "not responded").toLowerCase().trim(); // Col Q
-      const photoURL = cols[17] || "default.png"; // Col R
+      const fullName = `${firstName} ${lastName}`.trim();
+      const uid = cols[0] || ""; // Unique ID for de-duplication
+
+      const displayName = cols[12] || fullName;
+      const bio = cols[13] || "";
+      const lat = cols[14] || null;
+      const lng = cols[15] || null;
+      const rawStatus = (cols[16] || "not responded").toLowerCase().trim();
+      const photoURL = cols[17] || "default.png";
 
       let status = "not_responded";
-
-      if (rawStatus === "yes" || rawStatus === "attending") {
-        status = "yes";
-      } else if (rawStatus === "maybe") {
-        status = "maybe";
-      } else if (rawStatus === "no") {
-        status = "no";
-      } else if (rawStatus === "private") {
-        status = "private";
-      } else if (rawStatus === "missing") {
-        status = "missing";
-      } else if (rawStatus === "deceased") {
-        status = "deceased";
-      }
-
-      if (fullName && status !== "not_responded" && status !== "private") {
-        const listEl = document.getElementById(`list-${status}`);
-        if (listEl) {
-          const ele = document.createElement("div");
-          ele.textContent = displayName;
-          listEl.appendChild(ele);
-
-          if (status === "yes") countYes++;
-          if (status === "maybe") countMaybe++;
-          if (status === "no") countNo++;
-        }
-      }
+      if (rawStatus === "yes" || rawStatus === "attending") status = "yes";
+      else if (rawStatus === "maybe") status = "maybe";
+      else if (rawStatus === "no") status = "no";
+      else if (rawStatus === "private") status = "private";
+      else if (rawStatus === "missing") status = "missing";
+      else if (rawStatus === "deceased") status = "deceased";
 
       return {
+        uid: uid,
         name: fullName,
         displayName: displayName,
         bio: bio,
@@ -193,6 +178,29 @@ async function loadDirectoryData() {
           : `/grad-thumbnails/${photoURL}`,
         isPrivate: status === "private",
       };
+    });
+
+    // 2. DE-DUPLICATE by UID
+    // This ensures that even if a classmate is listed twice, they only appear once.
+    classmates = processedClassmates.filter(
+      (item, index, self) =>
+        item.uid !== "" && index === self.findIndex((t) => t.uid === item.uid),
+    );
+
+    // 3. Populate Status Lists (Yes/Maybe/No)
+    classmates.forEach((p) => {
+      if (p.name && p.status !== "not_responded" && p.status !== "private") {
+        const listEl = document.getElementById(`list-${p.status}`);
+        if (listEl) {
+          const ele = document.createElement("div");
+          ele.textContent = p.displayName;
+          listEl.appendChild(ele);
+
+          if (p.status === "yes") countYes++;
+          if (p.status === "maybe") countMaybe++;
+          if (p.status === "no") countNo++;
+        }
+      }
     });
 
     updateCountDisplay("count-yes", countYes);
