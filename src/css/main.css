@@ -118,7 +118,7 @@ img {
 
 :root {
     /* Spacing & Shapes */
-    --pill-padding: 0.5rem 1rem;
+    --pill-padding: 0.5rem 0.75rem;
     --pill-radius: 9999px;
     --transition-speed: 0.2s;
 }
@@ -734,5 +734,38 @@ p {
 @media (min-width: 768px) {
     .grid-cols-6 {
         grid-template-columns: repeat(6, 1fr);
+    }
+}
+
+/* The background image starts in color, then fades to grayscale after 5s */
+@keyframes toSepia {
+    from {
+        filter: sepia(0%) brightness(100%) contrast(100%);
+    }
+    to {
+        /* sepia(0.8) gives a nice warmth without being overbearing */
+        filter: sepia(0.8) brightness(1) contrast(105%);
+    }
+}
+
+.hero-image-fade {
+    animation: toSepia 2s forwards;
+    animation-delay: 5s;
+}
+
+/* The snapshots drop from above and fade in */
+.snapshot-drop {
+    animation: dropIn 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    animation-delay: var(--delay);
+}
+
+@keyframes dropIn {
+    0% {
+        opacity: 0;
+        transform: translateY(-50px) rotate(var(--rotation, 0deg)) scale(1.1);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0) rotate(var(--rotation, 0deg)) scale(1);
     }
 }

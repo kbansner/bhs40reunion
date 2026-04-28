@@ -88,7 +88,7 @@
         />
 
         <!-- Library for momentumChart -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
         <!-- Custom CSS -->
         <link rel="stylesheet" href="/src/css/main.css" />
     </head>
@@ -158,8 +158,42 @@
             <img
                 src="/src/images/194798a31b4a402cc84d49816afed367ea1864bf.png"
                 alt="Berkeley High School on Parade"
-                class="relative w-full h-auto min-h-[600px] sm:min-h-[500px] md:max-h-[800px] object-cover object-bottom block"
+                class="hero-image-fade relative w-full h-auto min-h-[600px] sm:min-h-[500px] md:max-h-[800px] object-cover object-bottom block"
             />
+
+            <div class="snapshot-drop opacity-0 absolute top-4 left-4 w-28 h-36 bg-white p-2 shadow-2xl rotate-[-10deg] z-30 border border-gray-200 lg:w-32 lg:h-40" style="--delay: 7.0s">
+                <div class="w-full h-7/8 bg-gray-200 overflow-hidden">
+                    <img src="/src/images/snaps/JennyNelsonThen.jpg" class="object-cover w-full h-full" />
+                </div>
+            </div>
+
+            <div class="hidden sm:block snapshot-drop opacity-0 absolute top-12 left-30 w-36 h-28 bg-white p-2 shadow-2xl rotate-[10deg] z-30 border border-gray-200 lg:w-40 lg:h-32" style="--delay: 8.0s">
+                <div class="w-full h-full bg-gray-200 overflow-hidden">
+                    <img src="/src/images/snaps/JennyNelsonNow.jpg" class="object-cover w-full h-full" />
+                </div>
+            </div>
+
+            <div class="snapshot-drop opacity-0 absolute bottom-12 left-8 w-28 h-36 bg-white p-2 shadow-2xl rotate-[5deg] z-30 border border-gray-200 lg:w-32 lg:h-40" style="--delay: 7.2s">
+                <div class="w-full h-7/8 bg-gray-200 overflow-hidden">
+                    <img src="/src/images/snaps/JenniferHolmesThen.jpg" class="object-cover w-full h-full" />
+                </div>
+            </div>
+
+            <div class="hidden sm:block snapshot-drop opacity-0 absolute bottom-7 left-38 w-28 h-36 bg-white p-2 shadow-2xl rotate-[-10deg] z-32 border border-gray-200 lg:w-32 lg:h-40" style="--delay: 7.8s">
+                <div class="w-full h-7/8 bg-gray-200 overflow-hidden">
+                    <img src="/src/images/snaps/JenniferHolmesNow.jpg" class="object-cover w-full h-full" />
+                </div>
+            </div>
+
+            <div class="snapshot-drop opacity-0 absolute top-30 right-14 w-36 h-20 shadow-2xl rotate-[12deg] z-30 lg:w-40 lg:h-32" style="--delay: 7.4s">
+                <img src="/src/images/snaps/BarneyGreinkeThen.jpg" class="object-cover w-full h-full rounded-md" />
+            </div>
+
+            <div class="hidden sm:block snapshot-drop opacity-0 absolute top-49 right-10 w-28 h-36 bg-white p-2 shadow-2xl rotate-[-8deg] z-30 border border-gray-200 lg:w-32 lg:h-40" style="--delay: 8.6s">
+                <div class="w-full h-7/8 bg-gray-200 overflow-hidden">
+                    <img src="/src/images/snaps/BarneyGreinkeNow.jpg" class="object-cover w-full h-full" />
+                </div>
+            </div>
 
             <div
                 class="absolute inset-0 bg-gradient-to-b from-black/60 via-black/50 to-black/70 z-10"
@@ -200,7 +234,7 @@
                     >
                         Help us lock in our venues! Your check-in helps us plan
                         the perfect space and gets your name off the "Missing
-                        Jackets" list.
+                        Classmates" list.
                     </h3>
                     <p class="text-lg mb-6 text-white/90 max-w-2xl mx-auto">
                         Make this our most inclusive reunion&nbsp;yet.
@@ -249,7 +283,7 @@
                             Join the Map & RSVP
                         </a>
                         <a
-                            href="#help-us-find"
+                            href="/missing.html"
                             class="w-full sm:w-auto px-8 py-4 bg-transparent text-white font-bold text-lg rounded-lg border-2 border-white hover:bg-white/10 transition-all flex items-center justify-center gap-2"
                         >
                             <svg
@@ -746,504 +780,325 @@
         <!-- Who's Coming Section -->
         <section
             id="whos-coming"
-            class="py-16 px-4 bg-gradient-to-b from-white to-gray-50"
+            class="py-20 bg-gradient-to-b from-white to-gray-50 relative overflow-hidden"
         >
-            <div class="max-w-6xl mx-auto">
-                <div class="text-center mb-12">
-                    <h2
-                        class="text-4xl md:text-5xl font-bold mb-4 text-bhs-green heading-font"
-                    >
-                        Who's Coming?
-                    </h2>
-                    <p class="text-xl text-gray-700">
-                        See which classmates are joining the celebration
-                    </p>
-                </div>
-
-                <!-- YES Section - Badge Wall -->
-                <div class="mb-12">
-                    <div class="flex items-center gap-3 mb-6">
-                        <div
-                            class="w-10 h-10 bg-bhs-green rounded-full flex items-center justify-center"
-                        >
-                            <svg
-                                class="w-6 h-6 text-white"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M5 13l4 4L19 7"
-                                />
-                            </svg>
-                        </div>
-                        <h3
-                            class="text-2xl font-bold text-bhs-green heading-font"
-                        >
-                            Confirmed <span id="count-yes">0</span>
-                        </h3>
-                    </div>
-                    <div
-                        class="bg-bhs-green/5 rounded-xl p-4 border-2 border-bhs-green/20"
-                    >
-                        <div
-                            id="list-yes"
-                            class="rsvp-pills flex flex-wrap gap-2 text-sm"
-                        ></div>
-                    </div>
-                </div>
-
-                <!-- MAYBE Section - Badge Wall -->
-                <div class="mb-12">
-                    <div class="flex items-center gap-2 mb-6">
-                        <div
-                            class="w-10 h-10 bg-bhs-gold rounded-full flex items-center justify-center"
-                        >
-                            <svg
-                                class="w-6 h-6 text-bhs-green"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                                />
-                            </svg>
-                        </div>
-                        <h3
-                            class="text-2xl font-bold text-bhs-green heading-font"
-                        >
-                            Maybe <span id="count-maybe"></span>
-                        </h3>
-                    </div>
-                    <div
-                        class="bg-bhs-gold/10 rounded-xl p-4 border-2 border-bhs-gold/30"
-                    >
-                        <div
-                            id="list-maybe"
-                            class="rsvp-pills flex flex-wrap gap-2"
-                        ></div>
-                    </div>
-                </div>
-
-                <!-- NO Section - Comma Separated List -->
-                <div class="mb-8">
-                    <div class="flex items-center gap-3 mb-4">
-                        <div
-                            class="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center"
-                        >
-                            <svg
-                                class="w-5 h-5 text-white"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M6 18L18 6M6 6l12 12"
-                                />
-                            </svg>
-                        </div>
-                        <h3
-                            class="text-xl font-bold text-gray-600 heading-font"
-                        >
-                            Can't Make It <span id="count-no"></span>
-                        </h3>
-                    </div>
-                    <div
-                        id="list-no"
-                        class="bg-gray-50 rounded-lg p-4 border border-gray-300"
-                    ></div>
-                </div>
-
-                <!-- CTA for those who haven't responded -->
-                <div
-                    class="bg-bhs-gold/85 rounded-xl shadow-lg p-8 text-center border-[4px] border-bhs-red/80 mt-12"
+            <div class="container mx-auto relative z-10">
+                <h2
+                    class="text-4xl md:text-5xl text-center font-bold mb-4 text-bhs-green heading-font"
                 >
-                    <h3
-                        class="text-2xl font-bold mb-4 text-bhs-green heading-font"
-                    >
-                        Ready to RSVP?
-                    </h3>
-                    <p class="text-bhs-green/90 mb-6 text-lg max-w-md mx-auto">
-                        RSVPs help us finalize
-                        <span class="font-bold">venues</span>
-                        based on headcount.
-                    </p>
-                    <a
-                        href="https://forms.gle/BQduAPNC67e2U9YQ7"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        class="inline-flex items-center gap-2 px-8 py-3 bg-bhs-green text-white font-bold text-lg rounded-lg hover:bg-bhs-green/90 transition-all transform hover:scale-105 shadow-lg"
-                    >
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="24"
-                            height="24"
-                            viewBox="0 0 24 24"
-                            fill="none"
-                            stroke="currentColor"
-                            stroke-width="3"
-                            stroke-linecap="round"
-                            stroke-linejoin="round"
-                        >
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                        </svg>
+                    Who's Coming to the 40th?
+                </h2>
+                <h3 id="whosComingSubheading" class="text-xl text-center mb-12 text-gray-600">
+                    The full summary of classmate responses is available after a quick check-in.
+                </h3>
 
-                        <span>Join the Class Map & RSVP</span>
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Check-in Form -->
-        <section id="check-in-section" class="py-16 px-4 bg-[#2d2d2d]">
-            <div class="max-w-6xl mx-auto">
-                <div
-                    class="bg-white rounded-xl shadow-lg p-8 border-2 border-gray-100"
-                >
-                    <div class="mb-8 text-left">
-                        <h2
-                            class="text-3xl md:text-4xl font-bold text-bhs-green mb-2 heading-font"
+                <div class="max-w-6xl mx-auto mb-0 relative">
+                    <div
+                        id="rsvp-list-mask"
+                        class="absolute inset-0 -top-10 -bottom-12 -left-2 -right-8 overflow-hidden pointer-events-none"
+                    >
+                        <div
+                            id="rsvp-list-container"
+                            class="opacity-30 select-none relative h-full pt-4"
                         >
-                            Not ready to RSVP? Just keep us updated.
-                        </h2>
-                        <p class="text-gray-500 text-sm md:text-base">
-                            We’ll send you the final schedule and ticket
-                            deadlines so you don't miss out. No commitment
-                            required.
-                        </p>
+                            <!-- YES Section - Badge Wall -->
+
+                            <div class="flex items-center gap-3 mb-6">
+                                <div
+                                    class="w-10 h-10 bg-bhs-green rounded-full flex items-center justify-center"
+                                >
+                                    <svg
+                                        class="w-6 h-6 text-white"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M5 13l4 4L19 7"
+                                        />
+                                    </svg>
+                                </div>
+                                <h3
+                                    class="text-2xl font-bold text-bhs-green heading-font"
+                                >
+                                    Confirmed
+                                    <span id="count-yes">0</span>
+                                </h3>
+                            </div>
+                            <div
+                                id="list-yes"
+                                class="rsvp-pills flex flex-wrap gap-2 text-sm"
+                            ></div>
+                            <!-- MAYBE Section - Badge Wall -->
+                            <div class="mb-12 mt-12">
+                                <div class="flex items-center gap-2 mb-6">
+                                    <div
+                                        class="w-10 h-10 bg-bhs-gold rounded-full flex items-center justify-center"
+                                    >
+                                        <svg
+                                            class="w-6 h-6 text-bhs-green"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                            />
+                                        </svg>
+                                    </div>
+                                    <h3
+                                        class="text-2xl font-bold text-bhs-green heading-font"
+                                    >
+                                        Maybe
+                                        <span id="count-maybe"></span>
+                                    </h3>
+                                </div>
+                                <div
+                                    id="list-maybe"
+                                    class="rsvp-pills flex flex-wrap gap-2"
+                                ></div>
+                            </div>
+
+                            <!-- NO Section - Comma Separated List -->
+                            <div class="flex items-center gap-3 mb-4">
+                                <div
+                                    class="w-8 h-8 bg-gray-400 rounded-full flex items-center justify-center"
+                                >
+                                    <svg
+                                        class="w-5 h-5 text-white"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M6 18L18 6M6 6l12 12"
+                                        />
+                                    </svg>
+                                </div>
+                                <h3
+                                    class="text-xl font-bold text-gray-600 heading-font"
+                                >
+                                    Can't Make It
+                                    <span id="count-no"></span>
+                                </h3>
+                            </div>
+                            <div
+                                id="list-no"
+                                class="bg-gray-50 rounded-lg p-4 border border-gray-300"
+                            ></div>
+                        </div>
+
+                        <div
+                            id="rsvp-list-fader"
+                            class="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-gray-50 via-gray-50/80 to-transparent"
+                        ></div>
                     </div>
 
                     <form
-                        id="check-in-form"
-                        class="flex flex-col md:flex-row gap-4"
+                        id="checkin-form"
+                        onsubmit="handleCheckIn(event)"
+                        class="relative -translate-x-3 border-1 border-gray-300 flex flex-col gap-4 bg-gray-50/50 backdrop-blur-[4px] p-6 rounded-lg"
                     >
-                        <input
-                            name="name"
-                            type="text"
-                            placeholder="Full Name"
-                            class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 outline-none"
-                            required
-                        />
-                        <input
-                            name="email"
-                            type="email"
-                            placeholder="Email Address"
-                            class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 outline-none"
-                            required
-                        />
-                        <input
-                            name="phone"
-                            type="tel"
-                            placeholder="Phone (Optional)"
-                            class="flex-1 px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500 outline-none"
-                        />
-                        <button
-                            tabindex="0"
-                            type="submit"
-                            id="submit-btn"
-                            class="hover:bg-bhs-gold text-bhs-green font-bold rounded-lg bg-bhs-gold/90 transition-all shadow-md py-2 px-6 duration-200 whitespace-nowrap"
-                        >
-                            Keep me posted
-                        </button>
+                        <!-- Top row: Name, Email, Phone -->
+                        <div class="flex flex-col md:flex-row gap-3">
+                            <div class="flex-1">
+                                <label
+                                    for="name"
+                                    class="block text-sm font-semibold text-gray-700 mb-1"
+                                >
+                                    Name at Graduation
+                                </label>
+                                <input
+                                    type="text"
+                                    id="name"
+                                    name="name"
+                                    placeholder="First & Last/Maiden"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFCC00] focus:border-[#FFCC00] bg-white"
+                                    required
+                                />
+                            </div>
+                            <div class="flex-1">
+                                <label
+                                    for="email"
+                                    class="block text-sm font-semibold text-gray-700 mb-1"
+                                >
+                                    Email
+                                </label>
+                                <input
+                                    type="email"
+                                    id="email"
+                                    name="email"
+                                    placeholder="your@email.com"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFCC00] focus:border-[#FFCC00] bg-white"
+                                    required
+                                />
+                            </div>
+                            <div class="flex-1">
+                                <label
+                                    for="phone"
+                                    class="block text-sm font-semibold text-gray-700 mb-1"
+                                >
+                                    Phone (optional)
+                                </label>
+                                <input
+                                    type="tel"
+                                    id="phone"
+                                    name="phone"
+                                    placeholder="(555) 555-5555"
+                                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFCC00] focus:border-[#FFCC00] bg-white"
+                                />
+                            </div>
+                        </div>
+
+                        <!-- Checkbox -->
+                        <div class="border-t border-gray-100 pt-3 mt-1">
+                          <label class="flex items-center cursor-pointer group">
+                            <input type="checkbox" name="fullRSVP" class="w-5 h-5 rounded border-gray-300 text-red-600 focus:ring-red-500">
+                            <div class="ml-3">
+                              <p class="text-sm font-medium text-gray-700">I'm definitely coming!</p>
+                              <p class="text-xs text-gray-500">Check this to open the full RSVP questionnaire after you see the list.</p>
+                            </div>
+                          </label>
+                        </div>
+
+                        <!-- Submit button -->
+                        <div class="mt-2">
+                            <button
+                                tabindex="0"
+                                type="submit"
+                                class="px-8 py-3 bg-[#C41230] text-white font-bold rounded-lg hover:bg-[#C41230]/90 transition-all shadow-md"
+                            >
+                                Check In to See the List
+                            </button>
+                        </div>
                     </form>
-                    <script>
-                        const scriptURL =
-                            "https://script.google.com/macros/s/AKfycbzvUhs1w4O0DdEI-pnczjOQCrgmVsp5NCt8a4pwgkiSLZOchLtFBqdCAYsohooZ9EJ3/exec";
-                        const form = document.getElementById("check-in-form");
-
-                        form.addEventListener("submit", (e) => {
-                            e.preventDefault();
-                            const btn = document.getElementById("submit-btn");
-                            btn.disabled = true;
-                            btn.innerText = "Saving...";
-
-                            fetch(scriptURL, {
-                                method: "POST",
-                                body: new FormData(form),
-                            })
-                                .then((response) => {
-                                    alert("Thanks! We'll keep you updated.");
-                                    form.reset();
-                                    btn.disabled = false;
-                                    btn.innerText = "Keep me posted";
-                                })
-                                .catch((error) => {
-                                    console.error("Error!", error.message);
-                                    btn.disabled = false;
-                                    btn.innerText = "Try Again";
-                                });
-                        });
-                    </script>
                 </div>
             </div>
         </section>
 
-        <!-- Reunion Momentum Chart -->
-        <section id="momentum-section" class="py-16 px-4 bg-[#2d2d2d]">
-            <div class="max-w-6xl mx-auto">
-                <div
-                    class="bg-white rounded-xl shadow-lg p-8 border-2 border-gray-100"
-                >
-                    <div class="mb-8 text-left">
-                        <h2
-                            class="text-3xl md:text-4xl font-bold text-bhs-green mb-2 heading-font"
+        <section class="py-16 bg-[#2d2d2d] text-white">
+            <div class="max-w-6xl mx-auto px-4">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                    <div class="lg:col-span-2">
+                        <div
+                            class="rounded-2xl overflow-hidden border-4 border-gray-800 shadow-2xl bg-black"
                         >
-                            New Classmate Check-ins
-                        </h2>
-                        <p class="text-gray-500 text-sm md:text-base max-w-2xl">
-                            Our target is
-                            <span class="font-bold text-gray-700"
-                                >25 check-ins per week</span
-                            >. At this pace, we'll find half of our remaining
-                            <span
-                                class="missing-count-display font-bold text-gray-700"
-                                >350</span
-                            >
-                            missing classmates by July!
+                            <div class="aspect-video w-full">
+                                <iframe
+                                    class="w-full h-full"
+                                    src="https://www.youtube-nocookie.com/embed/videoseries?list=PLy4U1MhMkWJn3UUOOuUyaSv_PZcSanFng&modestbranding=1&rel=0"
+                                    frameborder="0"
+                                    allowfullscreen
+                                >
+                                </iframe>
+                            </div>
+                        </div>
+                        <p
+                            class="mt-4 text-gray-400 text-sm italic text-center lg:text-left"
+                        >
+                            Now Playing: BHS '86 "All Requests" Fundraiser Mix
                         </p>
                     </div>
 
-                    <div class="relative w-full" style="height: 300px">
-                        <div
-                            id="chart-skeleton"
-                            class="loading-pulse absolute inset-0 z-10 rounded-lg bg-gray-50"
-                        ></div>
-                        <div style="height: 300px; width: 100%">
+                    <div
+                        id="momentum-section"
+                        class="bg-gray-800/50 p-6 rounded-2xl border border-gray-700 shadow-inner"
+                    >
+                        <h3
+                            class="text-xl font-bold mb-4 text-blue-400 text-center"
+                        >
+                            Check-in Momentum
+                        </h3>
+                        <div class="h-[300px]">
                             <canvas id="momentumChart"></canvas>
                         </div>
-                    </div>
-
-                    <div class="mt-8 text-center">
-                        <p class="text-gray-600 italic text-sm md:text-base">
-                            Every check-in is one person closer to a full house
-                            in October.
+                        <p class="mt-4 text-xs text-gray-400 text-center">
+                            New classmates are joining every day!
                         </p>
-                        <div
-                            class="text-2xl text-gray-400 mt-1 mb-2 animate-bounce"
-                        >
-                            ↓
-                        </div>
-                        <div
-                            id="sync-timestamp"
-                            class="text-gray-300 text-[10px] uppercase tracking-widest mt-2"
-                        ></div>
                     </div>
                 </div>
             </div>
         </section>
-        <!-- Missing Classmates Section -->
-        <section id="help-us-find" class="py-16 px-4 bg-gray-50">
-            <div class="max-w-7xl mx-auto">
-                <div class="text-center mb-6">
-                    <h2
-                        class="text-4xl md:text-5xl font-bold mb-4 text-bhs-green heading-font"
-                    >
-                        Help Us Find Missing Jackets
-                    </h2>
-                </div>
 
-                <!-- Info Deck -->
-                <div class="max-w-4xl mx-auto mb-8 p-6">
-                    <p
-                        class="text-base md:text-lg text-gray-700 leading-relaxed text-center"
-                    >
-                        <!--We are still searching for
-                        <span class="font-bold text-bhs-red">
-                            <span id="total-count">000</span> classmates</span
-                        >. Help us bridge the gap! -->
-                        Names on this list represent classmates whose contact
-                        info is missing or outdated. If you see someone you
-                        know, please encourage them to visit the site and update
-                        their details so they don't miss out on reunion updates.
-                    </p>
-                </div>
-
-                <!-- Search & Navigation Bar -->
-                <div
-                    class="search-nav-bar sticky top-0 z-40 bg-gray-50 pb-4 pt-2 border-b-2 border-gray-200 mb-4 transition-all duration-300"
-                    id="search-navbar"
+        <!-- Class Directory Section -->
+        <section
+            id="class-directory"
+            class="py-20 bg-gradient-to-b from-white to-gray-50"
+        >
+            <div class="container mx-auto px-4 text-center mb-8">
+                <h2
+                    class="text-4xl md:text-5xl text-center font-bold mb-4 text-bhs-green heading-font"
                 >
-                    <!-- Search Bar, Counter & View Controls -->
-                    <div
-                        class="hidden md:flex flex-col md:flex-row justify-between items-center gap-6 mb-3"
+                    BHS '86 Class Directory
+                </h2>
+                <p class="text-gray-500 mt-2">
+                    Search for classmates and check their status
+                </p>
+            </div>
+
+            <div class="max-w-3xl mx-auto min-h-[260px]">
+                <div class="mb-8 relative">
+                    <input
+                        type="text"
+                        id="directorySearch"
+                        placeholder="Type in a BHS '86 graduate name"
+                        class="w-full px-6 py-4 text-lg border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FFCC00] focus:border-[#FFCC00] bg-white shadow-md"
+                    />
+                    <svg
+                        class="absolute right-4 top-1/2 -translate-y-1/2 w-6 h-6 text-gray-400"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
                     >
-                        <input
-                            tabindex="-1"
-                            type="text"
-                            id="search-missing"
-                            placeholder="Search by name..."
-                            class="px-4 py-2 border border-gray-300 rounded-lg w-full md:flex-1 outline-none transition-all focus:border-bhs-gold focus:ring-4 focus:ring-bhs-gold/10 bg-white"
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
                         />
-                        <p class="text-sm text-gray-600 whitespace-nowrap">
-                            Showing <span id="results-count">32</span> of
-                            <span id="total-count-2">32</span>
-                        </p>
-                        <div class="view-controls">
-                            <button class="btn-view" data-cols="4">
-                                4 cols
-                            </button>
-                            <button class="btn-view active" data-cols="5">
-                                5 cols
-                            </button>
-                            <button class="btn-view" data-cols="6">
-                                6 cols
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="alphabet-section">
-                        <div
-                            id="alphabet-buttons"
-                            class="flex flex-wrap justify-center gap-1"
-                        >
-                            <!-- Letters A-Z will be generated by JavaScript -->
-                        </div>
-                        <button id="show-all-btn" class="btn-show-all">
-                            Show All
-                        </button>
-                    </div>
-                </div>
-
-                <div id="classmates-grid-container" class="min-h-[400px] p-4">
+                    </svg>
                     <div
-                        class="grid grid-cols-2 md:grid-cols-5 gap-3"
-                        id="classmates-grid"
-                    >
-                        <!-- Grid items will be populated by JavaScript -->
-                    </div>
-                    <!-- No Results Message -->
-                    <div id="no-results" class="no-results hidden">
-                        <svg
-                            class="no-results-icon"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                        >
-                            <path
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                                stroke-width="2"
-                                d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                        </svg>
-                        <p class="no-results-title">No classmates found</p>
-                        <p class="no-results-subtitle">
-                            Try a different search term
-                        </p>
-                    </div>
+                        id="autocompleteDropdown"
+                        class="hidden absolute z-10 w-full mt-2 bg-white/95 backdrop-blur-sm border-2 border-gray-200 rounded-lg shadow-xl overflow-hidden"
+                    ></div>
                 </div>
+                <div
+                    id="searchResults"
+                    class="mt-8 transition-all duration-300"
+                >
+                    <div id="searchResults" class="mt-8 transition-all duration-300">
+                        <div id="search-placeholder-text" class="py-6 px-2">
+                            <div class="max-w-2xl">
+                                <h5 class="text-gray-400 font-bold mb-3 uppercase tracking-wider text-xs">A Note on our Data</h5>
+                                <p class="text-gray-500 text-base leading-relaxed">
+                                    We are working hard to track everyone down, but we aren't 100% certain about all our data.
+                                    Most of this has been <span class="italic">crowd-sourced</span> from classmates like you.
+                                </p>
+                                <p class="text-gray-500 text-base mt-4 leading-relaxed">
+                                    If you see a mistake, please accept our apologies and help us correct it!
+                                    And if your photo is missing, please send one to
+                                    <a href="mailto:photos@bhs40.com" class="text-bhs-yellow hover:underline font-medium">photos@bhs40.com</a>.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
             </div>
         </section>
 
         <!-- Footer with Grapevine -->
-        <footer class="bg-[#2d2d2d] text-white py-12 px-4">
-            <div class="max-w-5xl mx-auto">
-                <!-- The Grapevine Section -->
-                <div class="text-center mb-8">
-                    <h3
-                        class="text-2xl md:text-3xl font-bold mb-4 heading-font"
-                    >
-                        Know someone who isn't on the RSVP list?
-                    </h3>
-                    <p class="text-lg text-white/90 mb-6">
-                        Send them this link to Check In!
-                    </p>
-
-                    <!-- Share Buttons -->
-                    <div class="flex flex-wrap justify-center gap-4 mb-8">
-                        <a
-                            href="mailto:?subject=BHS Class of '86 Reunion&body=Check out the Berkeley High Class of '86 40th Reunion! Help us make it happen: "
-                            class="flex items-center gap-2 px-6 py-3 bg-bhs-gold text-[#2d2d2d] font-semibold rounded-lg hover:bg-bhs-gold/90 transition-all"
-                        >
-                            <svg
-                                class="w-5 h-5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                                />
-                            </svg>
-                            Email
-                        </a>
-                        <a
-                            href="sms:?&body=Check out the Berkeley High Class of '86 40th Reunion! Help us make it happen: "
-                            class="flex items-center gap-2 px-6 py-3 bg-bhs-gold text-[#2d2d2d] font-semibold rounded-lg hover:bg-bhs-gold/90 transition-all"
-                        >
-                            <svg
-                                class="w-5 h-5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
-                                />
-                            </svg>
-                            Text
-                        </a>
-                        <a
-                            href="https://www.facebook.com/sharer/sharer.php?u="
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="flex items-center gap-2 px-6 py-3 bg-bhs-gold text-[#2d2d2d] font-semibold rounded-lg hover:bg-bhs-gold/90 transition-all"
-                        >
-                            <svg
-                                class="w-5 h-5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="2"
-                                    d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-                                />
-                            </svg>
-                            Facebook
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Divider -->
-                <div class="border-t border-white/20 pt-8">
-                    <div class="text-center text-white/80">
-                        <p class="mb-4">
-                            <a
-                                href="contact.html"
-                                class="text-bhs-gold hover:text-bhs-gold/80 transition-colors font-semibold"
-                            >
-                                Contact the Committee →
-                            </a>
-                        </p>
-                        <p class="mb-2">Berkeley High School Class of 1986</p>
-                        <p class="text-sm">
-                            © 2026 BHS Class of '86 Reunion Committee
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        <load ="./partials/footer.html" />
         <!-- Minimal JavaScript for Sticky Nav and Logo Animation -->
         <script type="module" src="/src/js/main.js"></script>
+        <script type="text/javascript" src="/src/js/class-list.js"></script>
         <script>
             // Ensure the DOM and main.js are ready
             window.addEventListener("DOMContentLoaded", () => {
@@ -1252,7 +1107,6 @@
                 }
             });
         </script>
-        <script type="module" src="/src/js/missing.js"></script>
         <script
             src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC3ai7PcNeXo-lI6LPG3dez315Z28fnXyI&callback=initMap&v=weekly"
             defer
