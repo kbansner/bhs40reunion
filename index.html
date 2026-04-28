@@ -905,7 +905,6 @@
 
                     <form
                         id="checkin-form"
-                        onsubmit="handleCheckIn(event)"
                         class="relative -translate-x-3 border-1 border-gray-300 flex flex-col gap-4 bg-gray-50/50 backdrop-blur-[4px] p-6 rounded-lg"
                     >
                         <!-- Top row: Name, Email, Phone -->
@@ -1098,7 +1097,7 @@
         <load ="./partials/footer.html" />
         <!-- Minimal JavaScript for Sticky Nav and Logo Animation -->
         <script type="module" src="/src/js/main.js"></script>
-        <script type="text/javascript" src="/src/js/class-list.js"></script>
+        <script type="module" src="/src/js/class-list.js"></script>
         <script>
             // Ensure the DOM and main.js are ready
             window.addEventListener("DOMContentLoaded", () => {

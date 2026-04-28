@@ -35,6 +35,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   initGatekeeper();
   await loadDirectoryData();
   if (document.getElementById("directorySearch")) initSearchLogic();
+  document
+    .getElementById("checkin-form")
+    .addEventListener("submit", handleCheckIn);
 });
 
 // --- GATEKEEPER & FORM HANDLER ---
