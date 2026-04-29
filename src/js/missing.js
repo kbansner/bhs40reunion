@@ -11,6 +11,7 @@ const MISSING_CONFIG = {
 // State
 let allMissingData = [];
 let filteredClassmates = [];
+let currentGridCols = 5;
 
 // DOM Elements
 const searchInput = document.getElementById("search-missing");
@@ -180,6 +181,11 @@ function filterByLetter(letter) {
   renderGrid();
 }
 
+function changeGridCols(cols) {
+  currentGridCols = cols;
+  classmatesGrid.className = `classmates-grid grid-cols-${cols}`;
+}
+
 function attachEventListeners() {
   if (searchInput) {
     // Typing listener
@@ -194,6 +200,19 @@ function attachEventListeners() {
       }
     });
   }
+
+  // Grid view buttons
+  const viewButtons = document.querySelectorAll(".btn-view");
+  viewButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const cols = parseInt(btn.dataset.cols);
+      changeGridCols(cols);
+
+      // Update active state
+      viewButtons.forEach((b) => b.classList.remove("active"));
+      btn.classList.add("active");
+    });
+  });
 
   if (showAllBtn) {
     showAllBtn.addEventListener("click", () => {
