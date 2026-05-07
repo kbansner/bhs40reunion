@@ -327,12 +327,11 @@ window.selectPerson = function (name) {
       ? `<p class="mt-2 text-slate-600"><span class="font-bold text-slate-800">Hometown:</span> ${p.hometown}</p>`
       : "";
 
-  const bioHTML =
-    !p.isPrivate && p.bio
-      ? `<div class="mt-4 pt-4 border-t border-gray-100">
+  const bioHTML = p.bio
+    ? `<div class="mt-4 pt-4 border-t border-gray-100">
            <p class="text-sm text-slate-500 italic leading-relaxed">"${p.bio}"</p>
          </div>`
-      : "";
+    : "";
 
   const imageStyle =
     statusKey === "deceased"
