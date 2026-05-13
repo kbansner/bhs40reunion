@@ -6,13 +6,15 @@ const CONFIG = {
   SHEET_URL:
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-xDkTv8aIauGKKuiqZrHiC2RgOw0A4Nw3HnJkYQ3ES5kmbzxXM7mUker_v-WX1rt6rnnBwI6wQvcO/pub?gid=1741366949&single=true&output=csv",
   SCRIPT_URL:
-    "https://script.google.com/macros/s/AKfycbzTgofUfnPz6tfIAys_trzbn56jesstiFIoCv3qJYLiwKw61O4vkXC9L6N2_UtV7T7h/exec",
-  STORAGE_KEY: "bhs86_checked_in",
-  ADMIN_FLAG: "checkin",
+    "https://script.google.com/macros/s/AKfycby9tAi93Sp82HqCYVSoepqa7NWom2MTL5VdDbONs-KFKXL02rJO16a2hnGXJkKkqOZR/exec",
 };
 
 let classmates = [];
+let rsvpYes = [];
+let rsvpMaybe = [];
+let rsvpNo = [];
 let selectedIndex = -1;
+let expandedCardIndex = null;
 
 const placeholderHTML = `
     <div id="search-placeholder-text" class="py-6 px-2">
@@ -32,89 +34,9 @@ const placeholderHTML = `
 
 // --- INITIALIZATION ---
 document.addEventListener("DOMContentLoaded", async () => {
-  initGatekeeper();
   await loadDirectoryData();
   if (document.getElementById("directorySearch")) initSearchLogic();
-  document
-    .getElementById("checkin-form")
-    .addEventListener("submit", handleCheckIn);
 });
-
-// --- GATEKEEPER & FORM HANDLER ---
-function initGatekeeper() {
-  const urlParams = new URLSearchParams(window.location.search);
-  if (urlParams.get(CONFIG.ADMIN_FLAG) === "true") {
-    setCheckInStatus(true);
-  }
-  if (getCheckInStatus()) {
-    revealRSVPList(false);
-  }
-}
-
-async function handleCheckIn(event) {
-  event.preventDefault();
-  const form = event.target;
-  const formData = new FormData(form);
-  const submitBtn = form.querySelector("button");
-
-  submitBtn.innerText = "Unlocking...";
-  submitBtn.disabled = true;
-
-  try {
-    const response = await fetch(CONFIG.SCRIPT_URL, {
-      method: "POST",
-      body: formData,
-    });
-    const result = await response.json();
-
-    if (result.result === "success" || result.result === "redirect") {
-      setCheckInStatus(true);
-      revealRSVPList(true);
-
-      if (result.result === "redirect") {
-        setTimeout(() => window.open(result.url, "_blank"), 1000);
-      }
-    }
-  } catch (error) {
-    console.error("Submission failed", error);
-    alert("Something went wrong. Please try again!");
-    submitBtn.innerText = "Check In to See the List";
-    submitBtn.disabled = false;
-  }
-}
-
-function revealRSVPList(animate = true) {
-  const blurOverlay = document.getElementById("checkin-form");
-  const rsvpList = document.getElementById("rsvp-list-container");
-  const rsvpListMask = document.getElementById("rsvp-list-mask");
-  const rsvpListFader = document.getElementById("rsvp-list-fader");
-  const subHeading = document.getElementById("whosComingSubheading");
-
-  if (!rsvpList) return;
-
-  if (subHeading) {
-    subHeading.innerText =
-      "Here is the current list of Yes, No, and Maybe responses.";
-  }
-
-  if (blurOverlay) {
-    if (animate) {
-      blurOverlay.style.transition = "opacity 0.5s ease";
-      blurOverlay.style.opacity = "0";
-      setTimeout(() => (blurOverlay.style.display = "none"), 500);
-    } else {
-      blurOverlay.style.display = "none";
-    }
-  }
-
-  if (rsvpListFader) rsvpListFader.remove();
-
-  rsvpList.style.filter = "none";
-  rsvpList.classList.remove("h-full", "opacity-60", "select-none");
-  rsvpList.classList.add("h-auto", "opacity-100");
-
-  if (rsvpListMask) rsvpListMask.className = "relative";
-}
 
 // --- DATA PROCESSING ---
 // --- UPDATED DATA PROCESSING FOR NEW COLUMN LAYOUT ---
@@ -187,28 +109,25 @@ async function loadDirectoryData() {
         item.uid !== "" && index === self.findIndex((t) => t.uid === item.uid),
     );
 
-    // 3. Populate Status Lists (Yes/Maybe/No)
-    classmates.forEach((p) => {
-      if (p.name && p.status !== "not_responded" && p.status !== "private") {
-        const listEl = document.getElementById(`list-${p.status}`);
-        if (listEl) {
-          const ele = document.createElement("div");
-          ele.textContent = p.displayName;
-          listEl.appendChild(ele);
+    // 1. Separate into RSVP categories
+    rsvpYes = classmates.filter((p) => p.status === "yes");
+    rsvpMaybe = classmates.filter((p) => p.status === "maybe");
+    rsvpNo = classmates.filter((p) => p.status === "no");
 
-          if (p.status === "yes") countYes++;
-          if (p.status === "maybe") countMaybe++;
-          if (p.status === "no") countNo++;
-        }
-      }
-    });
+    // 2. Render the interactive pills for each section
+    renderPills("list-yes", rsvpYes);
+    renderPills("list-maybe", rsvpMaybe);
+    renderPills("list-no", rsvpNo);
 
-    updateCountDisplay("count-yes", countYes);
-    updateCountDisplay("count-maybe", countMaybe);
-    updateCountDisplay("count-no", countNo);
+    // 3. Render the scrolling bio cards for each section
+    renderSectionCards("cards-container-yes", rsvpYes);
+    renderSectionCards("cards-container-maybe", rsvpMaybe);
+    renderSectionCards("cards-container-no", rsvpNo);
 
-    if (document.getElementById("searchResults"))
-      document.getElementById("searchResults").innerHTML = placeholderHTML;
+    // Update counts
+    updateCountDisplay("count-yes", rsvpYes.length);
+    updateCountDisplay("count-maybe", rsvpMaybe.length);
+    updateCountDisplay("count-no", rsvpNo.length);
   } catch (e) {
     console.error("Data load failed", e);
   }
@@ -324,7 +243,10 @@ window.selectPerson = function (name) {
 
   const hometownHTML =
     !p.isPrivate && p.hometown
-      ? `<p class="mt-2 text-slate-600"><span class="font-bold text-slate-800">Hometown:</span> ${p.hometown}</p>`
+      ? `<p class="mt-2 text-slate-600"><svg class="inline-block -mt-[3px] w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg> ${p.hometown}</p>`
       : "";
 
   const bioHTML = p.bio
@@ -369,4 +291,194 @@ function getCheckInStatus() {
   const legacyStatus = localStorage.getItem("bhs86_visited") === "true";
   if (legacyStatus && !modernStatus) setCheckInStatus(true);
   return modernStatus || legacyStatus;
+}
+
+// Bio Cards below RSVP status pills
+//
+// Reusable Pill Renderer
+function renderPills(containerId, data) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = "";
+
+  data.forEach((p) => {
+    const pill = document.createElement("div");
+    pill.textContent = p.displayName;
+    pill.onclick = () => scrollToUID(p.uid);
+    container.appendChild(pill);
+  });
+}
+
+// Reusable Card Section Renderer
+function renderSectionCards(containerId, data) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = "";
+
+  data.forEach((p) => {
+    const card = createCard(p, p.uid); // Pass UID instead of index
+    container.appendChild(card);
+  });
+}
+
+// Updated Scroll Logic using UID
+function scrollToUID(uid) {
+  const element = document.getElementById(`attendee-${uid}`);
+  if (element) {
+    element.scrollIntoView({
+      behavior: "smooth",
+      block: "nearest",
+      inline: "start",
+    });
+    // Optional: add a highlight flash effect
+    element.classList.add("ring-4", "ring-yellow-400");
+    setTimeout(
+      () => element.classList.remove("ring-4", "ring-yellow-400"),
+      2000,
+    );
+  }
+}
+
+// Create a single card
+function createCard(attendee, uid) {
+  const isExpanded = expandedCardIndex === uid;
+
+  const card = document.createElement("div");
+  card.id = `attendee-${uid}`;
+
+  // Changed h-[325px] to max-h and h-fit to prevent white space
+  const cardClasses = isExpanded
+    ? "fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] md:w-[600px] max-h-[85vh] overflow-y-auto shadow-2xl z-100 p-6 md:p-8"
+    : "w-[300px] md:w-[400px] h-fit min-h-[160px] shadow-lg hover:shadow-xl relative p-6";
+
+  card.className = `${cardClasses} flex-shrink-0 bg-white rounded-lg border-2 border-gray-100 flex flex-col card-transition`;
+
+  if (isExpanded) {
+    card.style.boxShadow = "0 20px 40px rgba(0, 0, 0, 0.15)";
+
+    const closeBtn = document.createElement("button");
+    closeBtn.className =
+      "absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 hover:bg-gray-200 transition-colors z-10";
+    closeBtn.innerHTML = `
+      <svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    `;
+    closeBtn.onclick = () => collapseCard();
+    card.appendChild(closeBtn);
+  }
+
+  // Header row
+  const header = document.createElement("div");
+  header.className = "flex gap-4 items-start mb-4";
+
+  const photoContainer = document.createElement("div");
+  photoContainer.className = "flex-shrink-0";
+
+  const photo = document.createElement("img");
+  // FIX: Handle missing images by providing a fallback path
+  photo.onerror = function () {
+    this.src = "/grad-thumbnails/default.png"; // Replace with your actual default path
+  };
+  photo.src = attendee.photo;
+  photo.alt = attendee.name;
+  photo.loading = "lazy";
+  photo.className =
+    "w-20 h-20 rounded-full aspect-square object-cover border-2 border-gray-200";
+  photoContainer.appendChild(photo);
+
+  const nameLocation = document.createElement("div");
+  nameLocation.className = "flex-1 min-w-0";
+  nameLocation.innerHTML = `
+    <h3 class="text-xl font-bold text-[#006400] mb-1" style="font-family: 'Roboto Slab', serif;">
+      ${attendee.name}
+    </h3>
+    <p class="text-sm text-gray-600 flex items-center gap-1">
+      <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+      ${attendee.hometown}
+    </p>
+  `;
+
+  header.appendChild(photoContainer);
+  header.appendChild(nameLocation);
+  card.appendChild(header);
+
+  // Bio text
+  const bioContainer = document.createElement("div");
+  bioContainer.className = isExpanded
+    ? "mb-2 flex-1 overflow-auto"
+    : "mb-2 overflow-hidden relative";
+
+  const bioText = document.createElement("p");
+  bioText.className = `text-sm text-gray-700 leading-[1.5] ${isExpanded ? "" : "line-clamp-4"}`;
+  bioText.textContent = attendee.bio;
+  bioContainer.appendChild(bioText);
+  card.appendChild(bioContainer);
+
+  // FIX: Only show Read More if the bio is actually long enough to overflow
+  if (!isExpanded && attendee.bio) {
+    const isLongBio = attendee.bio.length > 180; // Character heuristic to match line-clamp-4
+
+    if (isLongBio) {
+      const readMoreContainer = document.createElement("div");
+      readMoreContainer.className = "flex justify-end mt-auto pt-2";
+
+      const readMoreBtn = document.createElement("button");
+      readMoreBtn.className =
+        "text-sm text-[#006400] hover:underline font-medium flex items-center gap-1";
+      readMoreBtn.innerHTML = `
+        Read More →
+      `;
+      readMoreBtn.onclick = () => expandCard(uid);
+
+      readMoreContainer.appendChild(readMoreBtn);
+      card.appendChild(readMoreContainer);
+    }
+  }
+
+  return card;
+}
+
+// Expand card
+function expandCard(uid) {
+  expandedCardIndex = uid;
+  rerenderCards();
+  showBackdrop();
+}
+
+// Collapse card
+function collapseCard() {
+  expandedCardIndex = null;
+  rerenderCards();
+  hideBackdrop();
+}
+
+// Re-render all cards
+// Updated Re-render to handle multiple categories
+function rerenderCards() {
+  // 1. Re-render the scrolling bio cards for all three containers
+  renderSectionCards("cards-container-yes", rsvpYes);
+  renderSectionCards("cards-container-maybe", rsvpMaybe);
+  renderSectionCards("cards-container-no", rsvpNo);
+
+  // 2. Note: We don't need to clear "cardsContainer" because it's replaced by the 3 IDs above
+}
+
+// Backdrop functions
+function setupBackdropListener() {
+  const backdrop = document.getElementById("backdrop");
+  backdrop.onclick = collapseCard;
+}
+
+function showBackdrop() {
+  const backdrop = document.getElementById("backdrop");
+  backdrop.classList.remove("hidden");
+}
+
+function hideBackdrop() {
+  const backdrop = document.getElementById("backdrop");
+  backdrop.classList.add("hidden");
 }

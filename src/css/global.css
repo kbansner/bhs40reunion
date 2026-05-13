@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@config "../../tailwind.config.js";
+
+@theme {
+    /* Berkeley High School Colors */
+    --color-bhs-red: #c41230;
+    --color-bhs-gold: #ffcc00;
+    --color-bhs-green: #006400;
+
+    /* Functional UI Colors */
+    --color-primary: #003262; /* This fixes your white-on-white button */
+    --color-primary-foreground: #ffffff;
+
+    --color-muted: #f1f5f9;
+    --color-muted-foreground: #64748b;
+
+    --color-border: #e2e8f0;
+}

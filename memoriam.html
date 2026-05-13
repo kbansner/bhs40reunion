@@ -1,0 +1,299 @@
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>In Memoriam - Berkeley High Class of 1986</title>
+        <link rel="stylesheet" href="/src/css/global.css" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&display=swap"
+            rel="stylesheet"
+        />
+        <style>
+            .grayscale-hover {
+                filter: grayscale(100%);
+                transition: filter 500ms;
+            }
+            .grayscale-hover:hover {
+                filter: grayscale(0%);
+            }
+            .modal-backdrop {
+                background-color: rgba(0, 0, 0, 0.5);
+                backdrop-filter: blur(4px);
+            }
+            .modal-content {
+                animation: modal-in 200ms ease-out;
+            }
+            @keyframes modal-in {
+                from {
+                    opacity: 0;
+                    transform: translate(-50%, -50%) scale(0.95);
+                }
+                to {
+                    opacity: 1;
+                    transform: translate(-50%, -50%) scale(1);
+                }
+            }
+            .hidden {
+                display: none;
+            }
+
+            /* Custom CSS Section */
+            .sepia-person {
+                /* Initial State: Full Grayscale */
+                filter: grayscale(1) sepia(0) contrast(1) brightness(1);
+                transition:
+                    filter 0.6s ease-in-out,
+                    transform 0.6s ease-in-out;
+                will-change: filter; /* Optimizes performance for smooth transitions */
+            }
+
+            /* Hover State: Transition from Grayscale to Sepia/Vintage */
+            .group:hover .sepia-person {
+                /* Vintage Stack: Sepia .4, lower contrast, slightly brighter */
+                filter: grayscale(0) sepia(0.4) contrast(0.86) brightness(1.1);
+                transform: scale(
+                    1.03
+                ); /* Subtle zoom for interaction feedback */
+            }
+        </style>
+        <script type="module" src="/src/js/memoriam.js"></script>
+    </head>
+    <body class="bg-background text-foreground">
+        <!-- Header -->
+        <header class="border-b border-border">
+            <div class="container max-w-5xl mx-auto px-4 py-6 md:py-8">
+                <button
+                    onclick="window.history.back()"
+                    class="float-right flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors mb-4"
+                >
+                    <svg
+                        class="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M10 19l-7-7m0 0l7-7m-7 7h18"
+                        />
+                    </svg>
+                    Back to Reunion
+                </button>
+                <h1 class="font-serif text-3xl font-medium">In Memoriam</h1>
+                <p class="text-muted-foreground mt-2">
+                    Honoring 31 beloved classmates from the Berkeley High School
+                    Class of '86
+                </p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main
+            class="container mx-auto max-w-5xl px-4 py-12 flex-1"
+            id="gallery"
+        >
+            <div
+                class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"
+                id="classmates-grid"
+            >
+                <!-- Loading state -->
+                <div
+                    class="col-span-full flex items-center justify-center py-12"
+                >
+                    <div class="flex flex-col items-center gap-4">
+                        <svg
+                            class="h-12 w-12 animate-spin text-muted-foreground"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                        >
+                            <circle
+                                class="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                stroke-width="4"
+                            ></circle>
+                            <path
+                                class="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                        </svg>
+                        <p class="text-muted-foreground">Loading memories...</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="border-t border-slate-200 py-12 bg-background">
+            <div class="container mx-auto px-4">
+                <div class="text-center space-y-6">
+                    <p class="text-foreground/90">
+                        Missing a name or have a correction?
+                        <a
+                            href="mailto:info@bhs40.com"
+                            class="text-primary underline hover:opacity-80 transition-opacity"
+                        >
+                            Email the Committee
+                        </a>
+                    </p>
+
+                    <div
+                        class="flex items-center justify-center gap-6 text-muted-foreground text-sm"
+                    >
+                        <a
+                            href="/"
+                            class="hover:text-foreground transition-colors"
+                        >
+                            Home
+                        </a>
+                        <span class="text-muted-foreground/50">•</span>
+                        <button
+                            onclick="scrollToTop()"
+                            class="hover:text-foreground transition-colors"
+                        >
+                            Back to Top
+                        </button>
+                    </div>
+
+                    <p class="text-muted-foreground text-sm">
+                        © 2026 BHS Class of '86 Reunion Committee
+                    </p>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Modal -->
+        <div id="modal" class="hidden fixed inset-0 z-50">
+            <!-- Backdrop -->
+            <div
+                class="modal-backdrop fixed inset-0"
+                onclick="closeModal()"
+            ></div>
+
+            <!-- Modal Content -->
+            <div
+                class="modal-content fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full md:w-[75vw] max-h-[90vh] bg-white rounded-lg shadow-lg border border-border overflow-hidden"
+            >
+                <!-- Close Button -->
+                <button
+                    onclick="closeModal()"
+                    class="absolute top-4 right-4 z-10 opacity-70 hover:opacity-100 transition-opacity p-2 rounded"
+                >
+                    <svg
+                        class="h-4 w-4"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12"
+                        />
+                    </svg>
+                </button>
+
+                <div class="grid md:grid-cols-[1.2fr_1fr]">
+                    <!-- Left Side: Profile -->
+                    <div
+                        class="bg-gradient-to-br from-muted/50 via-muted/30 to-background p-8 flex flex-col items-center justify-center border-r shadow-inner"
+                    >
+                        <div class="w-full">
+                            <div
+                                class="relative w-full aspect-[4/5] overflow-hidden rounded-xl shadow-inner mb-6 bg-muted shadow-xl"
+                                id="modal-photo"
+                            >
+                                <!-- Photo will be inserted here -->
+                            </div>
+                            <h2
+                                class="font-serif text-xl font-medium text-center mb-4"
+                                id="modal-name"
+                            ></h2>
+                            <p
+                                class="text-muted-foreground text-center leading-relaxed"
+                                id="modal-bio"
+                            ></p>
+                        </div>
+                    </div>
+
+                    <!-- Right Side: Memory Wall -->
+                    <div class="flex flex-col max-h-[90vh]">
+                        <div class="p-6 border-b">
+                            <h3 class="text-lg font-medium">Share a Memory</h3>
+                        </div>
+
+                        <!-- Existing Memories -->
+                        <div
+                            class="flex-1 p-6 overflow-y-auto"
+                            id="memories-list"
+                        >
+                            <!-- Memories will be inserted here -->
+                        </div>
+
+                        <!-- Submission Form -->
+                        <div class="border-t p-6 bg-muted/20">
+                            <form id="memory-form" class="space-y-4">
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div class="space-y-2">
+                                        <label
+                                            for="contributor-name"
+                                            class="text-base font-medium"
+                                            >Your Name</label
+                                        >
+                                        <input
+                                            type="text"
+                                            id="contributor-name"
+                                            required
+                                            placeholder="Enter your name"
+                                            class="w-full rounded-md border border-border bg-background px-3 py-2 text-base"
+                                        />
+                                    </div>
+                                    <div class="space-y-2">
+                                        <label
+                                            for="relationship"
+                                            class="text-base font-medium"
+                                            >Relationship</label
+                                        >
+                                        <input
+                                            type="text"
+                                            id="relationship"
+                                            required
+                                            placeholder="Friend, Teammate..."
+                                            class="w-full rounded-md border border-border bg-background px-3 py-2 text-base"
+                                        />
+                                    </div>
+                                </div>
+                                <div class="space-y-2">
+                                    <label
+                                        for="memory-text"
+                                        class="text-base font-medium"
+                                        >Share a story or memory...</label
+                                    >
+                                    <textarea
+                                        id="memory-text"
+                                        required
+                                        placeholder="Your memory..."
+                                        rows="4"
+                                        class="w-full rounded-md border border-border bg-background px-3 py-2 text-base"
+                                    ></textarea>
+                                </div>
+                                <button
+                                    type="submit"
+                                    class="w-full bg-primary text-white py-2 px-4 rounded-md hover:opacity-90 transition-opacity font-medium"
+                                >
+                                    Post Memory
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
