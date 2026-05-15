@@ -202,21 +202,21 @@
                 <div class="grid md:grid-cols-[1.2fr_1fr]">
                     <!-- Left Side: Profile -->
                     <div
-                        class="bg-gradient-to-br from-muted/50 via-muted/30 to-background p-8 flex flex-col items-center justify-center border-r shadow-inner"
+                        class="bg-gradient-to-br from-muted/50 via-muted/30 to-background p-8 flex flex-col items-center justify-start border-r shadow-inner overflow-y-auto"
                     >
-                        <div class="w-full">
+                        <div class="w-full max-w-sm">
                             <div
-                                class="relative w-full aspect-[4/5] overflow-hidden rounded-xl shadow-inner mb-6 bg-muted shadow-xl"
+                                class="relative w-full aspect-[4/5] overflow-hidden rounded-xl shadow-inner mb-6 bg-muted shadow-xl flex-shrink-0"
                                 id="modal-photo"
-                            >
-                                <!-- Photo will be inserted here -->
-                            </div>
+                            ></div>
+
                             <h2
-                                class="font-serif text-xl font-medium text-center mb-4"
+                                class="font-serif text-2xl font-medium text-center mb-2 leading-tight"
                                 id="modal-name"
                             ></h2>
+
                             <p
-                                class="text-muted-foreground text-center leading-relaxed"
+                                class="mt-3 text-sm text-center text-muted-foreground leading-relaxed max-h-32 overflow-y-auto custom-scrollbar"
                                 id="modal-bio"
                             ></p>
                         </div>

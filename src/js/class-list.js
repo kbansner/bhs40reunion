@@ -400,6 +400,10 @@ function createCard(attendee, uid) {
       </svg>
       ${attendee.hometown}
     </p>
+    <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">
+      RSVP: <span class="capitalize ${attendee.status.toLowerCase() === "no" ? "text-red-700" : "text-[#006400]"}">
+        ${attendee.status}</span>
+    </p>
   `;
 
   header.appendChild(photoContainer);
