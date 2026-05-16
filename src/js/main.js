@@ -259,3 +259,96 @@ function handleScroll() {
     }
   });
 })();
+
+// Feedback section
+//
+const feedbackData = [
+  {
+    text: "At the last reunion, we wore lanyards with our old pictures on them. And to be honest, I hadn’t seen anybody in a long time and didn’t recognize most of our classmates, and the lanyards made it really hard for me to cheat, especially since they were quite often turned around and I couldn’t see the pictures at all! 😂 A button that people can pin near their shoulders, will make it much easier for those of us who have been out of touch for a while. Thanks!",
+    type: "scrap",
+    variant: "legal",
+    author: "Class of '86 Grad",
+  },
+  {
+    text: "Request: 'In Your Eyes' - Peter Gabriel. For the whole '86 Football team.",
+    type: "neon-pink",
+    author: "Chandler",
+  },
+  {
+    text: "Can we get a dedicated 80s dance floor?",
+    type: "post-it",
+    author: "Shelley",
+  },
+  { text: "", type: "blank", author: "" }, // The "+" Note
+];
+
+document.addEventListener("DOMContentLoaded", () => {
+  const wall = document.getElementById("note-wall");
+  if (!wall) return; // Safety check
+
+  feedbackData.forEach((note, index) => {
+    const div = document.createElement("div");
+
+    // Alternate notes left and right of the center player
+    const isLeft = index % 2 === 0;
+    const left = isLeft
+      ? Math.floor(Math.random() * 30) + 5 // 5% to 35% (Left side)
+      : Math.floor(Math.random() * 30) + 65; // 65% to 95% (Right side)
+
+    const top = Math.floor(Math.random() * 70) + 5;
+    const rotation = Math.floor(Math.random() * 20) - 10;
+
+    // Base Tailwind Classes
+    // div.className = `absolute pointer-events-auto cursor-pointer transition-all duration-300 transform
+    //                 hover:z-50 hover:scale-110 hover:rotate-0 p-6 shadow-lg hover:shadow-2xl
+    //                 ${getNoteStyles(note.type)}`;
+    // Ensure this is exactly what you have
+    div.className = getNoteStyles(note);
+    div.style.top = `${top}%`;
+    div.style.left = `${left}%`;
+    div.style.transform = `rotate(${rotation}deg)`;
+    div.style.width = note.type === "scrap" ? "280px" : "200px";
+
+    div.innerHTML = `
+      <div class="font-handwriting text-slate-800 h-full overflow-y-auto scrollbar-hide">
+        ${note.type === "blank" ? "..." : note.text}
+        ${note.author ? `<p class="text-xs mt-2 text-right italic pr-4">- ${note.author}</p>` : ""}
+      </div>
+    `;
+
+    wall.appendChild(div);
+  });
+});
+
+function getNoteStyles(note) {
+  const base =
+    "absolute pointer-events-auto cursor-pointer transition-all duration-300 transform hover:z-50 hover:scale-110 hover:rotate-0 p-6 shadow-lg hover:shadow-2xl ";
+
+  switch (note.type) {
+    case "post-it":
+      return base + "bg-yellow-200 aspect-square w-52";
+
+    case "neon-pink":
+      return base + "bg-pink-400 aspect-square w-52 text-white font-bold";
+
+    case "scrap":
+      if (note.variant === "legal") {
+        return (
+          base +
+          "bg-yellow-100 border-t-8 border-yellow-400 w-80 min-h-[350px] bg-[linear-gradient(#94d2ff_1px,transparent_1px)] bg-[size:100%_1.2rem] text-[15px] leading-[1.2rem]"
+        );
+      }
+      return (
+        base + "bg-white border-l-4 border-red-400 w-72 min-h-[200px] shadow-sm"
+      );
+
+    case "blank":
+      return (
+        base +
+        "bg-white/10 border-2 border-dashed border-white/30 aspect-square w-48 items-center justify-center"
+      );
+
+    default:
+      return base + "bg-white aspect-square w-52";
+  }
+}
