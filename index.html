@@ -61,7 +61,17 @@
 
             gtag("config", "G-CN178R0FGE");
         </script>
+        <style>
+        /* Temp: Hide everything except the workspace */
+        /*section:not(#request-line) {
+          display: none !important;
+        }*/
 
+        /* Also hide the nav/header if they are distracting */
+        /*header, footer {
+          display: none !important;
+        }*/
+        </style>
         <title>BHS Class of '86 • 40th Reunion</title>
 
         <!-- Fonts -->
@@ -379,7 +389,7 @@
                             <div
                                 class="percent-reachable text-5xl font-black text-bhs-green mb-2 heading-font"
                             >
-                                21%
+                                23%
                             </div>
                             <p class="text-sm text-gray-600 leading-snug">
                                 of Reachable Grads Reached
@@ -867,74 +877,77 @@
             class="fixed inset-0 bg-black/20 backdrop-blur-sm z-9 hidden"
         ></div>
 
-        <section class="relative bg-slate-900 pt-24 pb-40 overflow-hidden min-h-[1000px] flex flex-col items-center">
+        <section id="request-line" class="relative bg-slate-900 w-full h-screen overflow-hidden flex flex-col items-center justify-center">
+            <div id="note-modal" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm hidden opacity-0 transition-opacity duration-300">
+              <div class="bg-[#fef9c3] w-full max-w-lg p-8 shadow-2xl border-t-8 border-yellow-400 transform -rotate-1">
+                <h3 class="font-serif text-2xl mb-4 text-slate-800">Add to the Request Line</h3>
+                <form id="note-form" class="space-y-4">
+                    <div class="flex gap-3 mb-6">
+                      <button type="button" onclick="setNoteType('song')" id="btn-song"
+                        class="type-btn px-4 py-1 rounded-full border-2 border-blue-400 bg-blue-50 text-blue-700 text-sm font-bold transition-all">
+                        🎵 Song Request
+                      </button>
+                      <button type="button" onclick="setNoteType('suggestion')" id="btn-suggestion"
+                        class="type-btn px-4 py-1 rounded-full border-2 border-slate-300 text-slate-500 text-sm transition-all">
+                        💡 Reunion Idea
+                      </button>
+                    </div>
 
-          <h2 class="relative z-40 text-4xl md:text-6xl font-serif text-white mb-32 text-center">
-            The Request Line
-          </h2>
+                    <textarea id="note-input" rows="4"
+                      class="w-full bg-transparent border-none focus:ring-0 outline-none resize-none font-handwriting text-xl text-slate-800 leading-[1.6rem] bg-[linear-gradient(transparent_95%,#cbd5e1_5%)] bg-[size:100%_1.6rem]"
+                      placeholder="Type your memory or song request..."></textarea>
 
-          <div class="relative w-full max-w-6xl h-[600px] flex items-center justify-center">
+                    <input id="author-input" type="text"
+                      class="w-full bg-transparent border-none focus:ring-0 outline-none font-handwriting text-lg text-slate-800 mt-4 border-b border-slate-300"
+                      placeholder="- Your Name">
 
-            <div id="note-wall" class="absolute inset-0 pointer-events-none">
-               </div>
+                  <div class="flex justify-end gap-4 pt-4">
+                    <button id="close-modal" type="button" class="text-slate-500 hover:text-slate-800 uppercase text-xs tracking-widest">Cancel</button>
+                    <button id="submit-note" type="submit" class="bg-blue-500 text-white px-6 py-2 rounded shadow hover:bg-blue-600 transition-colors">Pin it!</button>
+                  </div>
+                </form>
+              </div>
+            </div>
 
-               <div class="relative z-30 w-full max-w-xs shadow-2xl rounded-xl overflow-hidden border-4 border-slate-800 bg-black aspect-square pointer-events-auto">
-                   <iframe
-                   class="w-full h-full"
-                   src="https://www.youtube-nocookie.com/embed/videoseries?list=PLy4U1MhMkWJn3UUOOuUyaSv_PZcSanFng&modestbranding=1&rel=0"
-                   title="BHS '86 Mix"
-                   frameborder="0"
-                   allow="autoplay; encrypted-media"
-                   allowfullscreen>
-                   </iframe>
-               </div>
+            <h2 class="relative z-40 text-4xl md:text-6xl font-serif text-white mb-8 text-center">
+                The Request Line
+            </h2>
+
+            <div class="relative w-full max-w-6xl h-[70vh] flex items-center justify-center">
+
+             <div id="note-wall" class="absolute inset-0 pointer-events-none">
+                </div>
+
+             <div class="relative z-30 w-full max-w-[300px] aspect-square shadow-2xl rounded-xl overflow-hidden border-4 border-slate-800 bg-black">
+                 <iframe
+                 class="w-full h-full"
+                 src="https://www.youtube-nocookie.com/embed/videoseries?list=PLy4U1MhMkWJn3UUOOuUyaSv_PZcSanFng&modestbranding=1&rel=0"
+                 title="BHS '86 Mix"
+                 frameborder="0"
+                 allow="autoplay; encrypted-media"
+                 allowfullscreen>
+                 </iframe>
+            </div>
 
           </div>
         </section>
 
-        <section class="py-16 bg-[#2d2d2d] text-white">
-            <div class="max-w-6xl mx-auto px-4">
-                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
-                    <div class="lg:col-span-2">
-                        <div
-                            class="rounded-2xl overflow-hidden border-4 border-gray-800 shadow-2xl bg-black"
-                        >
-                            <div class="aspect-video w-full">
-                                <iframe
-                                    class="w-full h-full"
-                                    src="https://www.youtube-nocookie.com/embed/videoseries?list=PLy4U1MhMkWJn3UUOOuUyaSv_PZcSanFng&modestbranding=1&rel=0"
-                                    frameborder="0"
-                                    allowfullscreen
-                                >
-                                </iframe>
-                            </div>
-                        </div>
-                        <p
-                            class="mt-4 text-gray-400 text-sm italic text-center lg:text-left"
-                        >
-                            Now Playing: BHS '86 "All Requests" Fundraiser Mix
-                        </p>
-                    </div>
-
-                    <div
-                        id="momentum-section"
-                        class="bg-gray-800/50 p-6 rounded-2xl border border-gray-700 shadow-inner"
-                    >
-                        <h3
-                            class="text-xl font-bold mb-4 text-blue-400 text-center"
-                        >
-                            Check-in Momentum
-                        </h3>
-                        <div class="h-[300px]">
-                            <canvas id="momentumChart"></canvas>
-                        </div>
-                        <p class="mt-4 text-xs text-gray-400 text-center">
-                            New classmates are joining every day!
-                        </p>
-                    </div>
-                </div>
+        <!--<div
+            id="momentum-section"
+            class="bg-gray-800/50 p-6 rounded-2xl border border-gray-700 shadow-inner"
+        >
+            <h3
+                class="text-xl font-bold mb-4 text-blue-400 text-center"
+            >
+                Check-in Momentum
+            </h3>
+            <div class="h-[300px]">
+                <canvas id="momentumChart"></canvas>
             </div>
-        </section>
+            <p class="mt-4 text-xs text-gray-400 text-center">
+                New classmates are joining every day!
+            </p>
+        </div>-->
 
         <!-- Class Directory Section -->
         <section
@@ -1004,8 +1017,8 @@
         <!-- Footer with Grapevine -->
         <load ="./partials/footer.html" />
         <!-- Minimal JavaScript for Sticky Nav and Logo Animation -->
-        <script type="module" src="/src/js/main.js"></script>
-        <script type="module" src="/src/js/class-list.js"></script>
+        <script type="module" src="/src/js/main.js" defer></script>
+        <script type="module" src="/src/js/class-list.js" defer></script>
         <script>
             // Ensure the DOM and main.js are ready
             window.addEventListener("DOMContentLoaded", () => {

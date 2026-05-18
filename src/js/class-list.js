@@ -6,7 +6,35 @@ const CONFIG = {
   SHEET_URL:
     "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-xDkTv8aIauGKKuiqZrHiC2RgOw0A4Nw3HnJkYQ3ES5kmbzxXM7mUker_v-WX1rt6rnnBwI6wQvcO/pub?gid=1741366949&single=true&output=csv",
   SCRIPT_URL:
-    "https://script.google.com/macros/s/AKfycby9tAi93Sp82HqCYVSoepqa7NWom2MTL5VdDbONs-KFKXL02rJO16a2hnGXJkKkqOZR/exec",
+    "https://script.google.com/macros/s/AKfycbz-4_TFUdayT9nobqg4RilTTZSSwAobRNa5HRhHO2PyeZIWcIvOfMXWEZe_hBWWKzXz/exec",
+};
+
+const themes = {
+  yes: { label: "Attending", colors: "bg-green-800 text-white" },
+  maybe: {
+    label: "Maybe",
+    colors: "bg-amber-50 text-amber-700 border-amber-200",
+  },
+  no: {
+    label: "Not Attending",
+    colors: "bg-red-50 text-red-700 border-red-200",
+  },
+  private: {
+    label: "Private",
+    colors: "bg-purple-100 text-purple-700 border-purple-200",
+  },
+  missing: {
+    label: "Missing",
+    colors: "bg-orange-50 text-orange-700 border-orange-200",
+  },
+  deceased: {
+    label: "In Memoriam", // Softened label
+    colors: "bg-slate-700 text-slate-50 border-slate-800", // Muted charcoal vs solid black
+  },
+  not_responded: {
+    label: "Not Responded",
+    colors: "bg-slate-100 text-slate-600 border-slate-200",
+  },
 };
 
 let classmates = [];
@@ -209,34 +237,6 @@ window.selectPerson = function (name) {
   document.getElementById("directorySearch").value = p.displayName;
   document.getElementById("autocompleteDropdown").classList.add("hidden");
 
-  const themes = {
-    yes: { label: "Attending", colors: "bg-green-800 text-white" },
-    maybe: {
-      label: "Maybe",
-      colors: "bg-amber-50 text-amber-700 border-amber-200",
-    },
-    no: {
-      label: "Not Attending",
-      colors: "bg-red-50 text-red-700 border-red-200",
-    },
-    private: {
-      label: "Private",
-      colors: "bg-purple-100 text-purple-700 border-purple-200",
-    },
-    missing: {
-      label: "Missing",
-      colors: "bg-orange-50 text-orange-700 border-orange-200",
-    },
-    deceased: {
-      label: "In Memoriam", // Softened label
-      colors: "bg-slate-700 text-slate-50 border-slate-800", // Muted charcoal vs solid black
-    },
-    not_responded: {
-      label: "Not Responded",
-      colors: "bg-slate-100 text-slate-600 border-slate-200",
-    },
-  };
-
   const statusKey = p.status.toLowerCase().trim();
 
   const t = themes[p.status] || themes.not_responded;
@@ -393,16 +393,16 @@ function createCard(attendee, uid) {
     <h3 class="text-xl font-bold text-[#006400] mb-1" style="font-family: 'Roboto Slab', serif;">
       ${attendee.name}
     </h3>
+    <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">
+      <span class="capitalize ${attendee.status.toLowerCase() === "no" ? "text-red-700" : "text-[#006400]"}">
+        ${themes[attendee.status.toLowerCase()].label}</span>
+    </p>
     <p class="text-sm text-gray-600 flex items-center gap-1">
       <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
       </svg>
       ${attendee.hometown}
-    </p>
-    <p class="text-xs font-semibold uppercase tracking-wider text-gray-500">
-      RSVP: <span class="capitalize ${attendee.status.toLowerCase() === "no" ? "text-red-700" : "text-[#006400]"}">
-        ${attendee.status}</span>
     </p>
   `;
 

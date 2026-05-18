@@ -9,7 +9,7 @@ const CONFIG = {
 
   // 2. Add your Apps Script URL here to fetch the live memories
   SCRIPT_URL:
-    "https://script.google.com/macros/s/AKfycby9tAi93Sp82HqCYVSoepqa7NWom2MTL5VdDbONs-KFKXL02rJO16a2hnGXJkKkqOZR/exec",
+    "https://script.google.com/macros/s/AKfycbz-4_TFUdayT9nobqg4RilTTZSSwAobRNa5HRhHO2PyeZIWcIvOfMXWEZe_hBWWKzXz/exec",
 };
 
 let deceasedClassmates = [];
