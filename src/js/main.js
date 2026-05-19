@@ -266,7 +266,6 @@ document.addEventListener("DOMContentLoaded", async () => {
   const wall = document.getElementById("note-wall");
   if (!wall) return;
 
-  // Define the Observer first so it's available
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -290,13 +289,11 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   try {
     const response = await fetch(SCRIPT_URL);
-
-    // Check if response is actually JSON
     if (!response.ok) throw new Error("Network response was not ok");
 
     const data = await response.json();
-    // 1. ALWAYS ADD THE BLANK TRIGGER FIRST
-    // Filter for ONLY Song Requests and Suggestions for the Request Line
+
+    // 1. Filter class notes
     const liveNotes = (data.notes || []).filter(
       (note) =>
         note.type === "neon-pink" ||
@@ -304,51 +301,65 @@ document.addEventListener("DOMContentLoaded", async () => {
         note.type === "post-it",
     );
 
-    // 1. ALWAYS ADD THE BLANK TRIGGER FIRST
-    // const addMemoryTrigger = { type: "blank", text: "+" };
-    const addMemoryTrigger = { type: "blank", text: "Add Your Request!" };
-    liveNotes.push(addMemoryTrigger);
-
+    // 2. Add classmate notes to the wall
     liveNotes.forEach((note, index) => {
       const div = createNoteElement(note);
 
-      // Placement Math
       const isLeft = index % 2 === 0;
-      const left =
-        note.type === "blank"
-          ? 80
-          : isLeft
-            ? Math.floor(Math.random() * 15) + 5
-            : Math.floor(Math.random() * 15) + 65;
-      const top =
-        note.type === "blank" ? 75 : Math.floor(Math.random() * 60) + 10;
+      const left = isLeft
+        ? Math.floor(Math.random() * 15) + 5
+        : Math.floor(Math.random() * 15) + 65;
+      const top = Math.floor(Math.random() * 60) + 10;
       const rotation = Math.floor(Math.random() * 20) - 10;
 
-      div.dataset.targetTop = top;
-      div.dataset.rotation = rotation;
-      div.dataset.delay = index * 100;
-
-      Object.assign(div.style, {
-        top: `${top + 15}%`,
-        left: `${left}%`,
-        opacity: "0",
-        transform: `rotate(${rotation + 10}deg) scale(0.5)`,
-        transition:
-          "opacity 0.8s ease, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)",
-        zIndex: note.type === "blank" ? "50" : "10",
-      });
+      setupInitialStyles(div, top, left, rotation, index);
 
       wall.appendChild(div);
       addDragLogic(div, wall, note);
     });
 
+    // 3. Append the Blank Trigger LAST (Ensures it is visually on top)
+    const addMemoryTrigger = { type: "blank", text: "Add Your Request!" };
+    const triggerDiv = createNoteElement(addMemoryTrigger);
+    triggerDiv.id = "blankNote";
+
+    // Static position for the "Add" button
+    setupInitialStyles(triggerDiv, 75, 80, 0, liveNotes.length);
+
+    wall.appendChild(triggerDiv);
+    addDragLogic(triggerDiv, wall, addMemoryTrigger);
+
     observer.observe(wall);
   } catch (error) {
     console.error("Failed to load notes:", error);
-    // Fallback: If sheet fails, at least show the Add button
-    spawnNewNote({ type: "blank", text: "+" });
+    // Fallback: spawn only the trigger if the fetch fails
+    const fallbackTrigger = { type: "blank", text: "Add Your Request!" };
+    const div = createNoteElement(fallbackTrigger);
+    div.id = "blankNote";
+    setupInitialStyles(div, 75, 80, 0, 0);
+    div.style.opacity = "1"; // Show immediately on error
+    wall.appendChild(div);
+    addDragLogic(div, wall, fallbackTrigger);
   }
 });
+
+/**
+ * Helper to apply initial animation data and styles
+ */
+function setupInitialStyles(div, top, left, rotation, index) {
+  div.dataset.targetTop = top;
+  div.dataset.rotation = rotation;
+  div.dataset.delay = index * 100;
+
+  Object.assign(div.style, {
+    top: `${top + 15}%`,
+    left: `${left}%`,
+    opacity: "0",
+    transform: `rotate(${rotation + 10}deg) scale(0.5)`,
+    transition:
+      "opacity 0.8s ease, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)",
+  });
+}
 
 function getNoteStyles(note) {
   const base =
@@ -356,29 +367,34 @@ function getNoteStyles(note) {
 
   switch (note.type) {
     case "post-it": // Fixed the backtick here
-      return base + "bg-yellow-200 w-48 h-48 text-slate-800 shadow-md";
+      return (
+        base + "note-resting bg-yellow-200 w-48 h-48 text-slate-800 shadow-md"
+      );
 
     case "neon-pink":
-      return base + "bg-pink-400 w-48 h-48 text-white font-bold shadow-md";
+      return (
+        base +
+        "note-resting bg-pink-400 w-48 h-48 text-white font-bold shadow-md"
+      );
 
     case "scrap":
       if (note.variant === "legal") {
         // The Long Yellow Legal Pad
         return (
           base +
-          "bg-yellow-100 border-t-8 border-yellow-400 w-72 min-h-[350px] bg-[linear-gradient(#94d2ff_1px,transparent_1px)] bg-[size:100%_1.2rem] text-[15px] leading-[1.2rem] text-slate-800"
+          "note-resting bg-yellow-100 border-t-8 border-yellow-400 w-72 min-h-[350px] bg-[linear-gradient(#94d2ff_1px,transparent_1px)] bg-[size:100%_1.2rem] text-[15px] leading-[1.2rem] text-slate-800"
         );
       }
       // The Short White Scrap (Red or Blue margin)
       return (
         base +
-        "bg-white border-l-4 border-red-400 w-64 min-h-[160px] shadow-sm text-slate-800"
+        "note-resting bg-white border-l-4 border-red-400 w-64 min-h-[160px] shadow-sm text-slate-800"
       );
 
     case "blank":
       return (
         base +
-        "bg-white/10 border-2 border-dashed border-white/30 w-48 h-48 items-center justify-center text-white/50"
+        "note-permanent-top bg-slate-800 border-2 border-dashed border-white/30 w-48 h-48 items-center justify-center text-white/40 hover:border-white/60 hover:text-white/80 hover:bg-slate-700 transition-all"
       );
 
     default:
@@ -446,13 +462,13 @@ if (noteForm) {
     if (selectedType === "song") {
       noteType = "neon-pink";
       // Songs usually stay on neon squares unless they are weirdly long
-      variant = text.length > 100 ? "legal" : null;
+      variant = text.length > 110 ? "legal" : null;
     } else {
       // REUNION IDEAS:
-      if (text.length < 40) {
+      if (text.length < 70) {
         // Very short? Use the yellow square
         noteType = "post-it";
-      } else if (text.length >= 40 && text.length <= 100) {
+      } else if (text.length >= 70 && text.length <= 110) {
         // Medium? Use the short white scrap (red line on left)
         noteType = "scrap";
         variant = null; // No legal variant means short scrap
@@ -526,20 +542,22 @@ function addDragLogic(div, wall, note) {
   let startX, startY, initialLeft, initialTop;
 
   div.addEventListener("mousedown", (e) => {
-    // 1. Safety check for the "Add Memory" note
     if (note && note.type === "blank") {
       openNoteModal();
       return;
     }
 
-    // 2. Setup Drag
     isDragging = true;
+
+    // 1. Just handle THIS specific note's elevation
+    // Only remove resting and add active if it's NOT the blankNote
+    if (div.id !== "blankNote") {
+      div.classList.remove("note-resting");
+      div.classList.add("note-active");
+    }
+
     div.style.cursor = "grabbing";
     div.style.transition = "none";
-
-    // Shuffle Z-index
-    wall.querySelectorAll(".absolute").forEach((n) => (n.style.zIndex = "10"));
-    div.style.zIndex = "40";
 
     startX = e.clientX;
     startY = e.clientY;
@@ -566,8 +584,17 @@ function addDragLogic(div, wall, note) {
   document.addEventListener("mouseup", () => {
     if (!isDragging) return;
     isDragging = false;
+
+    // 3. Reset THIS note back to resting
+    if (div.id !== "blankNote") {
+      div.classList.remove("note-active");
+      div.classList.add("note-resting");
+    }
+
     div.style.cursor = "grab";
-    div.style.transition = "transform 0.3s ease, box-shadow 0.3s ease";
+    // Keep the transform transition for the smooth "pop" back
+    div.style.transition =
+      "transform 0.3s ease, box-shadow 0.3s ease, top 0.5s ease, left 0.5s ease";
   });
 }
 

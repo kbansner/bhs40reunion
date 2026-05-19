@@ -795,3 +795,19 @@ body {
 .card-transition {
     transition: all 300ms ease-out;
 }
+
+/* The default state for a note on the wall */
+.note-resting {
+    z-index: 10 !important;
+}
+
+/* When a note is hovered or being interacted with */
+.note-active {
+    z-index: 60 !important;
+}
+
+/* The Add Suggestion button - always on top */
+.note-permanent-top {
+    z-index: 50 !important;
+    isolation: isolate;
+}

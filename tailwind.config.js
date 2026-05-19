@@ -1,6 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts}"],
+  content: [
+    "./index.html",
+    "./src/**/*.{js,ts}",
+    "./src/js/class-list.js",
+    "./src/js/main.js",
+  ],
+  safelist: ["capitalize", "ml-0.5"],
   plugins: [],
   theme: {
     extend: {
