@@ -5,7 +5,6 @@ const SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbz-4_TFUdayT9nobqg4RilTTZSSwAobRNa5HRhHO2PyeZIWcIvOfMXWEZe_hBWWKzXz/exec";
 
 // --- 0. THE GOOGLE MAPS FIX ---
-// We attach this to 'window' so the Google API can see it from index.html
 window.initMap = function () {
   console.log("Google Maps API is calling initMap...");
   const mapElement = document.getElementById("map");
@@ -18,44 +17,38 @@ window.initMap = function () {
   const map = new google.maps.Map(mapElement, {
     center: { lat: 37.8715, lng: -122.273 }, // Berkeley High
     zoom: 12,
-    mapId: "BHS_REUNION_MAP", // Use your actual Map ID if you have one
-    zoomControl: true, // Ensure this is true
-    mapTypeControl: false, // Keeps it clean
-    streetViewControl: false, // Optional: Hide the little yellow man
-    fullscreenControl: true, // Good for mobile users
+    mapId: "BHS_REUNION_MAP",
+    zoomControl: true,
+    mapTypeControl: false,
+    streetViewControl: false,
+    fullscreenControl: true,
   });
 
-  // Now that the map is ready, trigger the pins from your other file
   loadPins(map);
 };
 
 window.addEventListener("DOMContentLoaded", function () {
-  // Update share links with current URL (runs after page load)
   const currentUrl = encodeURIComponent(window.location.href);
   const shareMessage = encodeURIComponent(
     "Check out the Berkeley High Class of '86 40th Reunion! Help us make it happen: ",
   );
 
-  // Update email link
   const emailLink = document.querySelector('a[href^="mailto:"]');
   if (emailLink) {
     emailLink.href = `mailto:?subject=BHS Class of '86 Reunion&body=${shareMessage}${currentUrl}`;
   }
 
-  // Update SMS link
   const smsLink = document.querySelector('a[href^="sms:"]');
   if (smsLink) {
     smsLink.href = `sms:?&body=${shareMessage}${currentUrl}`;
   }
 
-  // Update Facebook link
   const fbLink = document.querySelector('a[href*="facebook.com/sharer"]');
   if (fbLink) {
     fbLink.href = `https://www.facebook.com/sharer/sharer.php?u=${currentUrl}`;
   }
 });
 
-// Email function for missing classmates
 window.sendEmail = (name) => {
   const questionnaireUrl = "https://forms.gle/BQduAPNC67e2U9YQ7";
   const subject = encodeURIComponent(
@@ -74,9 +67,8 @@ window.sendEmail = (name) => {
   window.location.href = `mailto:?subject=${subject}&body=${body}`;
 };
 
-// SMS function for missing classmates
 window.sendSMS = (name) => {
-  const questionnaireUrl = "https://forms.gle/BQduAPNC67e2U9YQ7"; // Replace with actual form URL
+  const questionnaireUrl = "https://forms.gle/BQduAPNC67e2U9YQ7";
   const firstName = name.split(",")[1] ? name.split(",")[1].trim() : name;
   const message = encodeURIComponent(
     `Hi ${firstName}! BHS Class of '86 here. We're planning our 40th reunion (Oct 2026) and would love to have you join! ` +
@@ -94,7 +86,7 @@ window.submitInfo = function (name, uid) {
 
 window.fetchReunionStats = async function () {
   const chartCanvas = document.getElementById("momentumChart");
-  if (!chartCanvas) return; // Exit early if the chart isn't on this page
+  if (!chartCanvas) return;
 
   const skeleton = document.getElementById("chart-skeleton");
   const syncTimestamp = document.getElementById("sync-timestamp");
@@ -102,14 +94,13 @@ window.fetchReunionStats = async function () {
   const missingCountDisplay = document.querySelectorAll(
     ".missing-count-display",
   );
+
   try {
     const response = await fetch(SCRIPT_URL);
     if (!response.ok) throw new Error("Network response was not ok");
 
     const stats = await response.json();
 
-    // 1. Get the "351" number (Missing Jackets / No Email)
-    // Adjust 'stats.missingJackets' to match your exact JSON property name
     const missingJacketsCount = stats.missingJackets || 351;
     if (missingCountDisplay) {
       missingCountDisplay.forEach((el) => {
@@ -117,7 +108,6 @@ window.fetchReunionStats = async function () {
       });
     }
 
-    // 2. Update the Global UI Cards
     document.getElementById("countdown-display").innerText =
       stats.daysRemaining;
     const rsvpCount = stats.rsvps;
@@ -127,11 +117,8 @@ window.fetchReunionStats = async function () {
     document.getElementById("rsvp-label").innerText = `${rsvpCount} RSVPs`;
     document.getElementById("goal-label").innerText = `Headcount Goal ${goal}`;
     document.getElementById("progress-bar-fill").style.width = `${pct}%`;
-    // document.getElementById("percent-display").innerText = `${pct.toFixed(1)}%`;
-    // 1. Select all elements with the class
-    const percentElements = document.querySelectorAll(".percent-reachable");
 
-    // 2. Loop through each one and update its content
+    const percentElements = document.querySelectorAll(".percent-reachable");
     percentElements.forEach((el) => {
       el.innerText = `${pct.toFixed(1)}%`;
     });
@@ -140,7 +127,6 @@ window.fetchReunionStats = async function () {
       syncTimestamp.innerText = `Synced at ${stats.lastUpdated}`;
     }
 
-    // 3. Success State Check (25/week target)
     const trendData = stats.weeklyTrends;
     const latestCount = trendData[trendData.length - 1].count;
     const target = 25;
@@ -151,8 +137,6 @@ window.fetchReunionStats = async function () {
       if (!chartTitle.innerText.includes("🎉")) chartTitle.innerText += " 🎉";
     }
 
-    // 4. Build the Momentum Chart
-    // Inside fetchReunionStats, near step 4:
     if (typeof Chart !== "undefined") {
       const ctx = chartCanvas.getContext("2d");
       new Chart(ctx, {
@@ -201,16 +185,13 @@ window.fetchReunionStats = async function () {
       });
     } else {
       console.warn("Chart.js not loaded yet. Retrying in 500ms...");
-      // Chart logic
-      if (typeof Chart !== "undefined") {
-        renderChart(chartCanvas, stats);
-      } else if (chartRetryCount < 3) {
-        chartRetryCount++;
+      if (typeof chartRetryCount === "undefined") window.chartRetryCount = 0;
+      if (window.chartRetryCount < 3) {
+        window.chartRetryCount++;
         setTimeout(window.fetchReunionStats, 1000);
       }
     }
 
-    // 5. Transition UI
     chartCanvas.classList.add("chart-loaded");
     if (skeleton) {
       skeleton.style.opacity = "0";
@@ -226,14 +207,9 @@ window.fetchReunionStats = async function () {
   }
 };
 
-// Sticky navigation scroll handler
 function handleScroll() {
-  // Search bar sticks ONLY when it would disappear under the sticky nav
-  const stickyNavHeight = 64; // Height of the sticky nav bar
-
   const stickyNav = document.getElementById("sticky-nav");
   if (stickyNav) {
-    // Sticky nav appears at 300px
     if (window.scrollY > 300) {
       stickyNav.classList.remove("-translate-y-full", "opacity-0");
       stickyNav.classList.add("translate-y-0", "opacity-100");
@@ -244,16 +220,11 @@ function handleScroll() {
   }
 }
 
-// Sticky Navigation - Show/Hide on Scroll
-(function () {
-  const stickyNav = document.getElementById("sticky-nav");
-  let lastScrollY = window.scrollY;
-
-  // Throttle scroll event for performance
+(() => {
   let ticking = false;
-  window.addEventListener("scroll", function () {
+  window.addEventListener("scroll", () => {
     if (!ticking) {
-      window.requestAnimationFrame(function () {
+      window.requestAnimationFrame(() => {
         handleScroll();
         ticking = false;
       });
@@ -262,9 +233,11 @@ function handleScroll() {
   });
 })();
 
+// --- REFACTORED REQUEST LINE INTERFACES ---
 document.addEventListener("DOMContentLoaded", async () => {
-  const wall = document.getElementById("note-wall");
-  if (!wall) return;
+  const wallCanvas = document.getElementById("wall-canvas");
+  const notesContainer = document.getElementById("notes-container");
+  if (!wallCanvas || !notesContainer) return;
 
   const observer = new IntersectionObserver(
     (entries) => {
@@ -275,7 +248,7 @@ document.addEventListener("DOMContentLoaded", async () => {
               () => {
                 note.style.top = `${note.dataset.targetTop}%`;
                 note.style.opacity = "1";
-                note.style.transform = `rotate(${note.dataset.rotation}deg) scale(1)`;
+                note.style.transform = `translate(-50%, -50%) rotate(${note.dataset.rotation}deg) scale(1)`;
               },
               parseInt(note.dataset.delay) || 0,
             );
@@ -284,7 +257,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       });
     },
-    { threshold: 0.2 },
+    { threshold: 0.1 },
   );
 
   try {
@@ -293,7 +266,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const data = await response.json();
 
-    // 1. Filter class notes
     const liveNotes = (data.notes || []).filter(
       (note) =>
         note.type === "neon-pink" ||
@@ -301,104 +273,126 @@ document.addEventListener("DOMContentLoaded", async () => {
         note.type === "post-it",
     );
 
-    // 2. Add classmate notes to the wall
+    const isMobile = window.innerWidth < 768;
+
+    // 1. Distribute active sheets cleanly via a Fermat Spiral pattern
     liveNotes.forEach((note, index) => {
       const div = createNoteElement(note);
+      if (!div) return;
 
-      const isLeft = index % 2 === 0;
-      const left = isLeft
-        ? Math.floor(Math.random() * 15) + 5
-        : Math.floor(Math.random() * 15) + 65;
-      const top = Math.floor(Math.random() * 60) + 10;
+      const goldenAngle = 2.39996;
+
+      // Scales tailored specifically to canvas width ratios
+      const baseScale = isMobile ? 80 : 140;
+      const damping = isMobile ? 0.03 : 0.04;
+      const spacingScale = baseScale / (1 + index * damping);
+
+      const radius = Math.sqrt(index + 1) * spacingScale;
+      const angle = index * goldenAngle;
+
+      const aspectXFactor = isMobile ? 1.8 : 1.4;
+      const aspectYFactor = isMobile ? 0.8 : 0.95;
+
+      // 16.66% centers the initial spiral point behind the jukebox player inside the first 100vw panel on mobile
+      // FIX: Changed the mobile divisor from 2.2 to 1.0 to compress the horizontal spiral spread
+      let left =
+        45 + (Math.cos(angle) * radius * aspectXFactor) / (isMobile ? 6 : 7);
+      let top =
+        50 + (Math.sin(angle) * radius * aspectYFactor) / (isMobile ? 7 : 10);
+
+      if (!isMobile) {
+        left += Math.sin(index * 4.5) * 3;
+        top += Math.cos(index * 7.2) * 3;
+      }
+
+      // Clamping limits adjusted to accommodate the full wider canvas panel
+      left = Math.max(isMobile ? 2 : 5, Math.min(isMobile ? 96 : 95, left));
+      top = Math.max(isMobile ? 14 : 12, Math.min(isMobile ? 86 : 88, top));
+
       const rotation = Math.floor(Math.random() * 20) - 10;
-
       setupInitialStyles(div, top, left, rotation, index);
 
-      wall.appendChild(div);
-      addDragLogic(div, wall, note);
+      notesContainer.appendChild(div);
+      addDragLogic(div, wallCanvas, note);
     });
 
-    // 3. Append the Blank Trigger LAST (Ensures it is visually on top)
+    // 2. Append the Blank Trigger Button last to claim natural top paint ordering
     const addMemoryTrigger = { type: "blank", text: "Add Your Request!" };
     const triggerDiv = createNoteElement(addMemoryTrigger);
-    triggerDiv.id = "blankNote";
+    if (triggerDiv) {
+      triggerDiv.id = "blankNote";
+      // Render the call-to-action note cleanly below the player view space on startup
+      setupInitialStyles(
+        triggerDiv,
+        78,
+        isMobile ? 50 : 80,
+        0,
+        liveNotes.length,
+      );
+      notesContainer.appendChild(triggerDiv);
+      addDragLogic(triggerDiv, wallCanvas, addMemoryTrigger);
+    }
 
-    // Static position for the "Add" button
-    setupInitialStyles(triggerDiv, 75, 80, 0, liveNotes.length);
-
-    wall.appendChild(triggerDiv);
-    addDragLogic(triggerDiv, wall, addMemoryTrigger);
-
-    observer.observe(wall);
+    observer.observe(notesContainer);
   } catch (error) {
     console.error("Failed to load notes:", error);
-    // Fallback: spawn only the trigger if the fetch fails
     const fallbackTrigger = { type: "blank", text: "Add Your Request!" };
     const div = createNoteElement(fallbackTrigger);
-    div.id = "blankNote";
-    setupInitialStyles(div, 75, 80, 0, 0);
-    div.style.opacity = "1"; // Show immediately on error
-    wall.appendChild(div);
-    addDragLogic(div, wall, fallbackTrigger);
+    if (div) {
+      div.id = "blankNote";
+      setupInitialStyles(div, 75, window.innerWidth < 768 ? 16.66 : 50, 0, 0);
+      notesContainer.appendChild(div);
+      addDragLogic(div, wallCanvas, fallbackTrigger);
+    }
   }
 });
 
-/**
- * Helper to apply initial animation data and styles
- */
-function setupInitialStyles(div, top, left, rotation, index) {
-  div.dataset.targetTop = top;
-  div.dataset.rotation = rotation;
-  div.dataset.delay = index * 100;
+function setupInitialStyles(el, top, left, rotation, index) {
+  el.style.left = `${left}%`;
+  el.style.top = `${top}%`;
 
-  Object.assign(div.style, {
-    top: `${top + 15}%`,
-    left: `${left}%`,
-    opacity: "0",
-    transform: `rotate(${rotation + 10}deg) scale(0.5)`,
-    transition:
-      "opacity 0.8s ease, transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)",
-  });
+  // translate(-50%, -50%) aligns geometric positions exactly from the center coordinate paths
+  el.style.transform = `translate(-50%, -50%) rotate(${rotation}deg) scale(1)`;
+  el.classList.add("note-resting");
 }
 
 function getNoteStyles(note) {
   const base =
-    "absolute pointer-events-auto cursor-pointer transition-all duration-300 transform hover:z-50 hover:scale-110 hover:rotate-0 p-3 shadow-lg hover:shadow-2xl flex flex-col items-start ";
+    "absolute pointer-events-auto cursor-pointer transition-all duration-300 transform p-3 shadow-lg hover:shadow-2xl flex flex-col items-start ";
 
   switch (note.type) {
-    case "post-it": // Fixed the backtick here
+    case "post-it":
       return (
-        base + "note-resting bg-yellow-200 w-48 h-48 text-slate-800 shadow-md"
+        base +
+        "note-resting bg-yellow-200 w-48 h-48 text-slate-800 shadow-md hover:z-50"
       );
 
     case "neon-pink":
       return (
         base +
-        "note-resting bg-pink-400 w-48 h-48 text-white font-bold shadow-md"
+        "note-resting bg-pink-400 w-48 h-48 text-white font-bold shadow-md hover:z-50"
       );
 
     case "scrap":
       if (note.variant === "legal") {
-        // The Long Yellow Legal Pad
         return (
           base +
-          "note-resting bg-yellow-100 border-t-8 border-yellow-400 w-72 min-h-[350px] bg-[linear-gradient(#94d2ff_1px,transparent_1px)] bg-[size:100%_1.2rem] text-[15px] leading-[1.2rem] text-slate-800"
+          "note-resting bg-yellow-100 border-t-8 border-yellow-400 w-72 min-h-[350px] bg-[linear-gradient(#94d2ff_1px,transparent_1px)] bg-[size:100%_1.2rem] text-[15px] leading-[1.2rem] text-slate-800  hover:z-50"
         );
       }
-      // The Short White Scrap (Red or Blue margin)
       return (
         base +
-        "note-resting bg-white border-l-4 border-red-400 w-64 min-h-[160px] shadow-sm text-slate-800"
+        "note-resting bg-white border-l-4 border-red-400 w-64 min-h-[160px] shadow-sm text-slate-800 hover:z-50"
       );
 
     case "blank":
       return (
         base +
-        "note-permanent-top bg-slate-800 border-2 border-dashed border-white/30 w-48 h-48 items-center justify-center text-white/40 hover:border-white/60 hover:text-white/80 hover:bg-slate-700 transition-all"
+        "note-permanent-top bg-slate-800 border-2 border-dashed border-white/30 w-48 h-28 items-center justify-center text-white/40 hover:border-white/60 hover:text-white/80 hover:bg-slate-700 transition-all"
       );
 
     default:
-      return base + "bg-white w-52 h-52 text-slate-800";
+      return base + "note-resting bg-white w-52 h-52 text-slate-800 hover:z-50";
   }
 }
 
@@ -423,27 +417,25 @@ document
 let selectedType = "song";
 
 window.setNoteType = function (type) {
-  // Attach to window
   selectedType = type;
   const songBtn = document.getElementById("btn-song");
   const suggBtn = document.getElementById("btn-suggestion");
 
   if (type === "song") {
     songBtn.className =
-      "type-btn px-4 py-1 rounded-full border-2 border-blue-400 bg-blue-50 text-blue-700 text-sm font-bold";
+      "type-btn px-4 py-1 rounded-full border-2 border-blue-400 bg-blue-50 text-blue-700 text-sm font-bold transition-all";
     suggBtn.className =
-      "type-btn px-4 py-1 rounded-full border-2 border-slate-300 text-slate-500 text-sm";
+      "type-btn px-4 py-1 rounded-full border-2 border-slate-300 text-slate-500 text-sm transition-all";
   } else {
     suggBtn.className =
-      "type-btn px-4 py-1 rounded-full border-2 border-yellow-500 bg-yellow-50 text-yellow-700 text-sm font-bold";
+      "type-btn px-4 py-1 rounded-full border-2 border-yellow-500 bg-yellow-50 text-yellow-700 text-sm font-bold transition-all";
     songBtn.className =
-      "type-btn px-4 py-1 rounded-full border-2 border-slate-300 text-slate-500 text-sm";
+      "type-btn px-4 py-1 rounded-full border-2 border-slate-300 text-slate-500 text-sm transition-all";
   }
 };
 
 const noteForm = document.getElementById("note-form");
 
-// Only attach if the element actually exists on this page
 if (noteForm) {
   noteForm.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -455,25 +447,19 @@ if (noteForm) {
     submitBtn.innerText = "Pinning...";
     submitBtn.disabled = true;
 
-    // Determine if it's a song request or a general suggestion
     let noteType;
     let variant = null;
 
     if (selectedType === "song") {
       noteType = "neon-pink";
-      // Songs usually stay on neon squares unless they are weirdly long
       variant = text.length > 110 ? "legal" : null;
     } else {
-      // REUNION IDEAS:
       if (text.length < 70) {
-        // Very short? Use the yellow square
         noteType = "post-it";
       } else if (text.length >= 70 && text.length <= 110) {
-        // Medium? Use the short white scrap (red line on left)
         noteType = "scrap";
-        variant = null; // No legal variant means short scrap
+        variant = null;
       } else {
-        // Long? Use the yellow legal pad (yellow line on top)
         noteType = "scrap";
         variant = "legal";
       }
@@ -482,14 +468,12 @@ if (noteForm) {
     const newNote = { text, author, type: noteType, variant };
 
     try {
-      // SEND TO GOOGLE SHEETS
       await fetch(SCRIPT_URL, {
         method: "POST",
-        mode: "no-cors", // Required for Apps Script POST
+        mode: "no-cors",
         body: JSON.stringify(newNote),
       });
 
-      // Visual feedback
       spawnNewNote(newNote);
       submitBtn.innerText = "Pinned!";
 
@@ -501,115 +485,215 @@ if (noteForm) {
       }, 1000);
     } catch (err) {
       console.error("Save failed:", err);
-      submitBtn.innerText = "Error!";
       submitBtn.disabled = false;
     }
   });
 }
 
 function spawnNewNote(noteData) {
-  const wall = document.getElementById("note-wall");
-  const div = createNoteElement(noteData); // Use the unified creator
+  const container = document.getElementById("notes-container");
+  const wallCanvas = document.getElementById("wall-canvas");
+  if (!container || !wallCanvas) return;
 
-  const left = Math.floor(Math.random() * 30) + 35;
+  const div = createNoteElement(noteData);
+  const isMobile = window.innerWidth < 768;
+
+  // Spawns items nearby the active viewing sector matrix
+  const left = isMobile
+    ? Math.floor(Math.random() * 20) + 8
+    : Math.floor(Math.random() * 30) + 35;
   const top = Math.floor(Math.random() * 30) + 25;
   const rotation = Math.floor(Math.random() * 20) - 10;
 
-  Object.assign(div.style, {
-    left: `${left}%`,
-    top: `${top + 15}%`,
-    opacity: "0",
-    transform: `rotate(${rotation + 15}deg) scale(0.5)`,
-    transition: "all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)",
-    zIndex: "100",
-  });
+  setupInitialStyles(div, top, left, rotation, 0);
+  div.style.zIndex = "100";
 
-  wall.appendChild(div);
-  addDragLogic(div, wall, noteData);
-
-  // Force reflow for animation
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      div.style.top = `${top}%`;
-      div.style.opacity = "1";
-      div.style.transform = `rotate(${rotation}deg) scale(1)`;
-    });
-  });
+  container.appendChild(div);
+  addDragLogic(div, wallCanvas, noteData);
 }
 
 function addDragLogic(div, wall, note) {
   let isDragging = false;
   let startX, startY, initialLeft, initialTop;
 
-  div.addEventListener("mousedown", (e) => {
+  const getEventCoords = (e) => {
+    if (e.touches && e.touches.length > 0) {
+      return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+    }
+    return { x: e.clientX, y: e.clientY };
+  };
+
+  const onStart = (e) => {
+    if (e.target.closest(".dismiss-btn")) return;
     if (note && note.type === "blank") {
-      openNoteModal();
+      if (typeof openNoteModal === "function") openNoteModal();
       return;
     }
 
+    if (window.getSelection) window.getSelection().removeAllRanges();
+    div.style.userSelect = "none";
+    div.style.webkitUserSelect = "none";
+
     isDragging = true;
-
-    // 1. Just handle THIS specific note's elevation
-    // Only remove resting and add active if it's NOT the blankNote
-    if (div.id !== "blankNote") {
-      div.classList.remove("note-resting");
-      div.classList.add("note-active");
-    }
-
     div.style.cursor = "grabbing";
     div.style.transition = "none";
 
-    startX = e.clientX;
-    startY = e.clientY;
+    const coords = getEventCoords(e);
+
+    // --- FIX 1: RECORD THE STABLE PAGE MOUSE COORDINATES ---
+    startX = coords.pageX || coords.x + window.scrollX;
+    startY = coords.pageY || coords.y + window.scrollY;
+
+    // --- FIX 2: READ RE-RENDER PROFILES DIRECTLY FROM THE DOM COMPONENT ---
+    // offsetLeft/Top look at the direct parent element context layout position,
+    // which completely ignores sticky navbars, viewports, or window scrolling gaps.
     initialLeft = div.offsetLeft;
     initialTop = div.offsetTop;
 
-    e.preventDefault();
-  });
+    if (typeof setNoteActive === "function") setNoteActive(div);
+  };
 
-  document.addEventListener("mousemove", (e) => {
+  const onMove = (e) => {
     if (!isDragging) return;
+    e.preventDefault();
 
-    const deltaX = e.clientX - startX;
-    const deltaY = e.clientY - startY;
+    const coords = getEventCoords(e);
     const wallRect = wall.getBoundingClientRect();
 
-    const newLeftPct = ((initialLeft + deltaX) / wallRect.width) * 100;
-    const newTopPct = ((initialTop + deltaY) / wallRect.height) * 100;
+    // Track current mouse position on the document page
+    const currentX = coords.pageX || coords.x + window.scrollX;
+    const currentY = coords.pageY || coords.y + window.scrollY;
+
+    // Calculate mouse travel distances
+    const deltaX = currentX - startX;
+    const deltaY = currentY - startY;
+
+    // --- FIX 3: ADD TRAVEL DELTAS STRAIGHT TO THE STABLE LAYOUT ANCHORS ---
+    let currentLeftPx = initialLeft + deltaX;
+    let currentTopPx = initialTop + deltaY;
+
+    // Convert pixel coordinates cleanly into stable wall percentages
+    let newLeftPct = (currentLeftPx / wallRect.width) * 100;
+    let newTopPct = (currentTopPx / wallRect.height) * 100;
+
+    // Bound limits to keep notes safely inside your board fields
+    newLeftPct = Math.max(0.5, Math.min(98.5, newLeftPct));
+    newTopPct = Math.max(2, Math.min(94, newTopPct));
 
     div.style.left = `${newLeftPct}%`;
     div.style.top = `${newTopPct}%`;
-  });
+  };
 
-  document.addEventListener("mouseup", () => {
+  const onEnd = () => {
     if (!isDragging) return;
     isDragging = false;
 
-    // 3. Reset THIS note back to resting
-    if (div.id !== "blankNote") {
-      div.classList.remove("note-active");
-      div.classList.add("note-resting");
-    }
-
     div.style.cursor = "grab";
-    // Keep the transform transition for the smooth "pop" back
+
+    // Re-enable smooth transition vectors on release
     div.style.transition =
       "transform 0.3s ease, box-shadow 0.3s ease, top 0.5s ease, left 0.5s ease";
-  });
+
+    div.style.userSelect = "";
+    div.style.webkitUserSelect = "";
+
+    if (typeof setNoteResting === "function") setNoteResting(div);
+  };
+
+  // Desktop Mouse Triggers
+  div.addEventListener("mousedown", onStart);
+  document.addEventListener("mousemove", onMove);
+  document.addEventListener("mouseup", onEnd);
+
+  // Mobile Touch Triggers
+  div.addEventListener("touchstart", onStart, { passive: false });
+  document.addEventListener("touchmove", onMove, { passive: false });
+  document.addEventListener("touchend", onEnd);
+}
+
+function setNoteActive(el) {
+  if (el.id === "blankNote") return;
+  const blankNote = document.getElementById("blankNote");
+
+  el.classList.remove("note-resting", "hover:z-50");
+  el.classList.add("note-active");
+
+  if (blankNote) {
+    blankNote.style.zIndex = "1";
+    blankNote.style.pointerEvents = "none";
+  }
+}
+
+function setNoteResting(el) {
+  if (el.id === "blankNote") return;
+  const blankNote = document.getElementById("blankNote");
+
+  el.classList.remove("note-active");
+  el.classList.add("note-resting", "hover:z-50");
+
+  if (blankNote) {
+    blankNote.style.zIndex = "";
+    blankNote.style.pointerEvents = "auto";
+  }
 }
 
 function createNoteElement(note) {
+  const storageId = `hid-note-${note.id || note.text.substring(0, 12)}`;
+  if (localStorage.getItem(storageId)) return null;
+
   const div = document.createElement("div");
-  div.className = getNoteStyles(note);
+  // Restores your original theme engine switcher cleanly
+  div.className = `${getNoteStyles(note)} group relative`;
 
   div.innerHTML = `
-    <div class="h-full w-full flex flex-col p-3 overflow-y-auto scrollbar-hide select-none">
-      <p class="text-lg leading-snug w-full font-handwriting">${note.text}</p>
+    ${
+      note.type !== "blank"
+        ? `
+      <button class="dismiss-btn absolute top-2 right-2 w-7 h-7 flex items-center justify-center bg-black/5 hover:bg-red-500 hover:text-white rounded-full text-xs font-sans transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 focus:opacity-100 pointer-events-auto z-50" title="Dismiss note">
+        ✕
+      </button>
+    `
+        : ""
+    }
+    <div class="h-full w-full flex flex-col p-1 overflow-y-auto scrollbar-hide select-none">
+      <p class="text-lg leading-snug w-full font-handwriting whitespace-pre-wrap">${note.text}</p>
       ${note.author ? `<p class="text-sm mt-auto pt-4 text-right italic opacity-80 w-full font-handwriting">- ${note.author}&nbsp;&nbsp;</p>` : ""}
     </div>
   `;
 
   div.style.position = "absolute";
-  div.style.fontFamily = "'Caveat', cursive";
+
+  div.addEventListener("mouseenter", () => setNoteActive(div));
+  div.addEventListener("mouseleave", () => setNoteResting(div));
+
+  // Dismiss Action Handler (Supports both Desktop Clicks and Mobile Taps)
+  const handleDismiss = (e) => {
+    e.stopPropagation();
+    e.preventDefault();
+    div.style.transform = "translate(-50%, -50%) scale(0) rotate(15deg)";
+    div.style.opacity = "0";
+    localStorage.setItem(storageId, "true");
+    setTimeout(() => div.remove(), 300);
+  };
+
+  const closeBtn = div.querySelector(".dismiss-btn");
+  if (closeBtn) {
+    closeBtn.addEventListener("click", handleDismiss);
+    closeBtn.addEventListener("touchstart", handleDismiss, { passive: false });
+  }
+
   return div;
 }
+
+// Run as soon as the DOM layout is ready
+document.addEventListener("DOMContentLoaded", () => {
+  const requestLine = document.getElementById("request-line");
+
+  if (requestLine) {
+    // Calculate 1/3rd of the total 300vw width to find the middle pane
+    const middlePanelOffset = window.innerWidth;
+
+    // Smoothly glide or instantly snap the scroller to the center
+    requestLine.scrollLeft = middlePanelOffset;
+  }
+});

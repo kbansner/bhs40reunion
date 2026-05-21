@@ -6,7 +6,10 @@ import { resolve } from "path"; // Required for multiple entry points
 
 export default defineConfig({
   base: "/",
-
+  server: {
+    host: true,
+    port: 5173, // Forces Vite to use this consistent port number
+  },
   plugins: [
     ViteImageOptimizer({
       jpg: { quality: 75 },

@@ -798,16 +798,33 @@ body {
 
 /* The default state for a note on the wall */
 .note-resting {
-    z-index: 10 !important;
+    z-index: 31 !important; /* Raised to float nicely within the new container stack */
 }
 
 /* When a note is hovered or being interacted with */
-.note-active {
-    z-index: 60 !important;
-}
-
 /* The Add Suggestion button - always on top */
 .note-permanent-top {
-    z-index: 50 !important;
+    z-index: 45 !important;
     isolation: isolate;
+}
+
+/* Ensure the button scales nicely on hover without bloating its depth layer */
+.note-permanent-top:hover {
+    z-index: 46 !important;
+}
+
+/* When a note is actively hovered or dragged - ALWAYS WINS */
+.note-active {
+    z-index: 999 !important;
+}
+
+.dismiss-btn {
+    cursor: pointer !important;
+}
+
+/* Fix: Force note cards to preserve line breaks and handle wrapping smoothly */
+.classmate-card p,
+#notes-container p {
+    white-space: pre-wrap; /* Respects \n newlines and spaces */
+    word-wrap: break-word; /* Prevents long text strings from overflowing the card card borders */
 }
