@@ -85,29 +85,27 @@ window.submitInfo = function (name, uid) {
 };
 
 window.fetchReunionStats = async function () {
-  const chartCanvas = document.getElementById("momentumChart");
-  if (!chartCanvas) return;
+  // const chartCanvas = document.getElementById("momentumChart");
+  // if (!chartCanvas) return;
 
-  const skeleton = document.getElementById("chart-skeleton");
-  const syncTimestamp = document.getElementById("sync-timestamp");
-  const chartTitle = document.querySelector("#momentum-section h2");
-  const missingCountDisplay = document.querySelectorAll(
-    ".missing-count-display",
-  );
+  // const skeleton = document.getElementById("chart-skeleton");
+  // const syncTimestamp = document.getElementById("sync-timestamp");
+  // const chartTitle = document.querySelector("#momentum-section h2");
+  // const missingCountDisplay = document.querySelectorAll(
+  //   ".missing-count-display",
+  // );
 
   try {
     const response = await fetch(SCRIPT_URL);
     if (!response.ok) throw new Error("Network response was not ok");
 
     const stats = await response.json();
-
     const missingJacketsCount = stats.missingJackets || 351;
-    if (missingCountDisplay) {
-      missingCountDisplay.forEach((el) => {
-        el.innerText = missingJacketsCount;
-      });
-    }
-
+    // if (missingCountDisplay) {
+    //   missingCountDisplay.forEach((el) => {
+    //     el.innerText = missingJacketsCount;
+    //   });
+    // }
     document.getElementById("countdown-display").innerText =
       stats.daysRemaining;
     const rsvpCount = stats.rsvps;
@@ -137,68 +135,68 @@ window.fetchReunionStats = async function () {
       if (!chartTitle.innerText.includes("🎉")) chartTitle.innerText += " 🎉";
     }
 
-    if (typeof Chart !== "undefined") {
-      const ctx = chartCanvas.getContext("2d");
-      new Chart(ctx, {
-        type: "bar",
-        data: {
-          labels: trendData.map((t) => `Week ${t.week}`),
-          datasets: [
-            {
-              label: "Actual Check-ins",
-              data: trendData.map((t) => t.count),
-              backgroundColor: trendData.map((t, i) => {
-                if (i === trendData.length - 1) {
-                  return t.count >= target ? "#16a34a" : "#2D5A27";
-                }
-                return "#741b47";
-              }),
-              borderRadius: 6,
-              order: 2,
-            },
-            {
-              label: "Weekly Target",
-              data: new Array(trendData.length).fill(target),
-              type: "line",
-              borderColor: "#cbd5e1",
-              borderDash: [5, 5],
-              pointRadius: 0,
-              fill: false,
-              borderWidth: 2,
-              order: 1,
-            },
-          ],
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: { legend: { display: false } },
-          scales: {
-            y: {
-              beginAtZero: true,
-              grid: { color: "#f8fafc" },
-              suggestedMax: 35,
-            },
-            x: { grid: { display: false } },
-          },
-        },
-      });
-    } else {
-      console.warn("Chart.js not loaded yet. Retrying in 500ms...");
-      if (typeof chartRetryCount === "undefined") window.chartRetryCount = 0;
-      if (window.chartRetryCount < 3) {
-        window.chartRetryCount++;
-        setTimeout(window.fetchReunionStats, 1000);
-      }
-    }
+    // if (typeof Chart !== "undefined") {
+    //   const ctx = chartCanvas.getContext("2d");
+    //   new Chart(ctx, {
+    //     type: "bar",
+    //     data: {
+    //       labels: trendData.map((t) => `Week ${t.week}`),
+    //       datasets: [
+    //         {
+    //           label: "Actual Check-ins",
+    //           data: trendData.map((t) => t.count),
+    //           backgroundColor: trendData.map((t, i) => {
+    //             if (i === trendData.length - 1) {
+    //               return t.count >= target ? "#16a34a" : "#2D5A27";
+    //             }
+    //             return "#741b47";
+    //           }),
+    //           borderRadius: 6,
+    //           order: 2,
+    //         },
+    //         {
+    //           label: "Weekly Target",
+    //           data: new Array(trendData.length).fill(target),
+    //           type: "line",
+    //           borderColor: "#cbd5e1",
+    //           borderDash: [5, 5],
+    //           pointRadius: 0,
+    //           fill: false,
+    //           borderWidth: 2,
+    //           order: 1,
+    //         },
+    //       ],
+    //     },
+    //     options: {
+    //       responsive: true,
+    //       maintainAspectRatio: false,
+    //       plugins: { legend: { display: false } },
+    //       scales: {
+    //         y: {
+    //           beginAtZero: true,
+    //           grid: { color: "#f8fafc" },
+    //           suggestedMax: 35,
+    //         },
+    //         x: { grid: { display: false } },
+    //       },
+    //     },
+    //   });
+    // } else {
+    //   console.warn("Chart.js not loaded yet. Retrying in 1000ms...");
+    //   if (typeof chartRetryCount === "undefined") window.chartRetryCount = 0;
+    //   if (window.chartRetryCount < 3) {
+    //     window.chartRetryCount++;
+    //     setTimeout(window.fetchReunionStats, 1000);
+    //   }
+    // }
 
-    chartCanvas.classList.add("chart-loaded");
-    if (skeleton) {
-      skeleton.style.opacity = "0";
-      setTimeout(() => {
-        skeleton.style.display = "none";
-      }, 100);
-    }
+    // chartCanvas.classList.add("chart-loaded");
+    // if (skeleton) {
+    //   skeleton.style.opacity = "0";
+    //   setTimeout(() => {
+    //     skeleton.style.display = "none";
+    //   }, 100);
+    // }
   } catch (error) {
     console.error("Dashboard Sync Failed:", error);
     if (skeleton) {
