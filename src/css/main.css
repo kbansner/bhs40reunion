@@ -828,3 +828,21 @@ body {
     white-space: pre-wrap; /* Respects \n newlines and spaces */
     word-wrap: break-word; /* Prevents long text strings from overflowing the card card borders */
 }
+
+/* Base State (Invisible and shifted) */
+#notes-container .absolute {
+    opacity: 0;
+    /* Keep your custom rotations and Fermat scale targets intact */
+    transform: translate(-50%, -50%) scale(0.75);
+
+    /* FIX: Specify exactly what animates, and do NOT add a third timing parameter here */
+    transition-property: opacity, transform;
+    transition-duration: 600ms;
+    transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+/* Revealed State */
+#notes-container.is-visible .absolute {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+}

@@ -237,26 +237,45 @@ document.addEventListener("DOMContentLoaded", async () => {
   const notesContainer = document.getElementById("notes-container");
   if (!wallCanvas || !notesContainer) return;
 
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.querySelectorAll(".absolute").forEach((note) => {
-            setTimeout(
-              () => {
-                note.style.top = `${note.dataset.targetTop}%`;
-                note.style.opacity = "1";
-                note.style.transform = `translate(-50%, -50%) rotate(${note.dataset.rotation}deg) scale(1)`;
-              },
-              parseInt(note.dataset.delay) || 0,
-            );
-          });
-          observer.unobserve(entry.target);
-        }
+  // --- CONTAINER-BASED SCROLL TRIGGER WITH STAGGERED DELAYS ---
+  // --- BULLETPROOF VISIBILITY CHECK ---
+  let animationTriggered = false;
+
+  const checkScrollVisibility = () => {
+    if (animationTriggered) return;
+
+    const rect = notesContainer.getBoundingClientRect();
+
+    // Check if the container has actually entered the visible viewport glass area
+    const isVisibleInViewport =
+      rect.top < window.innerHeight && // The top edge has crossed into the screen
+      rect.bottom > 0; // The bottom edge hasn't scrolled off the top
+
+    // CRITICAL TWEAK: Wait until the container is at least 150px deep into the viewport
+    if (isVisibleInViewport && rect.top < window.innerHeight - 150) {
+      animationTriggered = true;
+
+      // Find all rendered absolute notes
+      const notes = notesContainer.querySelectorAll(".absolute");
+
+      // Stagger them step-by-step
+      notes.forEach((note, index) => {
+        // 1. Base cushion: Wait 800ms AFTER the container rolls onto the glass before note #1 budges
+        // 2. Pace delay: Space out each consecutive note by 400ms
+        const staggerDelay = 800 + index * 300;
+
+        note.style.transitionDelay = `${staggerDelay}ms`;
       });
-    },
-    { threshold: 0.1 },
-  );
+      // Execute the CSS transitions
+      notesContainer.classList.add("is-visible");
+
+      // Unbind immediately
+      window.removeEventListener("scroll", checkScrollVisibility);
+    }
+  };
+
+  // Bind to active scroll actions
+  window.addEventListener("scroll", checkScrollVisibility);
 
   try {
     const response = await fetch(SCRIPT_URL);
@@ -280,7 +299,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       const goldenAngle = 2.39996;
 
-      // Scales tailored specifically to canvas width ratios
       const baseScale = isMobile ? 80 : 140;
       const damping = isMobile ? 0.03 : 0.04;
       const spacingScale = baseScale / (1 + index * damping);
@@ -291,10 +309,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       const aspectXFactor = isMobile ? 1.8 : 1.4;
       const aspectYFactor = isMobile ? 0.8 : 0.95;
 
-      // 16.66% centers the initial spiral point behind the jukebox player inside the first 100vw panel on mobile
-      // FIX: Changed the mobile divisor from 2.2 to 1.0 to compress the horizontal spiral spread
       let left =
-        45 + (Math.cos(angle) * radius * aspectXFactor) / (isMobile ? 6 : 7);
+        50 + (Math.cos(angle) * radius * aspectXFactor) / (isMobile ? 6 : 7);
       let top =
         50 + (Math.sin(angle) * radius * aspectYFactor) / (isMobile ? 7 : 10);
 
@@ -303,7 +319,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         top += Math.cos(index * 7.2) * 3;
       }
 
-      // Clamping limits adjusted to accommodate the full wider canvas panel
       left = Math.max(isMobile ? 2 : 5, Math.min(isMobile ? 96 : 95, left));
       top = Math.max(isMobile ? 14 : 12, Math.min(isMobile ? 86 : 88, top));
 
@@ -319,7 +334,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     const triggerDiv = createNoteElement(addMemoryTrigger);
     if (triggerDiv) {
       triggerDiv.id = "blankNote";
-      // Render the call-to-action note cleanly below the player view space on startup
       setupInitialStyles(
         triggerDiv,
         78,
@@ -331,14 +345,15 @@ document.addEventListener("DOMContentLoaded", async () => {
       addDragLogic(triggerDiv, wallCanvas, addMemoryTrigger);
     }
 
-    observer.observe(notesContainer);
+    // Run an instant visibility check now that data rendering is complete
+    setTimeout(checkScrollVisibility, 150);
   } catch (error) {
     console.error("Failed to load notes:", error);
     const fallbackTrigger = { type: "blank", text: "Add Your Request!" };
     const div = createNoteElement(fallbackTrigger);
     if (div) {
       div.id = "blankNote";
-      setupInitialStyles(div, 75, window.innerWidth < 768 ? 16.66 : 50, 0, 0);
+      setupInitialStyles(div, 75, isMobile ? 50 : 50, 0, 0);
       notesContainer.appendChild(div);
       addDragLogic(div, wallCanvas, fallbackTrigger);
     }
