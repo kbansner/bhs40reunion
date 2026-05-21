@@ -383,7 +383,7 @@ function getNoteStyles(note) {
     case "neon-pink":
       return (
         base +
-        "note-resting bg-pink-400 w-48 h-48 text-white font-bold shadow-md hover:z-50"
+        "note-resting bg-pink-400 w-42 h-39 text-white font-bold shadow-md hover:z-50"
       );
 
     case "scrap":
@@ -662,9 +662,7 @@ function createNoteElement(note) {
     ${
       note.type !== "blank"
         ? `
-      <button class="dismiss-btn absolute top-2 right-2 w-7 h-7 flex items-center justify-center bg-black/5 hover:bg-red-500 hover:text-white rounded-full text-xs font-sans transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 focus:opacity-100 pointer-events-auto z-50" title="Dismiss note">
-        ✕
-      </button>
+      <button class="dismiss-btn absolute top-4 -right-3 w-7 h-7 flex items-center justify-center bg-black/5 hover:bg-red-500 hover:text-white rounded-full text-xs font-sans transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 focus:opacity-100 pointer-events-auto z-50" title="Dismiss note">✕</button>
     `
         : ""
     }
