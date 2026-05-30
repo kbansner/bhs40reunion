@@ -85,27 +85,11 @@ window.submitInfo = function (name, uid) {
 };
 
 window.fetchReunionStats = async function () {
-  // const chartCanvas = document.getElementById("momentumChart");
-  // if (!chartCanvas) return;
-
-  // const skeleton = document.getElementById("chart-skeleton");
-  // const syncTimestamp = document.getElementById("sync-timestamp");
-  // const chartTitle = document.querySelector("#momentum-section h2");
-  // const missingCountDisplay = document.querySelectorAll(
-  //   ".missing-count-display",
-  // );
-
   try {
     const response = await fetch(SCRIPT_URL);
     if (!response.ok) throw new Error("Network response was not ok");
 
     const stats = await response.json();
-    const missingJacketsCount = stats.missingJackets || 351;
-    // if (missingCountDisplay) {
-    //   missingCountDisplay.forEach((el) => {
-    //     el.innerText = missingJacketsCount;
-    //   });
-    // }
     document.getElementById("countdown-display").innerText =
       stats.daysRemaining;
     const rsvpCount = stats.rsvps;
@@ -134,74 +118,8 @@ window.fetchReunionStats = async function () {
       chartTitle.classList.add("text-green-600");
       if (!chartTitle.innerText.includes("🎉")) chartTitle.innerText += " 🎉";
     }
-
-    // if (typeof Chart !== "undefined") {
-    //   const ctx = chartCanvas.getContext("2d");
-    //   new Chart(ctx, {
-    //     type: "bar",
-    //     data: {
-    //       labels: trendData.map((t) => `Week ${t.week}`),
-    //       datasets: [
-    //         {
-    //           label: "Actual Check-ins",
-    //           data: trendData.map((t) => t.count),
-    //           backgroundColor: trendData.map((t, i) => {
-    //             if (i === trendData.length - 1) {
-    //               return t.count >= target ? "#16a34a" : "#2D5A27";
-    //             }
-    //             return "#741b47";
-    //           }),
-    //           borderRadius: 6,
-    //           order: 2,
-    //         },
-    //         {
-    //           label: "Weekly Target",
-    //           data: new Array(trendData.length).fill(target),
-    //           type: "line",
-    //           borderColor: "#cbd5e1",
-    //           borderDash: [5, 5],
-    //           pointRadius: 0,
-    //           fill: false,
-    //           borderWidth: 2,
-    //           order: 1,
-    //         },
-    //       ],
-    //     },
-    //     options: {
-    //       responsive: true,
-    //       maintainAspectRatio: false,
-    //       plugins: { legend: { display: false } },
-    //       scales: {
-    //         y: {
-    //           beginAtZero: true,
-    //           grid: { color: "#f8fafc" },
-    //           suggestedMax: 35,
-    //         },
-    //         x: { grid: { display: false } },
-    //       },
-    //     },
-    //   });
-    // } else {
-    //   console.warn("Chart.js not loaded yet. Retrying in 1000ms...");
-    //   if (typeof chartRetryCount === "undefined") window.chartRetryCount = 0;
-    //   if (window.chartRetryCount < 3) {
-    //     window.chartRetryCount++;
-    //     setTimeout(window.fetchReunionStats, 1000);
-    //   }
-    // }
-
-    // chartCanvas.classList.add("chart-loaded");
-    // if (skeleton) {
-    //   skeleton.style.opacity = "0";
-    //   setTimeout(() => {
-    //     skeleton.style.display = "none";
-    //   }, 100);
-    // }
   } catch (error) {
     console.error("Dashboard Sync Failed:", error);
-    if (skeleton) {
-      skeleton.innerHTML = `<div class="p-4 text-center">Sync Failed. <button onclick="location.reload()">Retry</button></div>`;
-    }
   }
 };
 
@@ -232,7 +150,6 @@ function handleScroll() {
 })();
 
 // --- REFACTORED REQUEST LINE INTERFACES ---
-// --- REFACTORED REQUEST LINE INTERFACES ---
 document.addEventListener("DOMContentLoaded", async () => {
   const wallCanvas = document.getElementById("wall-canvas");
   const notesContainer = document.getElementById("notes-container");
@@ -240,7 +157,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let animationTriggered = false;
 
-  // REFACTORED SCROLL CHECK: Accessible globally inside this block scope
   const checkScrollVisibility = () => {
     if (animationTriggered) return;
 
@@ -248,28 +164,21 @@ document.addEventListener("DOMContentLoaded", async () => {
     const isVisibleInViewport =
       rect.top < window.innerHeight && rect.bottom > 0;
 
-    // Mobile-friendly visibility cushion adjustment
     if (isVisibleInViewport && rect.top < window.innerHeight - 50) {
       animationTriggered = true;
 
-      // Find dynamically rendered absolute notes
       const notes = notesContainer.querySelectorAll(".absolute");
 
-      // Stagger them step-by-step
       notes.forEach((note, index) => {
-        const staggerDelay = 200 + index * 100; // Lowered baseline delay for snappy rendering
+        const staggerDelay = 200 + index * 100;
         note.style.transitionDelay = `${staggerDelay}ms`;
       });
 
-      // Execute the CSS transitions
       notesContainer.classList.add("is-visible");
-
-      // Unbind cleanly
       window.removeEventListener("scroll", checkScrollVisibility);
     }
   };
 
-  // Bind to scroll immediately
   window.addEventListener("scroll", checkScrollVisibility);
 
   try {
@@ -287,7 +196,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const isMobile = window.innerWidth < 768;
 
-    // Distribute active sheets cleanly via a Fermat Spiral pattern
     liveNotes.forEach((note, index) => {
       const div = createNoteElement(note);
       if (!div) return;
@@ -323,7 +231,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       addDragLogic(div, wallCanvas, note);
     });
 
-    // Append the Blank Trigger Button last
+    // Append Blank Trigger Button
     const addMemoryTrigger = { type: "blank", text: "Add Your Request!" };
     const triggerDiv = createNoteElement(addMemoryTrigger);
     if (triggerDiv) {
@@ -333,13 +241,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         78,
         isMobile ? 50 : 80,
         0,
-        liveNotes.length,
+        0, // Set index to 0 so it loads without delay multipliers
       );
       notesContainer.appendChild(triggerDiv);
       addDragLogic(triggerDiv, wallCanvas, addMemoryTrigger);
     }
 
-    // CRITICAL MOBILE FIX: Force immediate recalculation now that layout tree is appended
     setTimeout(checkScrollVisibility, 50);
   } catch (error) {
     console.error("Failed to load notes:", error);
@@ -351,7 +258,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       notesContainer.appendChild(div);
       addDragLogic(div, wallCanvas, fallbackTrigger);
     }
-    // Run visibility even for fallback asset layouts
     setTimeout(checkScrollVisibility, 50);
   }
 });
@@ -359,8 +265,6 @@ document.addEventListener("DOMContentLoaded", async () => {
 function setupInitialStyles(el, top, left, rotation, index) {
   el.style.left = `${left}%`;
   el.style.top = `${top}%`;
-
-  // translate(-50%, -50%) aligns geometric positions exactly from the center coordinate paths
   el.style.transform = `translate(-50%, -50%) rotate(${rotation}deg) scale(1)`;
   el.classList.add("note-resting");
 }
@@ -396,8 +300,8 @@ function getNoteStyles(note) {
 
     case "blank":
       return (
-        base +
-        "note-permanent-top bg-slate-800 border-2 border-dashed border-white/30 w-48 h-28 items-center justify-center text-white/40 hover:border-white/60 hover:text-white/80 hover:bg-slate-700 transition-all"
+        base + // FIXED: Concatenates "absolute" to register properly under layout triggers
+        "note-permanent-top bg-slate-800 border-2 border-dashed border-white/30 w-48 h-28 items-center justify-center text-white/40 hover:border-white/60 hover:text-white/80 hover:bg-slate-700 transition-all z-50"
       );
 
     default:
@@ -507,7 +411,6 @@ function spawnNewNote(noteData) {
   const div = createNoteElement(noteData);
   const isMobile = window.innerWidth < 768;
 
-  // Spawns items nearby the active viewing sector matrix
   const left = isMobile
     ? Math.floor(Math.random() * 20) + 8
     : Math.floor(Math.random() * 30) + 35;
@@ -548,14 +451,9 @@ function addDragLogic(div, wall, note) {
     div.style.transition = "none";
 
     const coords = getEventCoords(e);
-
-    // --- FIX 1: RECORD THE STABLE PAGE MOUSE COORDINATES ---
     startX = coords.pageX || coords.x + window.scrollX;
     startY = coords.pageY || coords.y + window.scrollY;
 
-    // --- FIX 2: READ RE-RENDER PROFILES DIRECTLY FROM THE DOM COMPONENT ---
-    // offsetLeft/Top look at the direct parent element context layout position,
-    // which completely ignores sticky navbars, viewports, or window scrolling gaps.
     initialLeft = div.offsetLeft;
     initialTop = div.offsetTop;
 
@@ -569,23 +467,18 @@ function addDragLogic(div, wall, note) {
     const coords = getEventCoords(e);
     const wallRect = wall.getBoundingClientRect();
 
-    // Track current mouse position on the document page
     const currentX = coords.pageX || coords.x + window.scrollX;
     const currentY = coords.pageY || coords.y + window.scrollY;
 
-    // Calculate mouse travel distances
     const deltaX = currentX - startX;
     const deltaY = currentY - startY;
 
-    // --- FIX 3: ADD TRAVEL DELTAS STRAIGHT TO THE STABLE LAYOUT ANCHORS ---
     let currentLeftPx = initialLeft + deltaX;
     let currentTopPx = initialTop + deltaY;
 
-    // Convert pixel coordinates cleanly into stable wall percentages
     let newLeftPct = (currentLeftPx / wallRect.width) * 100;
     let newTopPct = (currentTopPx / wallRect.height) * 100;
 
-    // Bound limits to keep notes safely inside your board fields
     newLeftPct = Math.max(0.5, Math.min(98.5, newLeftPct));
     newTopPct = Math.max(2, Math.min(94, newTopPct));
 
@@ -598,8 +491,6 @@ function addDragLogic(div, wall, note) {
     isDragging = false;
 
     div.style.cursor = "grab";
-
-    // Re-enable smooth transition vectors on release
     div.style.transition =
       "transform 0.3s ease, box-shadow 0.3s ease, top 0.5s ease, left 0.5s ease";
 
@@ -609,12 +500,10 @@ function addDragLogic(div, wall, note) {
     if (typeof setNoteResting === "function") setNoteResting(div);
   };
 
-  // Desktop Mouse Triggers
   div.addEventListener("mousedown", onStart);
   document.addEventListener("mousemove", onMove);
   document.addEventListener("mouseup", onEnd);
 
-  // Mobile Touch Triggers
   div.addEventListener("touchstart", onStart, { passive: false });
   document.addEventListener("touchmove", onMove, { passive: false });
   document.addEventListener("touchend", onEnd);
@@ -651,7 +540,6 @@ function createNoteElement(note) {
   if (localStorage.getItem(storageId)) return null;
 
   const div = document.createElement("div");
-  // Restores your original theme engine switcher cleanly
   div.className = `${getNoteStyles(note)} group relative`;
 
   div.innerHTML = `
@@ -664,7 +552,7 @@ function createNoteElement(note) {
     }
     <div class="h-full w-full flex flex-col p-1 overflow-y-auto scrollbar-hide select-none">
       <p class="text-lg leading-snug w-full font-handwriting whitespace-pre-wrap">${note.text}</p>
-      ${note.author.trim() ? `<p class="text-sm mt-auto pt-4 text-right italic opacity-80 w-full font-handwriting">- ${note.author}&nbsp;&nbsp;</p>` : ""}
+      ${note.author && note.author.trim() ? `<p class="text-sm mt-auto pt-4 text-right italic opacity-80 w-full font-handwriting">- ${note.author}&nbsp;&nbsp;</p>` : ""}
     </div>
   `;
 
@@ -673,7 +561,6 @@ function createNoteElement(note) {
   div.addEventListener("mouseenter", () => setNoteActive(div));
   div.addEventListener("mouseleave", () => setNoteResting(div));
 
-  // Dismiss Action Handler (Supports both Desktop Clicks and Mobile Taps)
   const handleDismiss = (e) => {
     e.stopPropagation();
     e.preventDefault();
@@ -692,15 +579,10 @@ function createNoteElement(note) {
   return div;
 }
 
-// Run as soon as the DOM layout is ready
 document.addEventListener("DOMContentLoaded", () => {
   const requestLine = document.getElementById("request-line");
-
   if (requestLine) {
-    // Calculate 1/3rd of the total 300vw width to find the middle pane
     const middlePanelOffset = window.innerWidth;
-
-    // Smoothly glide or instantly snap the scroller to the center
     requestLine.scrollLeft = middlePanelOffset;
   }
 });
