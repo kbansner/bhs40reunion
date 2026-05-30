@@ -232,49 +232,44 @@ function handleScroll() {
 })();
 
 // --- REFACTORED REQUEST LINE INTERFACES ---
+// --- REFACTORED REQUEST LINE INTERFACES ---
 document.addEventListener("DOMContentLoaded", async () => {
   const wallCanvas = document.getElementById("wall-canvas");
   const notesContainer = document.getElementById("notes-container");
   if (!wallCanvas || !notesContainer) return;
 
-  // --- CONTAINER-BASED SCROLL TRIGGER WITH STAGGERED DELAYS ---
-  // --- BULLETPROOF VISIBILITY CHECK ---
   let animationTriggered = false;
 
+  // REFACTORED SCROLL CHECK: Accessible globally inside this block scope
   const checkScrollVisibility = () => {
     if (animationTriggered) return;
 
     const rect = notesContainer.getBoundingClientRect();
-
-    // Check if the container has actually entered the visible viewport glass area
     const isVisibleInViewport =
-      rect.top < window.innerHeight && // The top edge has crossed into the screen
-      rect.bottom > 0; // The bottom edge hasn't scrolled off the top
+      rect.top < window.innerHeight && rect.bottom > 0;
 
-    // CRITICAL TWEAK: Wait until the container is at least 150px deep into the viewport
-    if (isVisibleInViewport && rect.top < window.innerHeight - 150) {
+    // Mobile-friendly visibility cushion adjustment
+    if (isVisibleInViewport && rect.top < window.innerHeight - 50) {
       animationTriggered = true;
 
-      // Find all rendered absolute notes
+      // Find dynamically rendered absolute notes
       const notes = notesContainer.querySelectorAll(".absolute");
 
       // Stagger them step-by-step
       notes.forEach((note, index) => {
-        // 1. Base cushion: Wait 800ms AFTER the container rolls onto the glass before note #1 budges
-        // 2. Pace delay: Space out each consecutive note by 400ms
-        const staggerDelay = 700 + index * 100;
-
+        const staggerDelay = 200 + index * 100; // Lowered baseline delay for snappy rendering
         note.style.transitionDelay = `${staggerDelay}ms`;
       });
+
       // Execute the CSS transitions
       notesContainer.classList.add("is-visible");
 
-      // Unbind immediately
+      // Unbind cleanly
       window.removeEventListener("scroll", checkScrollVisibility);
     }
   };
 
-  // Bind to active scroll actions
+  // Bind to scroll immediately
   window.addEventListener("scroll", checkScrollVisibility);
 
   try {
@@ -292,13 +287,12 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     const isMobile = window.innerWidth < 768;
 
-    // 1. Distribute active sheets cleanly via a Fermat Spiral pattern
+    // Distribute active sheets cleanly via a Fermat Spiral pattern
     liveNotes.forEach((note, index) => {
       const div = createNoteElement(note);
       if (!div) return;
 
       const goldenAngle = 2.39996;
-
       const baseScale = isMobile ? 80 : 140;
       const damping = isMobile ? 0.03 : 0.04;
       const spacingScale = baseScale / (1 + index * damping);
@@ -329,7 +323,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       addDragLogic(div, wallCanvas, note);
     });
 
-    // 2. Append the Blank Trigger Button last to claim natural top paint ordering
+    // Append the Blank Trigger Button last
     const addMemoryTrigger = { type: "blank", text: "Add Your Request!" };
     const triggerDiv = createNoteElement(addMemoryTrigger);
     if (triggerDiv) {
@@ -345,8 +339,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       addDragLogic(triggerDiv, wallCanvas, addMemoryTrigger);
     }
 
-    // Run an instant visibility check now that data rendering is complete
-    setTimeout(checkScrollVisibility, 150);
+    // CRITICAL MOBILE FIX: Force immediate recalculation now that layout tree is appended
+    setTimeout(checkScrollVisibility, 50);
   } catch (error) {
     console.error("Failed to load notes:", error);
     const fallbackTrigger = { type: "blank", text: "Add Your Request!" };
@@ -357,6 +351,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       notesContainer.appendChild(div);
       addDragLogic(div, wallCanvas, fallbackTrigger);
     }
+    // Run visibility even for fallback asset layouts
+    setTimeout(checkScrollVisibility, 50);
   }
 });
 
