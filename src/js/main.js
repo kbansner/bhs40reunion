@@ -323,84 +323,87 @@ function closeNoteModal() {
   document.getElementById("author-input").value = "";
 }
 
-document
-  .getElementById("close-modal")
-  .addEventListener("click", closeNoteModal);
+// main.js is included on pages which don't have Request Line section modal
+if (document.getElementById("close-modal")) {
+  document
+    .getElementById("close-modal")
+    .addEventListener("click", closeNoteModal);
 
-let selectedType = "song";
+  let selectedType = "song";
 
-window.setNoteType = function (type) {
-  selectedType = type;
-  const songBtn = document.getElementById("btn-song");
-  const suggBtn = document.getElementById("btn-suggestion");
+  window.setNoteType = function (type) {
+    selectedType = type;
+    const songBtn = document.getElementById("btn-song");
+    const suggBtn = document.getElementById("btn-suggestion");
 
-  if (type === "song") {
-    songBtn.className =
-      "type-btn px-4 py-1 rounded-full border-2 border-blue-400 bg-blue-50 text-blue-700 text-sm font-bold transition-all";
-    suggBtn.className =
-      "type-btn px-4 py-1 rounded-full border-2 border-slate-300 text-slate-500 text-sm transition-all";
-  } else {
-    suggBtn.className =
-      "type-btn px-4 py-1 rounded-full border-2 border-yellow-500 bg-yellow-50 text-yellow-700 text-sm font-bold transition-all";
-    songBtn.className =
-      "type-btn px-4 py-1 rounded-full border-2 border-slate-300 text-slate-500 text-sm transition-all";
-  }
-};
-
-const noteForm = document.getElementById("note-form");
-
-if (noteForm) {
-  noteForm.addEventListener("submit", async (e) => {
-    e.preventDefault();
-    const text = document.getElementById("note-input").value.trim();
-    const author = document.getElementById("author-input").value.trim();
-    if (!text) return;
-
-    const submitBtn = e.target.querySelector('button[type="submit"]');
-    submitBtn.innerText = "Pinning...";
-    submitBtn.disabled = true;
-
-    let noteType;
-    let variant = null;
-
-    if (selectedType === "song") {
-      noteType = "neon-pink";
-      variant = text.length > 110 ? "legal" : null;
+    if (type === "song") {
+      songBtn.className =
+        "type-btn px-4 py-1 rounded-full border-2 border-blue-400 bg-blue-50 text-blue-700 text-sm font-bold transition-all";
+      suggBtn.className =
+        "type-btn px-4 py-1 rounded-full border-2 border-slate-300 text-slate-500 text-sm transition-all";
     } else {
-      if (text.length < 70) {
-        noteType = "post-it";
-      } else if (text.length >= 70 && text.length <= 110) {
-        noteType = "scrap";
-        variant = null;
+      suggBtn.className =
+        "type-btn px-4 py-1 rounded-full border-2 border-yellow-500 bg-yellow-50 text-yellow-700 text-sm font-bold transition-all";
+      songBtn.className =
+        "type-btn px-4 py-1 rounded-full border-2 border-slate-300 text-slate-500 text-sm transition-all";
+    }
+  };
+
+  const noteForm = document.getElementById("note-form");
+
+  if (noteForm) {
+    noteForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const text = document.getElementById("note-input").value.trim();
+      const author = document.getElementById("author-input").value.trim();
+      if (!text) return;
+
+      const submitBtn = e.target.querySelector('button[type="submit"]');
+      submitBtn.innerText = "Pinning...";
+      submitBtn.disabled = true;
+
+      let noteType;
+      let variant = null;
+
+      if (selectedType === "song") {
+        noteType = "neon-pink";
+        variant = text.length > 110 ? "legal" : null;
       } else {
-        noteType = "scrap";
-        variant = "legal";
+        if (text.length < 70) {
+          noteType = "post-it";
+        } else if (text.length >= 70 && text.length <= 110) {
+          noteType = "scrap";
+          variant = null;
+        } else {
+          noteType = "scrap";
+          variant = "legal";
+        }
       }
-    }
 
-    const newNote = { text, author, type: noteType, variant };
+      const newNote = { text, author, type: noteType, variant };
 
-    try {
-      await fetch(SCRIPT_URL, {
-        method: "POST",
-        mode: "no-cors",
-        body: JSON.stringify(newNote),
-      });
+      try {
+        await fetch(SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          body: JSON.stringify(newNote),
+        });
 
-      spawnNewNote(newNote);
-      submitBtn.innerText = "Pinned!";
+        spawnNewNote(newNote);
+        submitBtn.innerText = "Pinned!";
 
-      setTimeout(() => {
-        closeNoteModal();
-        submitBtn.innerText = "Pin it!";
+        setTimeout(() => {
+          closeNoteModal();
+          submitBtn.innerText = "Pin it!";
+          submitBtn.disabled = false;
+          noteForm.reset();
+        }, 1000);
+      } catch (err) {
+        console.error("Save failed:", err);
         submitBtn.disabled = false;
-        noteForm.reset();
-      }, 1000);
-    } catch (err) {
-      console.error("Save failed:", err);
-      submitBtn.disabled = false;
-    }
-  });
+      }
+    });
+  }
 }
 
 function spawnNewNote(noteData) {
