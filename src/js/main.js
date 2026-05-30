@@ -262,7 +262,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       notes.forEach((note, index) => {
         // 1. Base cushion: Wait 800ms AFTER the container rolls onto the glass before note #1 budges
         // 2. Pace delay: Space out each consecutive note by 400ms
-        const staggerDelay = 800 + index * 300;
+        const staggerDelay = 700 + index * 100;
 
         note.style.transitionDelay = `${staggerDelay}ms`;
       });
@@ -668,7 +668,7 @@ function createNoteElement(note) {
     }
     <div class="h-full w-full flex flex-col p-1 overflow-y-auto scrollbar-hide select-none">
       <p class="text-lg leading-snug w-full font-handwriting whitespace-pre-wrap">${note.text}</p>
-      ${note.author ? `<p class="text-sm mt-auto pt-4 text-right italic opacity-80 w-full font-handwriting">- ${note.author}&nbsp;&nbsp;</p>` : ""}
+      ${note.author.trim() ? `<p class="text-sm mt-auto pt-4 text-right italic opacity-80 w-full font-handwriting">- ${note.author}&nbsp;&nbsp;</p>` : ""}
     </div>
   `;
 
