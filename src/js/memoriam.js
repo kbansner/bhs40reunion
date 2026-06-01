@@ -192,11 +192,11 @@ function renderMemories(uid) {
         (memory) => `
         <div class="space-y-2">
             <div class="flex items-baseline gap-2">
-                <p class="font-medium">${memory.contributorName}</p>
+                <p class="font-medium text-sm md:text-base">${memory.contributorName}</p>
                 <span class="text-muted-foreground">·</span>
-                <p class="text-muted-foreground text-sm">${memory.relationship}</p>
+                <p class="text-muted-foreground text-xs md:text-sm">${memory.relationship}</p>
             </div>
-            <p class="text-foreground/90 leading-relaxed">
+            <p class="text-xs md:text-sm text-foreground/90 leading-relaxed">
                 ${memory.memoryText}
             </p>
             <div class="border-t border-border mt-6"></div>

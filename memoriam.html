@@ -109,7 +109,7 @@
             id="gallery"
         >
             <div
-                class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6"
+                class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6"
                 id="classmates-grid"
             >
                 <!-- Loading state -->
@@ -191,12 +191,12 @@
 
             <!-- Modal Content -->
             <div
-                class="modal-content fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full md:w-[75vw] max-h-[90vh] bg-white rounded-lg shadow-lg border border-border overflow-hidden"
+                class="modal-content fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95vw] md:w-[75vw] max-h-[95vh] bg-white rounded-lg shadow-lg border border-border overflow-hidden flex flex-col md:grid md:grid-cols-[1.2fr_1fr]"
             >
                 <!-- Close Button -->
                 <button
                     onclick="closeModal()"
-                    class="absolute top-4 right-4 z-10 opacity-70 hover:opacity-100 transition-opacity p-2 rounded"
+                    class="absolute top-4 right-4 z-20 bg-white/80 backdrop-blur-sm shadow-sm opacity-70 hover:opacity-100 transition-opacity p-2 rounded-full"
                 >
                     <svg
                         class="h-4 w-4"
@@ -213,98 +213,100 @@
                     </svg>
                 </button>
 
-                <div class="grid md:grid-cols-[1.2fr_1fr]">
-                    <!-- Left Side: Profile -->
-                    <div
-                        class="bg-gradient-to-br from-muted/50 via-muted/30 to-background p-8 flex flex-col items-center justify-start border-r shadow-inner overflow-y-auto"
-                    >
-                        <div class="w-full max-w-sm">
-                            <div
-                                class="relative w-full aspect-[4/5] overflow-hidden rounded-xl shadow-inner mb-6 bg-muted shadow-xl flex-shrink-0"
-                                id="modal-photo"
-                            ></div>
+                <!-- Left Side: Profile -->
+                <div
+                    class="bg-gradient-to-br from-muted/50 via-muted/30 to-background p-6 md:p-8 flex flex-col items-center justify-start border-b md:border-b-0 md:border-r shadow-inner overflow-y-auto"
+                >
+                    <div class="w-full max-w-[200px] md:max-w-sm">
+                        <div
+                            class="relative w-full aspect-[4/5] overflow-hidden rounded-xl shadow-inner mb-4 md:mb-6 bg-muted shadow-xl flex-shrink-0"
+                            id="modal-photo"
+                        ></div>
 
-                            <h2
-                                class="font-serif text-2xl font-medium text-center mb-2 leading-tight"
-                                id="modal-name"
-                            ></h2>
+                        <h2
+                            class="font-serif text-xl md:text-2xl font-medium text-center mb-2 leading-tight"
+                            id="modal-name"
+                        ></h2>
 
-                            <p
-                                class="mt-3 text-sm text-center text-muted-foreground leading-relaxed max-h-32 overflow-y-auto custom-scrollbar"
-                                id="modal-bio"
-                            ></p>
-                        </div>
+                        <p
+                            class="mt-2 md:mt-3 text-xs md:text-sm text-center text-muted-foreground leading-relaxed max-h-24 md:max-h-32 overflow-y-auto custom-scrollbar"
+                            id="modal-bio"
+                        ></p>
+                    </div>
+                </div>
+
+                <!-- Right Side: Memory Wall -->
+                <div class="flex flex-col flex-1 min-h-0 bg-slate-50">
+                    <div class="px-4 pt-4 md:px-6 md:pt-6 pb-2">
+                        <h3
+                            class="text-base md:text-lg font-medium text-slate-800"
+                        >
+                            Share a Memory
+                        </h3>
                     </div>
 
-                    <!-- Right Side: Memory Wall -->
-                    <div class="flex flex-col max-h-[90vh]">
-                        <div class="p-6 border-b">
-                            <h3 class="text-lg font-medium">Share a Memory</h3>
-                        </div>
+                    <!-- Existing Memories -->
+                    <div
+                        class="flex-1 px-4 md:px-6 overflow-y-auto"
+                        id="memories-list"
+                    >
+                        <!-- Memories will be inserted here -->
+                    </div>
 
-                        <!-- Existing Memories -->
-                        <div
-                            class="flex-1 p-6 overflow-y-auto"
-                            id="memories-list"
-                        >
-                            <!-- Memories will be inserted here -->
-                        </div>
-
-                        <!-- Submission Form -->
-                        <div class="border-t p-6 bg-muted/20">
-                            <form id="memory-form" class="space-y-4">
-                                <div class="grid grid-cols-2 gap-4">
-                                    <div class="space-y-2">
-                                        <label
-                                            for="contributor-name"
-                                            class="text-base font-medium"
-                                            >Your Name</label
-                                        >
-                                        <input
-                                            type="text"
-                                            id="contributor-name"
-                                            required
-                                            placeholder="Enter your name"
-                                            class="w-full rounded-md border border-border bg-background px-3 py-2 text-base"
-                                        />
-                                    </div>
-                                    <div class="space-y-2">
-                                        <label
-                                            for="relationship"
-                                            class="text-base font-medium"
-                                            >Relationship</label
-                                        >
-                                        <input
-                                            type="text"
-                                            id="relationship"
-                                            required
-                                            placeholder="Friend, Teammate..."
-                                            class="w-full rounded-md border border-border bg-background px-3 py-2 text-base"
-                                        />
-                                    </div>
-                                </div>
-                                <div class="space-y-2">
+                    <!-- Submission Form -->
+                    <div class="p-4 md:p-6 pt-2">
+                        <form id="memory-form" class="space-y-3 md:space-y-4">
+                            <div class="grid grid-cols-2 gap-3 md:gap-4">
+                                <div class="space-y-1.5 md:space-y-2">
                                     <label
-                                        for="memory-text"
-                                        class="text-base font-medium"
-                                        >Share a story or memory...</label
+                                        for="contributor-name"
+                                        class="text-sm md:text-base font-medium text-slate-700"
+                                        >Your Name</label
                                     >
-                                    <textarea
-                                        id="memory-text"
+                                    <input
+                                        type="text"
+                                        id="contributor-name"
                                         required
-                                        placeholder="Your memory..."
-                                        rows="4"
-                                        class="w-full rounded-md border border-border bg-background px-3 py-2 text-base"
-                                    ></textarea>
+                                        placeholder="Name"
+                                        class="w-full rounded-md border border-slate-200 bg-white px-3 py-1.5 md:py-2 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-slate-300"
+                                    />
                                 </div>
-                                <button
-                                    type="submit"
-                                    class="w-full bg-primary text-white py-2 px-4 rounded-md hover:opacity-90 transition-opacity font-medium"
+                                <div class="space-y-1.5 md:space-y-2">
+                                    <label
+                                        for="relationship"
+                                        class="text-sm md:text-base font-medium text-slate-700"
+                                        >Relationship</label
+                                    >
+                                    <input
+                                        type="text"
+                                        id="relationship"
+                                        required
+                                        placeholder="Role"
+                                        class="w-full rounded-md border border-slate-200 bg-white px-3 py-1.5 md:py-2 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-slate-300"
+                                    />
+                                </div>
+                            </div>
+                            <div class="space-y-1.5 md:space-y-2">
+                                <label
+                                    for="memory-text"
+                                    class="text-sm md:text-base font-medium text-slate-700"
+                                    >Share a memory...</label
                                 >
-                                    Post Memory
-                                </button>
-                            </form>
-                        </div>
+                                <textarea
+                                    id="memory-text"
+                                    required
+                                    placeholder="Your story..."
+                                    rows="2"
+                                    class="w-full rounded-md border border-slate-200 bg-white px-3 py-1.5 md:py-2 text-sm md:text-base md:rows-4 focus:outline-none focus:ring-2 focus:ring-slate-300"
+                                ></textarea>
+                            </div>
+                            <button
+                                type="submit"
+                                class="w-full bg-slate-800 text-white py-2 px-4 rounded-md hover:bg-slate-700 transition-colors font-medium text-sm md:text-base"
+                            >
+                                Post Memory
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
