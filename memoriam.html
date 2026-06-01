@@ -257,45 +257,33 @@
                     <div class="p-4 md:p-6 pt-2">
                         <form id="memory-form" class="space-y-3 md:space-y-4">
                             <div class="grid grid-cols-2 gap-3 md:gap-4">
-                                <div class="space-y-1.5 md:space-y-2">
-                                    <label
-                                        for="contributor-name"
-                                        class="text-sm md:text-base font-medium text-slate-700"
-                                        >Your Name</label
-                                    >
+                                <div>
                                     <input
                                         type="text"
                                         id="contributor-name"
                                         required
-                                        placeholder="Name"
+                                        placeholder="Your Name"
+                                        aria-label="Your Name"
                                         class="w-full rounded-md border border-slate-200 bg-white px-3 py-1.5 md:py-2 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-slate-300"
                                     />
                                 </div>
-                                <div class="space-y-1.5 md:space-y-2">
-                                    <label
-                                        for="relationship"
-                                        class="text-sm md:text-base font-medium text-slate-700"
-                                        >Relationship</label
-                                    >
+                                <div>
                                     <input
                                         type="text"
                                         id="relationship"
                                         required
-                                        placeholder="Role"
+                                        placeholder="Relationship (e.g., Friend)"
+                                        aria-label="Relationship"
                                         class="w-full rounded-md border border-slate-200 bg-white px-3 py-1.5 md:py-2 text-sm md:text-base focus:outline-none focus:ring-2 focus:ring-slate-300"
                                     />
                                 </div>
                             </div>
-                            <div class="space-y-1.5 md:space-y-2">
-                                <label
-                                    for="memory-text"
-                                    class="text-sm md:text-base font-medium text-slate-700"
-                                    >Share a memory...</label
-                                >
+                            <div>
                                 <textarea
                                     id="memory-text"
                                     required
-                                    placeholder="Your story..."
+                                    placeholder="Share a memory..."
+                                    aria-label="Share a memory"
                                     rows="2"
                                     class="w-full rounded-md border border-slate-200 bg-white px-3 py-1.5 md:py-2 text-sm md:text-base md:rows-4 focus:outline-none focus:ring-2 focus:ring-slate-300"
                                 ></textarea>
