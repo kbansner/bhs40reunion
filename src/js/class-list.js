@@ -391,7 +391,7 @@ function createCard(attendee, uid) {
   nameLocation.className = "flex-1 min-w-0";
   nameLocation.innerHTML = `
     <h3 class="text-xl font-bold text-[#006400] mb-1.5" style="font-family: 'Roboto Slab', serif;">
-      ${attendee.name}
+      ${attendee.displayName}
     </h3>
     <p style="" class="text-sm font-semibold capitalize tracking-wider text-gray-500 ml-0.5">
       <span class="capitalize ${attendee.status.toLowerCase() === "no" ? "text-red-700" : "text-[#006400]"}">
