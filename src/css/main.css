@@ -798,7 +798,7 @@ body {
 
 /* The default state for a note on the wall */
 .note-resting {
-    z-index: 31 !important; /* Raised to float nicely within the new container stack */
+    z-index: 31; /* Raised to float nicely within the new container stack */
 }
 
 /* When a note is hovered or being interacted with */
@@ -832,10 +832,13 @@ body {
 /* Base State (Invisible and shifted) */
 #notes-container .absolute {
     opacity: 0;
-    /* Keep your custom rotations and Fermat scale targets intact */
     transform: translate(-50%, -50%) scale(0.75);
 
-    /* FIX: Specify exactly what animates, and do NOT add a third timing parameter here */
+    /* FIX 1: Force iOS to create a dedicated composite layer for every note */
+    will-change: transform, opacity;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+
     transition-property: opacity, transform;
     transition-duration: 600ms;
     transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
