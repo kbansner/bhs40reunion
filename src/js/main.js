@@ -265,7 +265,32 @@ document.addEventListener("DOMContentLoaded", async () => {
 function setupInitialStyles(el, top, left, rotation, index) {
   el.style.left = `${left}%`;
   el.style.top = `${top}%`;
-  el.style.transform = `translate(-50%, -50%) rotate(${rotation}deg) scale(1)`;
+  // Start shrunken at scale(0.75) inline so it matches your intended scroll animation
+  el.style.transform = `translate(-50%, -50%) rotate(${rotation}deg) scale(0.75)`;
+
+  // When parent is visible, scale it up smoothly via inline update
+  if (
+    document.getElementById("notes-container").classList.contains("is-visible")
+  ) {
+    el.style.transform = `translate(-50%, -50%) rotate(${rotation}deg) scale(1)`;
+  } else {
+    // Fallback if container isn't visible yet: update transform rule when animation triggers
+    const observer = new MutationObserver(() => {
+      if (
+        document
+          .getElementById("notes-container")
+          .classList.contains("is-visible")
+      ) {
+        el.style.transform = `translate(-50%, -50%) rotate(${rotation}deg) scale(1)`;
+        observer.disconnect();
+      }
+    });
+    observer.observe(document.getElementById("notes-container"), {
+      attributes: true,
+      attributeFilter: ["class"],
+    });
+  }
+
   el.classList.add("note-resting");
 }
 
@@ -549,7 +574,7 @@ function createNoteElement(note) {
     ${
       note.type !== "blank"
         ? `
-      <button class="dismiss-btn absolute top-4 -right-3 w-7 h-7 flex items-center justify-center bg-black/5 hover:bg-red-500 hover:text-white rounded-full text-xs font-sans transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 focus:opacity-100 pointer-events-auto z-50" title="Dismiss note">✕</button>
+      <button class="dismiss-btn absolute top-1 right-1 w-7 h-7 flex items-center justify-center bg-black/5 hover:bg-red-500 hover:text-white rounded-full text-xs font-sans transition-all opacity-100 md:opacity-0 md:group-hover:opacity-100 focus:opacity-100 pointer-events-auto z-50" title="Dismiss note">✕</button>
     `
         : ""
     }

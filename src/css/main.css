@@ -829,12 +829,12 @@ body {
     word-wrap: break-word; /* Prevents long text strings from overflowing the card card borders */
 }
 
-/* Base State (Invisible and shifted) */
+/* Base State (Invisible and shrunken) */
 #notes-container .absolute {
     opacity: 0;
-    transform: translate(-50%, -50%) scale(0.75);
+    /* Remove transform entirely from here so inline JS handles base placement */
 
-    /* FIX 1: Force iOS to create a dedicated composite layer for every note */
+    /* Force iOS to create a dedicated composite layer for every note */
     will-change: transform, opacity;
     backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
@@ -847,7 +847,7 @@ body {
 /* Revealed State */
 #notes-container.is-visible .absolute {
     opacity: 1;
-    transform: translate(-50%, -50%) scale(1);
+    /* CSS will transition smoothly to whatever unique inline style JS assigned */
 }
 
 /* Scroll Arrow Animation */
