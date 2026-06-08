@@ -849,3 +849,41 @@ body {
     opacity: 1;
     transform: translate(-50%, -50%) scale(1);
 }
+
+/* Scroll Arrow Animation */
+@keyframes scrollBounce {
+    0%,
+    100% {
+        transform: translate(-50%, 0);
+    }
+    50% {
+        transform: translate(-50%, 10px);
+    }
+}
+
+@keyframes scrollFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.scroll-arrow {
+    position: absolute;
+    bottom: 2.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    z-index: 30;
+    color: white;
+    transition: color 0.3s ease;
+    animation:
+        scrollFadeIn 0.5s forwards 9.5s,
+        scrollBounce 2s infinite ease-in-out 10s;
+}
+
+.scroll-arrow:hover {
+    color: var(--color-bhs-gold);
+}
