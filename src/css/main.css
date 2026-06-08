@@ -887,3 +887,15 @@ body {
 .scroll-arrow:hover {
     color: var(--color-bhs-gold);
 }
+
+.underline-link {
+    text-decoration: underline;
+    text-decoration-color: var(--color-bhs-gold);
+    text-underline-offset: 4px;
+    transition: all 0.2s;
+}
+
+.underline-link:hover {
+    color: var(--color-bhs-gold);
+    text-decoration-color: white;
+}

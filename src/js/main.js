@@ -588,4 +588,24 @@ document.addEventListener("DOMContentLoaded", () => {
     const middlePanelOffset = window.innerWidth;
     requestLine.scrollLeft = middlePanelOffset;
   }
+
+  // Auto-play YouTube when scrolling to Request Line via link
+  const requestLineLinks = document.querySelectorAll('a[href="#request-line"]');
+  const youtubePlayer = document.getElementById("youtube-player");
+
+  if (youtubePlayer) {
+    requestLineLinks.forEach((link) => {
+      link.addEventListener("click", () => {
+        // Use postMessage to tell YouTube to play
+        youtubePlayer.contentWindow.postMessage(
+          JSON.stringify({
+            event: "command",
+            func: "playVideo",
+            args: "",
+          }),
+          "*",
+        );
+      });
+    });
+  }
 });
