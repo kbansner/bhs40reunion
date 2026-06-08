@@ -105,9 +105,9 @@ window.fetchReunionStats = async function () {
       el.innerText = `${pct.toFixed(1)}%`;
     });
 
-    if (syncTimestamp && stats.lastUpdated) {
-      syncTimestamp.innerText = `Synced at ${stats.lastUpdated}`;
-    }
+    // if (syncTimestamp && stats.lastUpdated) {
+    //   syncTimestamp.innerText = `Synced at ${stats.lastUpdated}`;
+    // }
 
     const trendData = stats.weeklyTrends;
     const latestCount = trendData[trendData.length - 1].count;
