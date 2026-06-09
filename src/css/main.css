@@ -135,14 +135,20 @@ img {
 
 /* Applying specific "Mixins" to your lists */
 #list-yes > div {
-    background-color: var(--color-bhs-green);
-    color: white;
-    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    /*background-color: var(--color-bhs-green);*/
+    /*color: white;*/
+    /*box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);*/
+    background-color: white;
+    color: var(--color-bhs-green);
+    border: 1px solid
+        color-mix(in srgb, var(--color-bhs-green) 30%, transparent); /* border border-emerald-200 */
 }
 
 #list-maybe > div {
-    background-color: var(--color-bhs-gold);
+    background-color: white;
+    /*background-color: var(--color-bhs-gold);*/
     color: var(--color-bhs-green);
+    border: 1px solid color-mix(in srgb, var(--color-bhs-gold) 80%, transparent); /* border border-emerald-200 */
 }
 
 #list-no > div {
