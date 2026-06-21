@@ -263,9 +263,14 @@ window.selectPerson = function (name) {
   document.getElementById("searchResults").innerHTML = `
       <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-100 max-w-3xl mx-auto mt-6 text-left">
         <div class="flex flex-col md:flex-row items-center gap-8">
-          <img
-          onerror="this.onerror=null; this.src='/grad-thumbnails/default.png';"
-          src="${p.photo}" class="w-40 h-40 rounded-xl object-cover shadow-md border-4 border-white shrink-0 ${imageStyle}">
+          <div class="relative">
+            <div style="z-index: 10" class="absolute top-2 right-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded">
+                ${p.uid}
+            </div>
+            <img
+            onerror="this.onerror=null; this.src='/grad-thumbnails/default.png';"
+            src="${p.photo}" class="w-40 h-40 rounded-xl object-cover shadow-md border-4 border-white shrink-0 ${imageStyle}">
+          </div>
           <div class="flex-1 w-full">
             <h4 class="text-3xl font-bold text-green-800 mb-2">${p.displayName}</h4>
             <span class="inline-flex px-4 py-1 rounded-full text-sm font-bold border ${t.colors}">${t.label}</span>
