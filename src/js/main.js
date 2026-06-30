@@ -634,3 +634,33 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 });
+
+/**
+ * Universal function to copy text to clipboard and provide visual feedback.
+ * @param {HTMLElement} element - The HTML element that was clicked.
+ * @param {string} textToCopy - The string to copy to the clipboard.
+ */
+window.copyUidToClipboard = async (element, textToCopy) => {
+  try {
+    // Write to clipboard
+    await navigator.clipboard.writeText(textToCopy);
+
+    // Store original text and styling
+    const originalText = element.innerText;
+
+    // Apply visual "Copied!" feedback
+    element.innerText = "Copied!";
+    element.classList.replace("bg-black/50", "bg-green-600/90"); // Optional: turns badge green
+    element.classList.replace("hover:bg-black/80", "hover:bg-green-600/90");
+
+    // Revert back after 2 seconds
+    setTimeout(() => {
+      element.innerText = originalText;
+      element.classList.replace("bg-green-600/90", "bg-black/50");
+      element.classList.replace("hover:bg-green-600/90", "hover:bg-black/80");
+    }, 2000);
+  } catch (err) {
+    console.error("Failed to copy text: ", err);
+    alert("Failed to copy UID. Please copy it manually.");
+  }
+};

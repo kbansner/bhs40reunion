@@ -264,7 +264,12 @@ window.selectPerson = function (name) {
       <div class="bg-white rounded-xl shadow-lg p-8 border border-gray-100 max-w-3xl mx-auto mt-6 text-left">
         <div class="flex flex-col md:flex-row items-center gap-8">
           <div class="relative">
-            <div style="z-index: 10" class="absolute top-2 right-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded">
+            <div
+                style="z-index: 10"
+                class="absolute top-2 right-2 bg-black/50 hover:bg-black/80 text-white text-[10px] px-2 py-1 rounded cursor-pointer transition-colors"
+                title="Click to copy UID"
+                onclick="copyUidToClipboard(this, '${p.uid}')"
+            >
                 ${p.uid}
             </div>
             <img
