@@ -1052,7 +1052,34 @@
                 </div>
             </div>
         </section>
+        <dialog id="ticketModal" class="p-6 rounded-xl shadow-2xl backdrop:bg-black/60 w-full max-w-md mx-auto backdrop:backdrop-blur-sm transition-all">
 
+          <!-- New X Close Button -->
+          <button onclick="closeTicketModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-700 transition-colors" aria-label="Close">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+
+          <h3 class="text-xl font-bold text-gray-900 mb-2 pr-6">Get Your Tickets</h3>
+          <p class="text-sm text-gray-600 mb-5">
+            Copy your Alumni Invite Code (UID) below. You will paste this into the Zeffy ticketing page so your purchase automatically syncs with your profile!
+          </p>
+
+          <div class="flex items-center gap-2 mb-6">
+            <input type="text" id="modalUidInput" readonly class="border border-gray-300 p-2 rounded-lg w-full bg-gray-50 text-gray-800 font-mono tracking-widest text-center text-lg focus:outline-none">
+            <button id="copyUidBtn" onclick="copyUid()" class="bg-gray-200 text-gray-800 font-semibold px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">
+              Copy
+            </button>
+          </div>
+
+          <!-- Updated Bottom Container -->
+          <div class="flex justify-end mt-2">
+            <a href="https://www.zeffy.com/en-US/ticketing/the-big-night-class-of-86-evening-celebration" target="_blank" class="bg-bhs-gold text-bhs-green px-5 py-2 rounded-lg font-bold shadow hover:scale-105 transition-transform">
+              Go to Zeffy
+            </a>
+          </div>
+        </dialog>
         <!-- Footer with Grapevine -->
         <load ="./partials/footer.html" />
         <!-- Minimal JavaScript for Sticky Nav and Logo Animation -->

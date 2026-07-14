@@ -102,9 +102,11 @@ async function loadDirectoryData() {
       const bio = cols[13] || "";
       const lat = cols[14] || null;
       const lng = cols[15] || null;
-      const rawStatus = (cols[16] || "not responded").toLowerCase().trim();
+      const tickets = parseInt(cols[18]) || 0;
+      const rawStatus = (tickets > 0 ? "Yes" : cols[16] || "Not Responded")
+        .toLowerCase()
+        .trim();
       const photoURL = cols[17] || "default.png";
-      const tickets = cols[18] || 0;
 
       let status = "not_responded";
       if (rawStatus === "yes" || rawStatus === "attending") status = "yes";
@@ -117,6 +119,7 @@ async function loadDirectoryData() {
       return {
         uid: uid,
         name: fullName,
+        firstName: firstName,
         displayName: displayName,
         bio: bio,
         lat: lat,
@@ -416,6 +419,13 @@ function createCard(attendee, uid) {
       </svg>
       ${attendee.hometown}
     </p>
+    ${
+      !attendee.tickets && attendee.status.toLowerCase() !== "no"
+        ? `<button type="button" onclick="event.preventDefault(); openTicketModal('${attendee.uid}')" class="text-xs font-medium text-blue-600 hover:text-blue-800 underline mt-1">
+            Get ${attendee.firstName}'s Ticket Code
+          </button>`
+        : ""
+    }
   `;
 
   header.appendChild(photoContainer);
@@ -498,3 +508,54 @@ function hideBackdrop() {
   const backdrop = document.getElementById("backdrop");
   backdrop.classList.add("hidden");
 }
+
+window.openTicketModal = function (uid) {
+  const modal = document.getElementById("ticketModal");
+  const input = document.getElementById("modalUidInput");
+  const copyBtn = document.getElementById("copyUidBtn");
+
+  // Reset the copy button text and set the UID
+  copyBtn.innerText = "Copy";
+  input.value = uid;
+
+  // Open the modal
+  modal.showModal();
+};
+
+window.closeTicketModal = function () {
+  const modal = document.getElementById("ticketModal");
+  modal.close();
+};
+
+window.copyUid = function () {
+  const input = document.getElementById("modalUidInput");
+  const copyBtn = document.getElementById("copyUidBtn");
+
+  // Select and copy
+  input.select();
+  input.setSelectionRange(0, 99999); // Fallback for mobile devices
+  navigator.clipboard.writeText(input.value);
+
+  // Visual feedback
+  copyBtn.innerText = "Copied!";
+  setTimeout(() => {
+    copyBtn.innerText = "Copy";
+  }, 2000);
+};
+// Close the modal when clicking outside of it
+document.addEventListener("DOMContentLoaded", () => {
+  const modal = document.getElementById("ticketModal");
+
+  modal.addEventListener("click", (e) => {
+    const dialogDimensions = modal.getBoundingClientRect();
+    const isClickOutside =
+      e.clientX < dialogDimensions.left ||
+      e.clientX > dialogDimensions.right ||
+      e.clientY < dialogDimensions.top ||
+      e.clientY > dialogDimensions.bottom;
+
+    if (isClickOutside) {
+      modal.close();
+    }
+  });
+});
