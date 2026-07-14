@@ -104,6 +104,7 @@ async function loadDirectoryData() {
       const lng = cols[15] || null;
       const rawStatus = (cols[16] || "not responded").toLowerCase().trim();
       const photoURL = cols[17] || "default.png";
+      const tickets = cols[18] || 0;
 
       let status = "not_responded";
       if (rawStatus === "yes" || rawStatus === "attending") status = "yes";
@@ -121,6 +122,7 @@ async function loadDirectoryData() {
         lat: lat,
         lng: lng,
         status: status,
+        tickets: tickets,
         hometown:
           cols[10] && cols[11] ? `${cols[10]}, ${cols[11]}` : cols[10] || null,
         photo: photoURL.includes("http")
@@ -405,7 +407,7 @@ function createCard(attendee, uid) {
     </h3>
     <p style="" class="text-sm font-semibold capitalize tracking-wider text-gray-500 ml-0.5">
       <span class="capitalize ${attendee.status.toLowerCase() === "no" ? "text-red-700" : "text-[#006400]"}">
-        ${themes[attendee.status.toLowerCase()].label}</span>
+        ${themes[attendee.status.toLowerCase()].label} ${attendee.tickets ? "🎟️".repeat(attendee.tickets) : ""}</span>
     </p>
     <p class="text-sm text-gray-600 flex items-center gap-0.5">
       <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
