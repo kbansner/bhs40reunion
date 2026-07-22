@@ -56,6 +56,12 @@ async function init() {
         const rawStatus = (cols[16] || "").toLowerCase().trim();
         const photoFileName = cols[17] || "default.png";
 
+        // Grab the number from Column T (index 19)
+        const notesCount = parseInt((cols[19] || "").trim(), 10) || 0;
+
+        // NEW - Grab the Batch ID from Column U (index 20)
+        const searchBatch = (cols[20] || "").trim().toLowerCase();
+
         if (rawStatus !== "missing") return null;
 
         return {
@@ -68,22 +74,75 @@ async function init() {
           thumbnail: photoFileName.includes("http")
             ? photoFileName
             : `/grad-thumbnails/${photoFileName}`,
+          notesCount: notesCount,
+          batch: searchBatch // Pass the batch down to the array
         };
       })
       .filter((item) => item !== null);
 
+    // De-duplication
     allMissingData = allMissingData.filter(
       (item, index, self) =>
         index === self.findIndex((t) => t.uid === item.uid),
     );
 
-    filteredClassmates = [...allMissingData];
+    // --- FACEBOOK BATCH URL FILTERING ---
+    const urlParams = new URLSearchParams(window.location.search);
+    const batchId = urlParams.get('batch');
 
+    if (batchId) {
+      // 1. Filter the array
+      filteredClassmates = allMissingData.filter(p => p.batch === batchId.toLowerCase());
+
+      // 2. Update the main page title
+      const titleEl = document.querySelector("h1");
+      if (titleEl) titleEl.textContent = `Find Our Friends Fridays: Week ${batchId}`;
+
+      // 3. Update the Control Box Header & Text
+      const controlBox = document.querySelector(".search-section");
+      if (controlBox) {
+        const boxHeader = controlBox.querySelector(".section-title");
+        const boxText = controlBox.querySelector(".section-subtitle");
+
+        if (boxHeader) boxHeader.textContent = `${filteredClassmates.length} Targeted Classmates`;
+        if (boxText) boxText.textContent = "Please review this week's focus list. Click on a classmate to leave a note about your search efforts or log any contact information you have discovered.";
+      }
+
+      // 4. Hide unnecessary controls
+      const searchContainer = document.querySelector(".search-input-wrapper");
+      if (searchContainer) searchContainer.style.display = "none";
+
+      const searchCount = document.querySelector(".search-count");
+      if (searchCount) searchCount.style.display = "none";
+
+      if (alphabetButtons) alphabetButtons.style.display = "none";
+
+      // 5. Update the "Show All" button to act as an exit button
+      if (showAllBtn) {
+        showAllBtn.textContent = "Exit Friday Focus List";
+
+        // Add some inline styles or Tailwind classes to make it stand out
+        showAllBtn.style.backgroundColor = "#2d5a27"; // bhs-green
+        showAllBtn.style.color = "white";
+        showAllBtn.style.border = "none";
+
+        showAllBtn.onclick = (e) => {
+          e.preventDefault();
+          window.location.href = window.location.pathname;
+        };
+      }
+
+    } else {
+      // Normal page load, show everyone
+      filteredClassmates = [...allMissingData];
+    }
+
+    // Update counts based on the total missing
     const count = allMissingData.length;
     if (totalCount) totalCount.textContent = count;
     if (totalCount2) totalCount2.textContent = count;
-    if (showingCount) showingCount.textContent = count;
 
+    // Finally, render the page
     generateAlphabetButtons();
     attachEventListeners();
     renderGrid();
@@ -124,6 +183,15 @@ function createClassmateCard(person, index) {
     .join("")
     .toUpperCase();
 
+  // 1. Build the badge if there is at least 1 note (Using a clean SVG instead of an emoji)
+  const noteIndicator = person.notesCount > 0
+    ? `<div style="z-index: 10" class="absolute top-2 left-2 bg-bhs-gold text-white text-[10px] px-2 py-1 rounded shadow-md font-bold flex items-center gap-1">
+          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+          ${person.notesCount} Note${person.notesCount > 1 ? 's' : ''}
+        </div>`
+    : ``;
+
+  // 2. Inject it into the HTML, right inside the thumbnail div
   card.innerHTML = `
     <div class="classmate-thumbnail relative aspect-square bg-gray-100">
         <div class="thumbnail-placeholder loading" id="placeholder-${index}">${initials}</div>
@@ -132,6 +200,10 @@ function createClassmateCard(person, index) {
              class="w-full h-full object-cover"
              onload="handleImageLoad(this, ${index})"
              onerror="handleImageError(this, ${index})" />
+
+        <!-- NEW: Inject the badge here (Top Left) -->
+        ${noteIndicator}
+
         <div style="z-index: 10" class="absolute top-2 right-2 bg-black/50 text-white text-[10px] px-2 py-1 rounded">
             ${person.uid}
         </div>
@@ -156,7 +228,6 @@ function createClassmateCard(person, index) {
   `;
   return card;
 }
-
 // --- UTILITIES ---
 window.handleImageLoad = function (img, index) {
   img.classList.add("loaded");
