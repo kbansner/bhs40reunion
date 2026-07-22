@@ -222,5 +222,65 @@
 
         <!-- Footer -->
         <load ="./partials/footer.html" />
+
+
+        <!-- Search Party Modal Overlay -->
+        <div id="classmate-modal" class="modal-overlay" style="display: none;">
+          <div class="modal-content">
+            <button id="close-modal" class="close-btn">&times;</button>
+
+            <h3 id="modal-display-name">Searching for...</h3>
+            <p class="modal-instructions" style="margin-bottom: 15px; color: #555; font-size: 14px;">Log your search attempts or enter found contact info below.</p>
+
+            <form id="headless-search-form">
+              <!-- HIDDEN FIELDS: Populated automatically by JavaScript -->
+              <input type="hidden" id="hidden-uid" name="entry.1741703138">
+              <input type="hidden" id="hidden-name" name="entry.1936296006">
+
+              <!-- VOLUNTEER INFO -->
+              <div class="form-group">
+                <label for="volunteer-name">Your Name</label>
+                <input type="text" id="volunteer-name" name="entry.1860471336" required placeholder="First & Last Name">
+              </div>
+
+              <!-- SEARCH NOTES -->
+              <div class="form-group">
+                <label for="search-notes">Search Notes (What did you try?)</label>
+                <textarea id="search-notes" name="entry.1910300906" placeholder="e.g., Left a voicemail, checked Facebook..." rows="3"></textarea>
+              </div>
+
+              <!-- CONTACT DATA -->
+              <div class="form-group">
+                <label for="found-email">Classmate's Email</label>
+                <input type="email" id="found-email" name="entry.1035614886">
+              </div>
+
+              <div class="form-group">
+                <label for="found-phone">Classmate's Phone</label>
+                <input type="tel" id="found-phone" name="entry.1420683700">
+              </div>
+
+              <div class="form-group">
+                <label for="found-social">Classmate's Social Media</label>
+                <input type="text" id="found-social" name="entry.1914428207" placeholder="LinkedIn, Facebook, etc.">
+              </div>
+
+              <div class="form-group">
+                <label for="found-address">Classmate's Address</label>
+                <input type="text" id="found-address" name="entry.952625681" placeholder="City, State, or full address">
+              </div>
+
+              <!-- OPT OUT -->
+              <div class="form-group checkbox-group" style="flex-direction: row; align-items: center; gap: 10px; margin-top: 10px;">
+                <input type="checkbox" id="opt-out" name="entry.57963511" value="Opt-Out">
+                <label for="opt-out" style="margin-bottom: 0;">Found! (But do not list or contact further)</label>
+              </div>
+
+              <button type="submit" id="submit-btn" style="background-color: #006400; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; margin-top: 15px;">Submit Update</button>
+              <p id="success-message" style="display: none; color: green; font-weight: bold; margin-top: 10px; text-align: center;">Update saved successfully!</p>
+            </form>
+          </div>
+        </div>
+
     </body>
 </html>
