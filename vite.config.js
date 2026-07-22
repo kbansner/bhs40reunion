@@ -19,10 +19,17 @@ export default defineConfig({
     }),
     injectHTML(),
     createHtmlPlugin({
-      minify: true,
+      minify: {
+        collapseWhitespace: true,
+        keepClosingSlash: true,
+        removeComments: true,
+        removeRedundantAttributes: false, // <-- THIS IS THE KEY FIX
+        removeScriptTypeAttributes: false,
+        removeStyleLinkTypeAttributes: false,
+        useShortDoctype: true,
+      },
       inject: {
         data: {
-          // You can even pass dynamic data here, like the reunion year!
           title: "BHS Class of 86",
         },
         tags: [
@@ -40,6 +47,9 @@ export default defineConfig({
   build: {
     outDir: "dist",
     assetsInlineLimit: 4096,
+    minify: 'esbuild',
+    // Keep target high enough so it doesn't overly transform markup
+    target: 'esnext',
     // Add rollupOptions here to include the new page
     rollupOptions: {
       input: {
