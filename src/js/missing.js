@@ -311,6 +311,7 @@ function attachEventListeners() {
       const name = card.getAttribute("data-name") || "Unknown Classmate";
 
       document.getElementById("modal-display-name").textContent = "Searching for " + name;
+      document.getElementById("modal-display-name-opt-out").textContent = name;
       document.getElementById("hidden-uid").value = uid;
       document.getElementById("hidden-name").value = name;
 

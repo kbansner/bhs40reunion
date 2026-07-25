@@ -124,13 +124,20 @@
                         class="search-header flex flex-col md:flex-row justify-between items-start gap-4"
                     >
                         <div class="max-w-3xl">
-                            <h2 class="section-title">
-                                <span id="total-count">310</span> Missing
-                                Classmates
-                            </h2>
-                            <p class="section-subtitle">
-                                Names on this list represent classmates whose contact info is missing or outdated. If you see someone you know, please encourage them to visit the site and update their details/RSVP (even if it's a "NO"—this helps us keep in touch and invite you to the next one in 10 years!).
-                            </p>
+                            <h2 class="section-title">We are trying to track down the remaining <span id="total-count">310</span> missing classmates. </h2>
+                            <div class="section-subtitle">
+                                <p class="mt-1">
+                                    If you are on this list, please <a
+                                        href="https://forms.gle/BQduAPNC67e2U9YQ7"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="underline font-bold"
+                                    >RSVP here</a> to update your contact information. Even a simple "No" helps us out, and you can choose the "Private" option on the RSVP form to ensure your details are never shown on the site!
+                                </p>
+                                <p class="mt-3">
+                                    If you are helping us find a friend, please encourage them to RSVP. Alternatively, if you know a classmate simply wants to be left off the radar entirely, you can submit an <strong>Opt-Out</strong> on their behalf right here. Just click their card below or the (i) icon and check the <strong>Opt-Out</strong> box. Once submitted, our committee will promptly remove their name from the Who's Missing list, and we won't show their photo or any other information on the site.
+                                </p>
+                            </div>
                         </div>
 
                         <div
@@ -239,6 +246,12 @@
                 <input type="text" id="volunteer-name" name="entry.1860471336" required placeholder="First & Last Name">
               </div>
 
+              <!-- OPT OUT -->
+              <div class="form-group checkbox-group" style="flex-direction: row; align-items: center; gap: 10px; margin-top: 10px;">
+                <input type="checkbox" id="opt-out" name="entry.57963511" value="Opt-Out">
+                <label for="opt-out" style="margin-bottom: 0;">Opt-Out: Stop searching for <span id="modal-display-name-opt-out">[Name]</span></label>
+              </div>
+
               <!-- SEARCH NOTES -->
               <div class="form-group">
                 <label for="search-notes">Search Notes (What did you try?)</label>
@@ -264,12 +277,6 @@
               <div class="form-group">
                 <label for="found-address">Classmate's Address</label>
                 <input type="text" id="found-address" name="entry.952625681" placeholder="City, State, or full address">
-              </div>
-
-              <!-- OPT OUT -->
-              <div class="form-group checkbox-group" style="flex-direction: row; align-items: center; gap: 10px; margin-top: 10px;">
-                <input type="checkbox" id="opt-out" name="entry.57963511" value="Opt-Out">
-                <label for="opt-out" style="margin-bottom: 0;">Found! (But do not list or contact further)</label>
               </div>
 
               <button type="submit" id="submit-btn" style="background-color: #006400; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; width: 100%; font-size: 16px; margin-top: 15px;">Submit Update</button>
