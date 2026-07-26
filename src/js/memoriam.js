@@ -42,7 +42,7 @@ async function loadLiveMemories() {
 }
 
 /**
- * FETCH & FILTER CLASS REGISTRY (Updated to handle fetch)
+ * FETCH & FILTER CLASS REGISTRY
  */
 async function loadMemoriamData() {
   try {
@@ -57,14 +57,19 @@ async function loadMemoriamData() {
 
       const firstName = (cols[1] || "").replace(/\s[a-z]\.?$/gi, "").trim();
       const lastName = cols[2] || "";
+      const displayName = cols[12] || ""; // Column M is index 12
+
       const status = (cols[16] || "").toLowerCase().trim();
       const photoURL = cols[17] || "default.png";
+
+      // Fallback: Use Display Name (Col T) if present; otherwise, join First + Last Name
+      const fullName = displayName !== "" ? displayName : `${firstName} ${lastName}`.trim();
 
       return {
         uid: cols[0] || "",
         firstName: firstName,
         lastName: lastName,
-        fullName: `${firstName} ${lastName}`,
+        fullName: fullName,
         bio: cols[13] || "",
         status: status,
         photoUrl: photoURL.includes("http")

@@ -214,24 +214,17 @@
                 </button>
 
                 <!-- Left Side: Profile -->
-                <div
-                    class="bg-gradient-to-br from-muted/50 via-muted/30 to-background p-6 md:p-8 flex flex-col items-center justify-start border-b md:border-b-0 md:border-r shadow-inner overflow-y-auto"
-                >
-                    <div class="w-full max-w-[200px] md:max-w-sm">
-                        <div
-                            class="relative w-full aspect-[4/5] overflow-hidden rounded-xl shadow-inner mb-4 md:mb-6 bg-muted shadow-xl flex-shrink-0"
-                            id="modal-photo"
-                        ></div>
+                <div class="bg-gradient-to-br from-muted/50 via-muted/30 to-background p-6 md:p-8 flex flex-col items-center justify-start border-b md:border-b-0 md:border-r shadow-inner overflow-y-auto">
+                    <!-- Increased md:max-w-sm to md:max-w-md to allow wider bio text -->
+                    <div class="w-full max-w-[220px] md:max-w-md flex flex-col items-center">
 
-                        <h2
-                            class="font-serif text-xl md:text-2xl font-medium text-center mb-2 leading-tight"
-                            id="modal-name"
-                        ></h2>
+                        <div class="relative w-full aspect-[4/5] overflow-hidden rounded-xl shadow-inner mb-4 md:mb-5 bg-muted shadow-xl flex-shrink-0" id="modal-photo"></div>
 
-                        <p
-                            class="mt-2 md:mt-3 text-xs md:text-sm text-center text-muted-foreground leading-relaxed max-h-24 md:max-h-32 overflow-y-auto custom-scrollbar"
-                            id="modal-bio"
-                        ></p>
+                        <h2 class="font-serif text-xl md:text-2xl font-medium text-center mb-2 leading-tight" id="modal-name"></h2>
+
+                        <!-- Increased md:max-h-32 to md:max-h-48 for more visible bio lines -->
+                        <p class="mt-1 md:mt-2 text-xs md:text-sm text-muted-foreground leading-relaxed max-h-28 md:max-h-48 overflow-y-auto custom-scrollbar w-full text-pretty text-balance" id="modal-bio"></p>
+
                     </div>
                 </div>
 
