@@ -58,7 +58,7 @@ async function loadMemoriamData() {
       const firstName = (cols[1] || "").replace(/\s[a-z]\.?$/gi, "").trim();
       const lastName = cols[2] || "";
       const displayName = cols[12] || ""; // Column M is index 12
-
+      const rawBio = cols[13] || "";
       const status = (cols[16] || "").toLowerCase().trim();
       const photoURL = cols[17] || "default.png";
 
@@ -70,11 +70,15 @@ async function loadMemoriamData() {
         firstName: firstName,
         lastName: lastName,
         fullName: fullName,
-        bio: cols[13] || "",
+        bio: formatSmartQuotes(rawBio),
         status: status,
         photoUrl: photoURL.includes("http")
           ? photoURL
           : `/grad-thumbnails/${photoURL}`,
+        bigPhotoUrl: photoURL.includes("http")
+          ? photoURL
+          : `/grad-portraits/${photoURL}`,
+
       };
     });
 
@@ -147,7 +151,7 @@ function openModal(person) {
           </svg>
       </div>
 
-      <img src="${person.photoUrl}"
+      <img src="${person.bigPhotoUrl}"
            onerror="this.remove();"
            alt="${person.fullName}"
            class="absolute inset-0 block w-full h-full object-cover object-top z-10 sepia-[.4] contrast-[.86] brightness-[1.1]">
@@ -282,3 +286,15 @@ document.addEventListener("keydown", (e) => {
     closeModal();
   }
 });
+
+function formatSmartQuotes(text) {
+  if (!text) return "";
+
+  return text
+    // 1. Collapse 2 or more consecutive quotes into a single straight quote
+    .replace(/"+/g, '"')
+    // 2. Replace opening quotes (at start of string, or after spaces/brackets)
+    .replace(/(^|[\s(\[{])"/g, '$1“')
+    // 3. Replace any remaining straight quotes with closing quotes
+    .replace(/"/g, '”');
+}

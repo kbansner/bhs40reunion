@@ -99,7 +99,9 @@ async function loadDirectoryData() {
       const uid = cols[0] || ""; // Unique ID for de-duplication
 
       const displayName = cols[12] || fullName;
-      const bio = cols[13] || "";
+      const rawBio = cols[13] || "";
+      // Removes carriage returns (\r) and newlines (\n)
+      const bio = rawBio.replace(/[\r\n]+/g, " ").trim();
       const lat = cols[14] || null;
       const lng = cols[15] || null;
       const tickets = parseInt(cols[18]) || 0;
