@@ -108,7 +108,8 @@ async function loadDirectoryData() {
       const rawStatus = (tickets > 0 ? "Yes" : cols[16] || "Not Responded")
         .toLowerCase()
         .trim();
-      const photoURL = cols[17] || "default.png";
+      const hasPhoto = cols[21] || "Missing";
+      const photoURL = hasPhoto === "Missing" ? "default.png" : cols[17] || "default.png";
 
       let status = "not_responded";
       if (rawStatus === "yes" || rawStatus === "attending") status = "yes";
