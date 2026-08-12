@@ -52,16 +52,18 @@ window.addEventListener("DOMContentLoaded", function () {
 window.sendEmail = (name) => {
   const questionnaireUrl = "https://forms.gle/BQduAPNC67e2U9YQ7";
   const subject = encodeURIComponent(
-    "BHS Class of '86 Reunion - We're Looking for You!",
+    "BHS '86 40th Reunion: We've been looking for you! 🔍",
   );
   const body = encodeURIComponent(
     `Hi ${name.split(",")[1] ? name.split(",")[1].trim() : name},\n\n` +
-      `The Berkeley High School Class of 1986 is planning our 40th reunion for October 2026!\n\n` +
-      `We'd love to have you join us. Please check-in with this quick questionnaire so we can keep you in the loop:\n` +
+      `Your name popped up on our Berkeley High Class of '86 missing list today—we've literally got a search team out trying to track you down for our 40th Reunion this October!\n\n` +
+    `We don't want you to miss out. Could you take 30 seconds to check in on our quick questionnaire so we can make sure you're in the loop for all the details?\n` +
+      `👉 Check in here: ` +
       `  ${questionnaireUrl}\n\n` +
-      `Hope to see you there!\n\n` +
-      `- BHS Class of '86 Reunion Committee\n` +
-      `  bhs40reunion.com`,
+    `Hope to see you there!\n\n` +
+    `Best,\n\n` +
+      `[Your Name] & The BHS Class of '86 Reunion Committee\n\n` +
+      `bhs40reunion.com`,
   );
 
   window.location.href = `mailto:?subject=${subject}&body=${body}`;
@@ -71,8 +73,8 @@ window.sendSMS = (name) => {
   const questionnaireUrl = "https://forms.gle/BQduAPNC67e2U9YQ7";
   const firstName = name.split(",")[1] ? name.split(",")[1].trim() : name;
   const message = encodeURIComponent(
-    `Hi ${firstName}! BHS Class of '86 here. We're planning our 40th reunion (Oct 2026) and would love to have you join! ` +
-      `Fill out our quick questionnaire: ${questionnaireUrl} ` +
+    `Hey ${firstName}! This is [Your Name] from Berkeley High '86. We've got a search team looking for missing classmates for our 40th reunion this October! ` +
+      `Can you take 30 seconds to RSVP so we can remove your name from the missing classmates list, and send you info about the reunion? ${questionnaireUrl} ` +
       `or visit our website: bhs40reunion.com/`,
   );
 

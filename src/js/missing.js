@@ -88,7 +88,7 @@ async function init() {
 
     // --- FACEBOOK BATCH URL FILTERING ---
     const urlParams = new URLSearchParams(window.location.search);
-    const batchId = urlParams.get('batch');
+    const batchId = urlParams.get('team');
 
     if (batchId) {
       // 1. Filter the array
@@ -96,16 +96,22 @@ async function init() {
 
       // 2. Update the main page title
       const titleEl = document.querySelector("h1");
-      if (titleEl) titleEl.textContent = `Find Our Friends Fridays: Week ${batchId}`;
+      if (titleEl) titleEl.textContent = `Search Team ${batchId}`;
 
       // 3. Update the Control Box Header & Text
       const controlBox = document.querySelector(".search-section");
       if (controlBox) {
         const boxHeader = controlBox.querySelector(".section-title");
         const boxText = controlBox.querySelector(".section-subtitle");
-
-        if (boxHeader) boxHeader.textContent = `${filteredClassmates.length} Targeted Classmates`;
-        if (boxText) boxText.textContent = "Please review this week's focus list. Click on a classmate to leave a note about your search efforts or log any contact information you have discovered.";
+        if (filteredClassmates.length === 0) {
+          if (boxHeader) boxHeader.textContent = "All Classmates Found! 🏆";
+          if (boxText) boxText.textContent = `Outstanding job, Search Team ${batchId}! Your team has successfully located every assigned classmate on your list.`;
+        } else {
+          if (boxHeader) boxHeader.textContent = `${filteredClassmates.length} Classmates Left to Find`;
+          if (boxText) boxText.textContent = "Your 4-person team is the only group assigned to track down these classmates. Click on any classmate below to log notes, or submit contact information.";
+        }
+        if (boxHeader) boxHeader.textContent = `${filteredClassmates.length} Classmates Left to Find`;
+        if (boxText) boxText.textContent = "Your 4-person team is the only group assigned to track down these classmates. Click on any classmate below to log notes, or submit contact information.";
       }
 
       // 4. Hide unnecessary controls
@@ -119,7 +125,7 @@ async function init() {
 
       // 5. Update the "Show All" button to act as an exit button
       if (showAllBtn) {
-        showAllBtn.textContent = "Exit Friday Focus List";
+        showAllBtn.textContent = "View Full Missing Gallery";
 
         // Add some inline styles or Tailwind classes to make it stand out
         showAllBtn.style.backgroundColor = "#2d5a27"; // bhs-green
