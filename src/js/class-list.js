@@ -289,6 +289,13 @@ window.selectPerson = function (name) {
             <span class="inline-flex px-4 py-1 rounded-full text-sm font-bold border ${t.colors}">${t.label}</span>
             ${hometownHTML}
             ${bioHTML}
+            ${
+              statusKey !== "deceased" && !p.tickets
+                ? `<p class="mt-2"><button type="button" onclick="event.preventDefault(); openTicketModal('${p.uid}')" class="font-medium text-blue-600 hover:text-blue-800 underline mt-1">
+                    Get ${p.firstName}'s Ticket Code
+                  </button></p>`
+                : ""
+            }
           </div>
         </div>
       </div>`;
