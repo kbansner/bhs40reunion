@@ -1,18 +1,46 @@
-<div style="text-align: center; margin-top: 50px; font-family: sans-serif">
-    <p>Redirecting to BHS Reunion tickets on Zeffy.com</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-CN178R0FGE"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        const targetUrl = "https://www.zeffy.com/en-US/ticketing/the-big-night-class-of-86-evening-celebration";
+        let redirected = false;
+
+        function doRedirect() {
+            if (!redirected) {
+                redirected = true;
+                window.location.href = targetUrl;
+            }
+        }
+
+        // Send page view and redirect only once the event reaches Google
+        gtag('config', 'G-CN178R0FGE', {
+            'event_callback': doRedirect
+        });
+
+        // Fallback: Redirect after 1.5s if ad-blockers or slow connections block gtag
+        setTimeout(doRedirect, 1500);
+    </script>
+
+    <!-- Meta refresh fallback for users with JavaScript completely disabled -->
+    <noscript>
+        <meta http-equiv="refresh" content="2;url=https://www.zeffy.com/en-US/ticketing/the-big-night-class-of-86-evening-celebration" />
+    </noscript>
+</head>
+<body style="text-align: center; margin-top: 50px; font-family: sans-serif;">
+    <p>Redirecting to BHS Reunion tickets on Zeffy.com...</p>
     <p>
-        <a href="https://www.zeffy.com/en-US/ticketing/the-big-night-class-of-86-evening-celebration"
-            >Click here if you aren't redirected automatically.</a
-        >
+        <a href="https://www.zeffy.com/en-US/ticketing/the-big-night-class-of-86-evening-celebration">
+            Click here if you aren't redirected automatically.
+        </a>
     </p>
-</div>
-
-<meta
-    http-equiv="refresh"
-    content="1;url=https://www.zeffy.com/en-US/ticketing/the-big-night-class-of-86-evening-celebration"
-/>
-
-<script>
-    window.location.href =
-        "https://www.zeffy.com/en-US/ticketing/the-big-night-class-of-86-evening-celebration";
-</script>
+</body>
+</html>
