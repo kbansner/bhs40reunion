@@ -66,6 +66,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (document.getElementById("directorySearch")) initSearchLogic();
 });
 
+const clean = (val) => {
+  if (!val) return null;
+  const trimmed = String(val).trim();
+  return trimmed && !["null", "undefined"].includes(trimmed.toLowerCase()) ? trimmed : null;
+};
+
 // --- DATA PROCESSING ---
 // --- UPDATED DATA PROCESSING FOR NEW COLUMN LAYOUT ---
 async function loadDirectoryData() {
@@ -129,9 +135,13 @@ async function loadDirectoryData() {
         lng: lng,
         status: status,
         tickets: tickets,
-        hometown:
-          cols[10] && cols[11] ? `${cols[10]}, ${cols[11]}` : cols[10] || null,
-        photo: photoURL.includes("http")
+        hometown: (() => {
+          const city = clean(cols[10]);
+          const state = clean(cols[11]);
+
+          if (city && state) return `${city}, ${state}`;
+          return city || state || null;
+        })(),        photo: photoURL.includes("http")
           ? photoURL
           : `/grad-thumbnails/${photoURL}`,
         isPrivate: status === "private",
@@ -285,7 +295,7 @@ window.selectPerson = function (name) {
             src="${p.photo}" class="w-40 h-40 rounded-xl object-cover shadow-md border-4 border-white shrink-0 ${imageStyle}">
           </div>
           <div class="flex-1 w-full">
-            <h4 class="text-3xl font-bold text-green-800 mb-2">${p.displayName}</h4>
+            <h4 class="text-3xl font-bold text-green-800 mb-2">${p.displayName} ${p.tickets ? "🎟️".repeat(p.tickets) : ""}</h4>
             <span class="inline-flex px-4 py-1 rounded-full text-sm font-bold border ${t.colors}">${t.label}</span>
             ${hometownHTML}
             ${bioHTML}
@@ -422,13 +432,17 @@ function createCard(attendee, uid) {
       <span class="capitalize ${attendee.status.toLowerCase() === "no" ? "text-red-700" : "text-[#006400]"}">
         ${themes[attendee.status.toLowerCase()].label} ${attendee.tickets ? "🎟️".repeat(attendee.tickets) : ""}</span>
     </p>
-    <p class="text-sm text-gray-600 flex items-center gap-0.5">
-      <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-      </svg>
-      ${attendee.hometown}
-    </p>
+    ${
+      attendee.hometown
+        ? `<p class="text-sm text-gray-600 flex items-center gap-0.5">
+          <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          ${attendee.hometown}
+        </p>`
+        : ""
+    }
     ${
       !attendee.tickets && attendee.status.toLowerCase() !== "no"
         ? `<button type="button" onclick="event.preventDefault(); openTicketModal('${attendee.uid}')" class="text-xs font-medium text-blue-600 hover:text-blue-800 underline mt-1">
