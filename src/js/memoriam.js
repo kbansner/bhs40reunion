@@ -83,6 +83,10 @@ async function loadMemoriamData() {
     });
 
     deceasedClassmates = allData.filter((p) => p.status === "deceased");
+
+    // NEW: Sort the filtered array alphabetically by firstName
+    deceasedClassmates.sort((a, b) => a.firstName.localeCompare(b.firstName));
+
     renderClassmatesGrid();
   } catch (e) {
     console.error("Failed to load Class Registry", e);
