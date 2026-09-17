@@ -113,19 +113,16 @@ function renderClassmatesGrid() {
 
     card.innerHTML = `
       <div class="aspect-[4/5] bg-muted relative overflow-hidden">
-
             <div class="absolute inset-0 flex items-center justify-center opacity-30 z-0">
                 <svg class="h-24 w-24 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z"/>
                     <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z"/>
                 </svg>
             </div>
-
             <img src="${person.photoUrl}"
                  onerror="this.remove();"
                  alt="${person.fullName}"
                  class="${imgClass}">
-
           </div>
       <div class="p-4 text-center">
           <h3 class="font-serif font-medium text-lg">${person.fullName}</h3>
@@ -210,7 +207,7 @@ function renderMemories(uid) {
                 <p class="text-muted-foreground text-xs md:text-sm">${memory.relationship}</p>
             </div>
             <p class="text-xs md:text-sm text-foreground/90 leading-relaxed">
-                ${memory.memoryText}
+                ${formatMemoryText(memory.memoryText)}
             </p>
             <div class="border-t border-border mt-6"></div>
         </div>
@@ -234,9 +231,11 @@ function setupFormHandler() {
     }
 
     const submitBtn = form.querySelector('button[type="submit"]');
-    const contributorName = document.getElementById("contributor-name").value;
-    const relationship = document.getElementById("relationship").value;
-    const memoryText = document.getElementById("memory-text").value;
+
+    // Use .trim() to clean up accidental extra whitespace/newlines at the start and end
+    const contributorName = document.getElementById("contributor-name").value.trim();
+    const relationship = document.getElementById("relationship").value.trim();
+    const memoryText = document.getElementById("memory-text").value.trim();
 
     const newMemory = {
       id: `M${Date.now()}`,
@@ -301,4 +300,19 @@ function formatSmartQuotes(text) {
     .replace(/(^|[\s(\[{])"/g, '$1“')
     // 3. Replace any remaining straight quotes with closing quotes
     .replace(/"/g, '”');
+}
+
+/**
+ * Safely format text to prevent HTML breakage and convert newlines to <br> tags.
+ */
+function formatMemoryText(text) {
+  if (!text) return "";
+
+  return text
+    // 1. Escape HTML first to prevent code injection & layout breaking
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    // 2. Convert raw carriage returns / line breaks into HTML break tags
+    .replace(/\r?\n/g, "<br>");
 }
