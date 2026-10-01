@@ -97,13 +97,16 @@
     <div id="print-container"></div>
 
     <script>
+        // Check the URL for the sort parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const sortByTicket = urlParams.get('sort') === 'ticket';
+
         const CONFIG = {
             SHEET_URL: "https://docs.google.com/spreadsheets/d/e/2PACX-1vQ-xDkTv8aIauGKKuiqZrHiC2RgOw0A4Nw3HnJkYQ3ES5kmbzxXM7mUker_v-WX1rt6rnnBwI6wQvcO/pub?gid=1741366949&single=true&output=csv"
         };
 
-        // --- UPDATE THIS TO MATCH YOUR NEW COLUMN ---
-        // e.g., If Plus-1 First Name is in Column W, the index is 22.
-        const PLUS_ONE_COL_INDEX = 22;
+        const PLUS_ONE_COL_INDEX = 22; // Column W
+        const TICKET_NUM_COL_INDEX = 23; // Update to match your new Ticket Number column (e.g., Column X)
 
         document.addEventListener("DOMContentLoaded", loadAndGenerateTags);
 
@@ -115,47 +118,55 @@
 
                 let allTags = [];
 
-                // 1. Parse CSV and Flatten into Tag Objects
                 rows.forEach(row => {
                     const cols = row.split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/).map(c => c.replace(/^"\vert{}"$/g, "").trim());
 
                     const tickets = parseInt(cols[18]) || 0;
-                    if (tickets === 0) return; // Only process people with tickets
+                    if (tickets === 0) return;
 
-                    // Basic student data
+                    // Extract the chronoligcal ticket number for sorting
+                    const ticketNum = parseInt(cols[TICKET_NUM_COL_INDEX]) || 999999;
+
                     const displayName = cols[12] || `${cols[1]} ${cols[2]}`;
-                    // Check for photo, leave blank if missing instead of using default.png
                     const hasPhoto = cols[21] || "Missing";
                     let photoURL = "";
                     if (hasPhoto !== "Missing" && cols[17] && cols[17].trim() !== "") {
                         photoURL = cols[17].includes("http") ? cols[17] : `/grad-thumbnails/${cols[17]}`;
                     }
-
-                    // Format the name onto two lines
                     const formattedName = displayName.replace(' ', '<br>');
 
-                    // Push Primary Student Tag
+                    // Push Primary Tag
                     allTags.push({
                         isGuest: false,
                         photo: photoURL,
-                        formattedName: formattedName
+                        formattedName: formattedName,
+                        ticketNum: ticketNum // Store for sorting
                     });
 
-                    // Check for Guest and Push Guest Tag if exists
+                    // Push Guest Tag
                     const plusOneFullName = cols[PLUS_ONE_COL_INDEX];
-
-                    if (plusOneFullName && plusOneFullName.trim() !== "") {
-                        // Split the name by spaces and grab just the first word
+                    if (tickets > 1 && plusOneFullName && plusOneFullName.trim() !== "") {
                         const guestFirstName = plusOneFullName.trim().split(/\s+/)[0];
-
                         allTags.push({
                             isGuest: true,
-                            photo: photoURL, // Guest gets the host's photo
+                            photo: photoURL,
                             formattedName: formattedName,
-                            guestName: guestFirstName // Outputs just the first name
+                            guestName: guestFirstName,
+                            ticketNum: ticketNum // Share the host's ticket number so they sort together
                         });
                     }
                 });
+
+                // Intercept and re-order the array if the URL parameter is present
+                if (sortByTicket) {
+                    allTags.sort((a, b) => {
+                        if (a.ticketNum === b.ticketNum) {
+                            // If ticket numbers match, ensure the guest sorts immediately after the primary
+                            return a.isGuest ? 1 : -1;
+                        }
+                        return a.ticketNum - b.ticketNum;
+                    });
+                }
 
                 renderPages(allTags);
 
