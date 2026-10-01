@@ -23,16 +23,16 @@
             margin: 0 auto;
             display: grid;
             grid-template-columns: 4in 4in; /* 2 columns */
-            grid-template-rows: repeat(3, 3.33in); /* 3 rows */
+            grid-template-rows: repeat(3, 3in); /* 3 rows */
             page-break-after: always; /* Forces a new sheet for the duplex back */
         }
 
         .nametag {
             width: 4in;
-            height: 3.33in;
+            height: 3in;
             position: relative;
             background-image: url('/public/images/name-tag-background.png');
-            background-size: 100% 100%;
+            background-size: cover;
             background-repeat: no-repeat;
             box-sizing: border-box;
             /* Optional: uncomment below to see cut lines while testing */
@@ -43,9 +43,9 @@
         .portrait {
             position: absolute;
             right: 0.475in; /* Aligns with the photo box in image_a69cd6.jpg */
-            top: 0.91in;
-            width: 1.37in;
-            height: 1.86in;
+            top: 0.9in;
+            width: 1.26in;
+            height: 1.65in;
             object-fit: cover;
             z-index: 1;
         }
@@ -54,8 +54,8 @@
         .text-area {
             position: absolute;
             left: 0.4in;
-            bottom: 0.55in;
-            width: 1.7in;
+            bottom: 0.44in;
+            width: 1.75in;
             display: flex;
             flex-direction: column;
             justify-content: center;
