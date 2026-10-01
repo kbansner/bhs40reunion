@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+    @page {
+        size: 8.5in 11in;
+        margin: 0.25in; /* Standard printer margin */
+    }
+
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        -webkit-print-color-adjust: exact; /* Forces background images to print */
+        print-color-adjust: exact;
+    }
+
+    .page {
+        width: 8in;
+        height: 10in;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: 4in 4in; /* 2 columns */
+        grid-template-rows: repeat(3, 3.33in); /* 3 rows */
+        page-break-after: always; /* Forces a new sheet for the duplex back */
+    }
+
+    .nametag {
+        width: 4in;
+        height: 3.33in;
+        position: relative;
+        background-image: url('/public/images/name-tag-background.png');
+        background-size: 100% 100%;
+        background-repeat: no-repeat;
+        box-sizing: border-box;
+        /* Optional: uncomment below to see cut lines while testing */
+        border: 1px dashed #e5e5e5;
+    }
+
+    /* Portrait Placement */
+    .portrait {
+        position: absolute;
+        right: 0.475in; /* Aligns with the photo box in image_a69cd6.jpg */
+        top: 0.8125in;
+        width: 1.381in;
+        height: 1.95in;
+        object-fit: cover;
+        z-index: 1;
+    }
+
+    /* Text Container Placement */
+    .text-area {
+        position: absolute;
+        left: 0.4in;
+        bottom: 0.55in;
+        width: 1.8in;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    /* Typography */
+    .name {
+        font-family: Georgia, serif;
+        font-size: 22pt;
+        line-height: 1.1;
+    }
+
+    /* Guest (+1) Specific Styles */
+    .guest-label {
+        font-size: 10pt;
+        margin-bottom: 2px;
+    }
+
+    .guest-name {
+        font-family: Georgia, serif;
+        font-size: 14pt;
+        margin-top: 8px;
+        font-weight: bold;
+        color: #ff3300;
+    }
+    </style>
+    <title>6-Up Name Tags</title>
+</head>
+<body>
+
+    <!-- PAGE 1: FRONT -->
+    <div class="page">
+        <!-- Row 1, Left: Standard Alumnus (Tag 1) -->
+        <div class="nametag">
+            <img src="grad-thumbnails/001_aaron-elliott.jpg" class="portrait" alt="Arthur Adamson">
+            <div class="text-area">
+                <div class="name">Arthur<br>Adamson</div>
+            </div>
+        </div>
+
+        <!-- Row 1, Right: Guest / +1 (Tag 2) -->
+        <div class="nametag">
+            <img src="grad-thumbnails/001_aaron-elliott.jpg" class="portrait" alt="Arthur Adamson">
+            <div class="text-area">
+                <div class="guest-label">I'm with...</div>
+                <div class="name">Arthur<br>Adamson</div>
+                <div class="guest-name">Jane</div> <!-- Guest's actual name -->
+            </div>
+        </div>
+
+        <!-- Row 2, Left: Standard Alumnus (Tag 3) -->
+        <div class="nametag">
+            <img src="grad-thumbnails/035_amy-fitzsimons.jpg" class="portrait">
+            <div class="text-area">
+                <div class="name">Student<br>Three</div>
+            </div>
+        </div>
+
+        <!-- Row 2, Right: Standard Alumnus (Tag 4) -->
+        <div class="nametag">
+            <img src="grad-thumbnails/014_alicea-nellis.jpg" class="portrait">
+            <div class="text-area">
+                <div class="name">Student<br>Four</div>
+            </div>
+        </div>
+
+        <!-- Row 3, Left: (Tag 5) -->
+        <div class="nametag">
+            <!-- content -->
+        </div>
+
+        <!-- Row 3, Right: (Tag 6) -->
+        <div class="nametag">
+            <!-- content -->
+        </div>
+    </div>
+
+
+    <!-- PAGE 2: BACK (Columns Mirrored for Duplex Printing) -->
+    <div class="page">
+        <!-- Row 1, Left on Back (Contains Tag 2 Data) -->
+        <div class="nametag">
+            <img src="grad-thumbnails/001_aaron-elliott.jpg" class="portrait" alt="Arthur Adamson">
+            <div class="text-area">
+                <div class="guest-label">I'm with...</div>
+                <div class="name">Arthur<br>Adamson</div>
+                <div class="guest-name">Jane Doe</div>
+            </div>
+        </div>
+
+        <!-- Row 1, Right on Back (Contains Tag 1 Data) -->
+        <div class="nametag">
+            <img src="grad-thumbnails/001_aaron-elliott.jpg" class="portrait" alt="Arthur Adamson">
+            <div class="text-area">
+                <div class="name">Arthur<br>Adamson</div>
+            </div>
+        </div>
+
+        <!-- Row 2, Left on Back (Contains Tag 4 Data) -->
+        <div class="nametag">
+            <img src="student4.jpg" class="portrait">
+            <div class="text-area">
+                <div class="name">Student<br>Four</div>
+            </div>
+        </div>
+
+        <!-- Row 2, Right on Back (Contains Tag 3 Data) -->
+        <div class="nametag">
+            <img src="student3.jpg" class="portrait">
+            <div class="text-area">
+                <div class="name">Student<br>Three</div>
+            </div>
+        </div>
+
+        <!-- Row 3, Left on Back (Contains Tag 6 Data) -->
+        <div class="nametag">
+            <!-- content -->
+        </div>
+
+        <!-- Row 3, Right on Back (Contains Tag 5 Data) -->
+        <div class="nametag">
+            <!-- content -->
+        </div>
+    </div>
+
+</body>
+</html>
