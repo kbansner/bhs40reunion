@@ -54,6 +54,7 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: resolve(__dirname, "index.html"),
+        nametags: resolve(__dirname, 'nametags.html'),
         contact: resolve(__dirname, "contact.html"),
         missing: resolve(__dirname, "missing.html"),
         memoriam: resolve(__dirname, "memoriam.html"),
