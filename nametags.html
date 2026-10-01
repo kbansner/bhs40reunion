@@ -131,7 +131,7 @@
                     const hasPhoto = cols[21] || "Missing";
                     let photoURL = "";
                     if (hasPhoto !== "Missing" && cols[17] && cols[17].trim() !== "") {
-                        photoURL = cols[17].includes("http") ? cols[17] : `/grad-thumbnails/${cols[17]}`;
+                        photoURL = cols[17].includes("http") ? cols[17] : `/grad-portraits/${cols[17]}`;
                     }
                     const formattedName = displayName.replace(' ', '<br>');
 
