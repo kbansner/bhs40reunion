@@ -6,25 +6,28 @@
     <style>
         @page {
             size: 8.5in 11in;
-            margin: 0.25in; /* Standard printer margin */
+            margin: 0.75in 0.25in; /* 1-inch top/bottom, 0.25-inch left/right */
         }
 
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            -webkit-print-color-adjust: exact; /* Forces background images to print */
+            font-family: Georgia, serif;
+            -webkit-print-color-adjust: exact;
             print-color-adjust: exact;
+            background-color: #f3f4f6;
         }
 
         .page {
             width: 8in;
-            height: 10in;
-            margin: 0 auto;
+            height: 9in; /* Updated to 9 inches */
+            margin: 0.75in auto 0.75in auto; /* 1-inch top and bottom margins */
+            background: white;
             display: grid;
-            grid-template-columns: 4in 4in; /* 2 columns */
-            grid-template-rows: repeat(3, 3in); /* 3 rows */
-            page-break-after: always; /* Forces a new sheet for the duplex back */
+            grid-template-columns: 4in 4in;
+            grid-template-rows: repeat(3, 3in); /* Updated to 3 inches */
+            page-break-after: always;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
         .nametag {
@@ -37,6 +40,15 @@
             box-sizing: border-box;
             /* Optional: uncomment below to see cut lines while testing */
             /*border: 1px dashed #e5e5e5;*/
+        }
+
+        @media print {
+            .page {
+                margin: 0 auto; /* Removed the 1in top margin here */
+                box-shadow: none;
+            }
+            #loading { display: none; }
+            body { background-color: white; }
         }
 
         /* Portrait Placement */
