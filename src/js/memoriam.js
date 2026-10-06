@@ -141,7 +141,7 @@ function openModal(person) {
 
   document.getElementById("modal-name").textContent = person.fullName;
   document.getElementById("modal-bio").textContent =
-    person.bio || "No biography available.";
+    person.bio || "";
 
   const photoContainer = document.getElementById("modal-photo");
 
